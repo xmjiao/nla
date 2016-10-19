@@ -1,0 +1,2342 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 12: Conditioning of Least Squares Problems;
+\begin_inset Newline newline
+\end_inset
+
+Stability of Householder Triangularization
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conditioning of Least Squares Problems (NLA§18)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Four Conditioning Problems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "b"
+use_parbox 0
+use_makebox 0
+width "58col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Itemize
+Least squares problem: Given 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ with full rank and 
+\begin_inset Formula $\vec{b}\in\mathbb{R}^{m}$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+\min_{\vec{x}\in\mathbb{R}^{n}}\Vert\vec{b}-\vec{A}\vec{x}\Vert
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Its solution is 
+\begin_inset Formula $\vec{x}=\vec{A}^{+}\vec{b}$
+\end_inset
+
+.
+ Another quantity is 
+\begin_inset Formula $\vec{y}=\vec{A}\vec{x}=\vec{P}\vec{b}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{P}=\vec{A}\vec{A}^{+}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "b"
+use_parbox 0
+use_makebox 0
+width "40col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/lsp.eps
+	lyxscale 50
+	width 1.9in
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Consider 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+ as input data, and 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ as output.
+ We then have four conditioning problems:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Input 
+\backslash
+ Output
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\kappa_{\vec{b}\rightarrow\vec{y}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\kappa_{\vec{b}\rightarrow\vec{x}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\kappa_{\vec{A}\rightarrow\vec{y}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\kappa_{\vec{A}\rightarrow\vec{x}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+These conditioning problems are important and subtle.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Some Prerequisites
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+We focus on the second column, namely 
+\begin_inset Formula $\kappa_{\vec{b}\rightarrow\vec{x}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa_{\vec{A}\rightarrow\vec{x}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+However, understanding 
+\begin_inset Formula $\kappa_{\vec{b}\rightarrow\vec{y}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa_{\vec{A}\rightarrow\vec{y}}$
+\end_inset
+
+ is prerequisite
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "b"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "58col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Itemize
+Three quantities: (All in 2-norms)
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Condition number of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+: 
+\begin_inset Formula $\kappa(\vec{A})=\Vert\vec{A}\Vert\Vert\vec{A}^{+}\Vert=\sigma_{1}/\sigma_{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Angle between 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+: 
+\begin_inset Formula $\theta=\arccos\frac{\Vert\vec{y}\Vert}{\Vert\vec{b}\Vert}.$
+\end_inset
+
+ (
+\begin_inset Formula $0\leq\theta\leq\pi/2$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Orientation of 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ with range(
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+): 
+\begin_inset Formula $\eta=\frac{\Vert\vec{A}\Vert\Vert\vec{x}\Vert}{\Vert\vec{y}\Vert}$
+\end_inset
+
+.
+ (
+\begin_inset Formula $1\leq\eta\leq\kappa(A)$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\end_inset
+
+
+\begin_inset Box Frameless
+position "b"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "40col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/lsp.eps
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sensitivity of 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ to Perturbations in 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Intuition: The larger 
+\begin_inset Formula $\theta$
+\end_inset
+
+ is, the more sensitive 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ is in terms of relative error
+\end_layout
+
+\begin_layout Itemize
+Analysis: 
+\begin_inset Formula $\vec{y}=\vec{P}\vec{b}$
+\end_inset
+
+, so
+\begin_inset Formula 
+\[
+\kappa_{\vec{b}\rightarrow\vec{y}}=\frac{\Vert\vec{P}\Vert}{\Vert\vec{y}\Vert/\Vert\vec{b}\Vert}=\frac{\Vert\vec{b}\Vert}{\Vert\vec{y}\Vert}=\frac{1}{\cos\theta},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\Vert\vec{P}\Vert=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Input 
+\backslash
+ Output
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\frac{1}{\cos\theta}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: When is the maximum attained for perturbation 
+\begin_inset Formula $\delta\vec{b}$
+\end_inset
+
+? 
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: When is 
+\begin_inset Formula $\delta\vec{b}$
+\end_inset
+
+ in range
+\begin_inset Formula $(\vec{A})$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sensitivity of 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ to Perturbations in 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Intuition: It depends on how sensitive 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ is to 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+, and how 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ lies within range(
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Analysis: 
+\begin_inset Formula $\vec{x}=\vec{A}^{+}\vec{b}$
+\end_inset
+
+, so 
+\begin_inset Formula 
+\[
+\kappa_{\vec{b}\rightarrow\vec{x}}=\frac{\Vert\vec{A}^{+}\Vert}{\Vert\vec{x}\Vert/\Vert\vec{b}\Vert}=\Vert\vec{A}^{+}\Vert\frac{\Vert\vec{b}\Vert}{\Vert\vec{y}\Vert}\frac{\Vert\vec{y}\Vert}{\Vert\vec{x}\Vert}=\Vert\vec{A}^{+}\Vert\frac{1}{\cos\theta}\frac{\Vert\vec{A}\Vert}{\eta}=\frac{\kappa(\vec{A})}{\eta\cos\theta},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\eta=\Vert\vec{A}\Vert\Vert\vec{x}\Vert/\Vert\vec{y}\Vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Input 
+\backslash
+ Output
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\frac{1}{\cos\theta}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\frac{\kappa(\vec{A})}{\eta\cos\theta}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sensitivity of 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ to Perturbations in 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Assume 
+\begin_inset Formula $\cos\theta=O(1)$
+\end_inset
+
+, 
+\begin_inset Formula $\kappa_{\vec{b}\rightarrow\vec{x}}=\frac{\kappa(\vec{A})}{\eta\cos\theta}$
+\end_inset
+
+ can lie anywhere between 
+\begin_inset Formula $1$
+\end_inset
+
+ and 
+\begin_inset Formula $O(\kappa(\vec{A}))$
+\end_inset
+
+!
+\end_layout
+
+\begin_layout Itemize
+Question: When is the maximum attained for perturbation 
+\begin_inset Formula $\delta\vec{b}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: When 
+\begin_inset Formula $\delta\vec{b}$
+\end_inset
+
+ is in subspace spanned by left singular vectors corresponding to smallest
+ singular values
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: What if 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is a nonsingular matrix? 
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: 
+\begin_inset Formula $\kappa_{\vec{b}\rightarrow\vec{x}}$
+\end_inset
+
+ can lie anywhere between 
+\begin_inset Formula $1$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa(\vec{A})$
+\end_inset
+
+!
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sensitivity of 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ to Perturbations in 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The relationship are nonlinear, because range
+\begin_inset Formula $(\vec{A})$
+\end_inset
+
+ changes due to 
+\begin_inset Formula $\delta\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Intuitions: 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The larger 
+\begin_inset Formula $\theta$
+\end_inset
+
+ is, the more sensitive 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ is in terms of relative error.
+\end_layout
+
+\begin_layout Itemize
+Tilting of range
+\begin_inset Formula $(\vec{A})$
+\end_inset
+
+ depends on 
+\begin_inset Formula $\kappa(\vec{A})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+For 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+, it depends where 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ lies within range
+\begin_inset Formula $(\vec{A})$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Input 
+\backslash
+ Output
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\frac{1}{\cos\theta}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\frac{\kappa(\vec{A})}{\eta\cos\theta}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\leq\frac{\kappa(\vec{A})}{\cos\theta}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\leq\kappa(\vec{A})+\frac{\kappa(\vec{A})^{2}\tan\theta}{\eta}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For second row, bounds are not necessarily tight
+\end_layout
+
+\begin_layout Itemize
+Assume 
+\begin_inset Formula $\cos\theta=O(1)$
+\end_inset
+
+, 
+\begin_inset Formula $\kappa_{\vec{A}\rightarrow\vec{x}}$
+\end_inset
+
+ can lie anywhere between 
+\begin_inset Formula $\kappa(\vec{A})$
+\end_inset
+
+ and 
+\begin_inset Formula $O(\kappa(\vec{A})^{2})$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Condition Numbers of Linear Systems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Linear system 
+\begin_inset Formula $\vec{A}\vec{x}=\vec{b}$
+\end_inset
+
+ for nonsingular 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times m}$
+\end_inset
+
+ is a special case of least squares problems, where 
+\begin_inset Formula $\vec{y}=\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $m=n$
+\end_inset
+
+, then 
+\begin_inset Formula $\theta=0$
+\end_inset
+
+, so 
+\begin_inset Formula $\cos\theta=1$
+\end_inset
+
+ and 
+\begin_inset Formula $\tan\theta=0$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Input 
+\backslash
+ Output
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\kappa(\vec{A})/\eta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\leq\kappa(\vec{A})$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\leq\kappa(\vec{A})$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Stability of Householder Triangularization (NLA§16,19)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Solution of Least Squares Problems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+An efficient and robust approach is to use QR factorization 
+\begin_inset Formula $\vec{A}=\hat{\vec{Q}}\hat{\vec{R}}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+ can be projected onto 
+\begin_inset Formula $\mbox{range}(\vec{A})$
+\end_inset
+
+ by 
+\begin_inset Formula $\vec{P}=\hat{\vec{Q}}\hat{\vec{Q}}^{T}$
+\end_inset
+
+, and therefore 
+\begin_inset Formula $\hat{\vec{Q}}\hat{\vec{R}}\vec{x}=\hat{\vec{Q}}\hat{\vec{Q}}^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Left-multiply by 
+\begin_inset Formula $\hat{\vec{Q}}^{T}$
+\end_inset
+
+ and we get 
+\begin_inset Formula $\hat{\vec{R}}\vec{x}=\hat{\vec{Q}}^{T}\vec{b}$
+\end_inset
+
+ (note 
+\begin_inset Formula $\vec{A}^{+}=\hat{\vec{R}}^{-1}\hat{\vec{Q}}^{T}$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "75text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Least squares via QR Factorization
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute reduced QR factorization 
+\begin_inset Formula $\vec{A}=\hat{\vec{Q}}\hat{\vec{R}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute vector 
+\begin_inset Formula $\vec{c}=\hat{\vec{Q}}^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Solve upper-triangular system 
+\begin_inset Formula $\hat{\vec{R}}\vec{x}=\vec{c}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Computation is dominated by QR factorization (
+\begin_inset Formula $2mn^{2}-\frac{2}{3}n^{3}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+What about stability?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Backward Stability of Householder Triangularization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For a QR factorization 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{R}$
+\end_inset
+
+ computed by Householder triangularization, the factors 
+\begin_inset Formula $\tilde{\vec{Q}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\tilde{\vec{R}}$
+\end_inset
+
+ satisfy
+\begin_inset Formula 
+\[
+\tilde{\vec{Q}}\tilde{\vec{R}}=\vec{A}+\delta\vec{A},\ \ \ \Vert\delta\vec{A}\Vert/\Vert\vec{A}\Vert=O(\epsilon_{\mbox{machine}}),
+\]
+
+\end_inset
+
+i.e., exact 
+\begin_inset Formula $QR$
+\end_inset
+
+ factorization of a slightly perturbed 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\tilde{\vec{R}}$
+\end_inset
+
+ is 
+\begin_inset Formula $\vec{R}$
+\end_inset
+
+ computed by algorithm using floating points
+\end_layout
+
+\begin_layout Itemize
+However, 
+\begin_inset Formula $\tilde{\vec{Q}}$
+\end_inset
+
+ is product of 
+\emph on
+exactly orthogonal
+\emph default
+ reflectors
+\begin_inset Formula 
+\[
+\tilde{\vec{Q}}=\tilde{\vec{Q}}_{1}\tilde{\vec{Q}}_{2}\dots\tilde{\vec{Q}}_{n}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\tilde{\vec{Q}}_{k}$
+\end_inset
+
+ is given by computed 
+\begin_inset Formula $\tilde{\vec{v}}_{k}$
+\end_inset
+
+, since 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ is not formed explicitly
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Backward Stability of Solving 
+\begin_inset Formula $\vec{A}\vec{x}=\vec{b}$
+\end_inset
+
+ with QR
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "95text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: Solving 
+\begin_inset Formula $\vec{A}\vec{x}=\vec{b}$
+\end_inset
+
+ by QR Factorization
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{R}$
+\end_inset
+
+ using Householder, represent 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ by reflectors
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute vector 
+\begin_inset Formula $\vec{y}=\vec{Q}^{T}\vec{b}$
+\end_inset
+
+ implicitly using reflectors
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Solve upper-triangular system 
+\begin_inset Formula $\vec{R}\vec{x}=\vec{y}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+All three steps are backward stable
+\end_layout
+
+\begin_layout Itemize
+Overall, we can show that 
+\begin_inset Formula 
+\[
+(\vec{A}+\Delta\vec{A})\tilde{\vec{x}}=\vec{b},\ \ \ \Vert\Delta\vec{A}\Vert/\Vert\vec{A}\Vert=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+ as we prove next
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Backward Stability of Solving 
+\begin_inset Formula $\vec{A}\vec{x}=\vec{b}$
+\end_inset
+
+ with Householder Triangularization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Proof: Step 2 gives 
+\begin_inset Formula 
+\[
+(\tilde{\vec{Q}}+\delta\vec{Q})\tilde{\vec{y}}=\vec{b},\ \ \ \Vert\delta\vec{Q}\Vert=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Step 3 gives 
+\begin_inset Formula 
+\[
+(\tilde{\vec{R}}+\delta\vec{R})\tilde{\vec{x}}=\tilde{\vec{y}},\ \ \ \Vert\delta\vec{R}\Vert/\Vert\tilde{\vec{R}}\Vert=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore, 
+\begin_inset Formula 
+\[
+\vec{b}=(\tilde{\vec{Q}}+\delta\vec{Q})(\tilde{\vec{R}}+\delta\vec{R})\tilde{\vec{x}}=\left[\tilde{\vec{Q}}\tilde{\vec{R}}+(\delta\vec{Q})\tilde{\vec{R}}+\tilde{\vec{Q}}(\delta\vec{R})+(\delta\vec{Q})(\delta\vec{R})\right]\tilde{\vec{x}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Step 1 gives 
+\begin_inset Formula 
+\[
+b=\left[\vec{A}+\underbrace{\delta\vec{A}+(\delta\vec{Q})\tilde{\vec{R}}+\tilde{\vec{Q}}(\delta\vec{R})+(\delta\vec{Q})(\delta\vec{R})}_{\Delta\vec{A}}\right]\tilde{\vec{x}}
+\]
+
+\end_inset
+
+ where 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\tilde{\vec{Q}}\tilde{\vec{R}}=\vec{A}+\delta\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Proof of Backward Stability Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula $\tilde{\vec{Q}}\tilde{\vec{R}}=\vec{A}+\delta\vec{A}$
+\end_inset
+
+ where 
+\begin_inset Formula $\Vert\delta\vec{A}\Vert/\Vert\vec{A}\Vert=O(\epsilon_{\mbox{machine}})$
+\end_inset
+
+, and therefore
+\begin_inset Formula 
+\[
+\frac{\Vert\tilde{\vec{R}}\Vert}{\Vert\vec{A}\Vert}\leq\Vert\tilde{\vec{Q}}^{T}\Vert\frac{\Vert\vec{A}+\delta\vec{A}\Vert}{\Vert\vec{A}\Vert}=O(1)
+\]
+
+\end_inset
+
+Now show that each term in 
+\begin_inset Formula $\Delta A$
+\end_inset
+
+ is small
+\begin_inset Formula 
+\[
+\frac{\Vert(\delta\vec{Q})\tilde{\vec{R}}\Vert}{\Vert\vec{A}\Vert}\leq\Vert(\delta\vec{Q})\Vert\frac{\Vert\tilde{\vec{R}}\Vert}{\Vert\vec{A}\Vert}=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\Vert\tilde{\vec{Q}}(\delta\vec{R})\Vert}{\Vert\vec{A}\Vert}\leq\Vert\tilde{\vec{Q}}\Vert\frac{\Vert\delta\vec{R}\Vert}{\Vert\tilde{\vec{R}}\Vert}\frac{\Vert\tilde{\vec{R}}\Vert}{\Vert\vec{A}\Vert}=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\Vert(\delta\vec{Q})(\delta\vec{R})\Vert}{\Vert\vec{A}\Vert}\leq\Vert\delta\vec{Q}\Vert\frac{\Vert\delta\vec{R}\Vert}{\Vert\vec{A}\Vert}=O(\epsilon_{\mbox{machine}}^{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Overall, 
+\begin_inset Formula 
+\[
+\frac{\Vert\Delta\vec{A}\Vert}{\Vert\vec{A}\Vert}\leq\frac{\Vert\delta A\Vert}{\Vert A\Vert}+\frac{\Vert(\delta\vec{Q})\tilde{\vec{R}}\Vert}{\Vert\vec{A}\Vert}+\frac{\Vert\tilde{\vec{Q}}(\delta\vec{R})\Vert}{\Vert\vec{A}\Vert}+\frac{\Vert(\delta\vec{Q})(\delta\vec{R})\Vert}{\Vert\vec{A}\Vert}=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since the algorithm is backward stable, it is also accurate.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Backward Stability of Householder Triangularization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+Let the full-rank least squares problem be solved using Householder triangulariz
+ation on a computer satisfying the two axioms of floating point numbers.
+ The algorithm is backward stable in the sense that the computed solution
+ 
+\begin_inset Formula $\tilde{\vec{x}}$
+\end_inset
+
+ has the property 
+\begin_inset Formula 
+\[
+\Vert(\vec{A}+\delta\vec{A})\tilde{\vec{x}}-\vec{b})\Vert=\min,\quad\frac{\Vert\delta\vec{A}\Vert}{\Vert\vec{A}\Vert}=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+for some 
+\begin_inset Formula $\delta\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Backward stability of the algorithm is true whether 
+\begin_inset Formula $\hat{\vec{Q}}^{T}b$
+\end_inset
+
+ is computed via explicit formation of 
+\begin_inset Formula $\hat{\vec{Q}}$
+\end_inset
+
+ or computed implicitly
+\end_layout
+
+\begin_layout Itemize
+Backward stability also holds for Householder triangularization with arbitrary
+ column pivoting 
+\begin_inset Formula $\vec{A}\vec{P}=\hat{\vec{Q}}\hat{\vec{R}}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

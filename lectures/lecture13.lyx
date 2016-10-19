@@ -1,0 +1,2577 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 13: Other Methods for Least Squares Problems;
+\begin_inset Newline newline
+\end_inset
+
+Rank-Deficient Least Squares Problems;
+\begin_inset Newline newline
+\end_inset
+
+Linear Algebra Software
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Solution of Least Squares Problems
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algorithms for Solving Least Squares Problems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+There are many variants of algorithms for solving least squares problems
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Householder QR (with/without pivoting, explicit or implicit 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+): 
+\series bold
+Backward stable
+\end_layout
+
+\begin_layout Itemize
+Classical Gram-Schmidt: 
+\series bold
+Unstable
+\end_layout
+
+\begin_layout Itemize
+Modified Gram-Schmidt with explicit 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+: 
+\series bold
+Unstable
+\end_layout
+
+\begin_layout Itemize
+Modified Gram-Schmidt with augmented system of equations with implicit 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+: 
+\series bold
+Backward stable
+\end_layout
+
+\begin_layout Itemize
+Normal equations (solve 
+\begin_inset Formula $\vec{A}^{T}\vec{A}\vec{x}=\vec{A}^{T}\vec{b}$
+\end_inset
+
+): 
+\series bold
+Unstable
+\end_layout
+
+\begin_layout Itemize
+Singular value decomposition: 
+\series bold
+Stable and most accurate
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Stability of Gram-Schmidt Orthogonalization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Gram-Schmidt QR is unstable, due to loss of orthogonality
+\end_layout
+
+\begin_layout Itemize
+Gram-Schmidt can be stabilized using augmented system of equations
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Compute QR factorization of augmented matrix: [Q,R1]=mgs([A,b])
+\end_layout
+
+\begin_layout Enumerate
+Extract 
+\begin_inset Formula $R$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\vec{Q}}^{T}\vec{b}$
+\end_inset
+
+ from 
+\begin_inset Formula $\vec{R}1$
+\end_inset
+
+: R=R1(1:n,1:n); Qb=R1(1:n,n+1)
+\end_layout
+
+\begin_layout Enumerate
+Back solve: x=R
+\backslash
+Qb
+\end_layout
+
+\end_deeper
+\begin_layout Theorem
+The solution of the full-rank least squares problem by Gram-Schmidt orthogonalit
+y is backward stable in the sense that the computed solution 
+\begin_inset Formula $\tilde{\vec{x}}$
+\end_inset
+
+ has the property 
+\begin_inset Formula 
+\[
+\Vert(\vec{A}+\delta\vec{A})\tilde{\vec{x}}-\vec{b})\Vert=\min,\quad\frac{\Vert\delta\vec{A}\Vert}{\Vert\vec{A}\Vert}=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+for some 
+\begin_inset Formula $\delta\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, provided that 
+\begin_inset Formula $\hat{\vec{Q}}^{T}b$
+\end_inset
+
+ is formed implicitly.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Other Methods
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The method of 
+\emph on
+normal equation
+\emph default
+ solves 
+\begin_inset Formula $\vec{x}=(A^{T}A)^{-1}A^{T}b$
+\end_inset
+
+, due to squaring of condition number of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+The solution of the full-rank least squares problem via normal equation
+ is unstable.
+ Stability can be achieved, however, by restriction to a class of problems
+ in which 
+\begin_inset Formula $\kappa(A)$
+\end_inset
+
+ is uniformly bounded above.
+\end_layout
+
+\begin_layout Itemize
+Another method is to SVD
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Solution by SVD
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Using 
+\begin_inset Formula $\vec{A}=\hat{\vec{U}}\hat{\vec{\Sigma}}\vec{V}^{T}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+ can be projected onto 
+\begin_inset Formula $\mbox{range}(\vec{A})$
+\end_inset
+
+ by 
+\begin_inset Formula $\vec{P}=\hat{\vec{U}}\hat{\vec{U}}^{T}$
+\end_inset
+
+, and therefore 
+\begin_inset Formula $\hat{\vec{U}}\hat{\vec{\Sigma}}\vec{V}^{T}\vec{x}=\hat{\vec{U}}\hat{\vec{U}}^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Left-multiply by 
+\begin_inset Formula $\hat{\vec{U}}^{T}$
+\end_inset
+
+ and we get 
+\begin_inset Formula $\hat{\vec{\Sigma}}\vec{V}^{T}\vec{x}=\hat{\vec{U}}^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "75text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Least squares via SVD
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute reduced SVD factorization 
+\begin_inset Formula $\vec{A}=\hat{\vec{U}}\hat{\vec{\Sigma}}\vec{V}^{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute vector 
+\begin_inset Formula $\vec{c}=\hat{\vec{U}}^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Solve diagonal system 
+\begin_inset Formula $\hat{\vec{\Sigma}}\vec{w}=\vec{c}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{w}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Set 
+\begin_inset Formula $\vec{x}=\vec{V}\vec{w}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Work is dominated by SVD, which is 
+\begin_inset Formula $\sim2mn^{2}+11n^{3}$
+\end_inset
+
+ flops, very expensive if 
+\begin_inset Formula $m\approx n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is rank deficient, how to solve 
+\begin_inset Formula $\vec{A}\vec{x}\approx\vec{b}$
+\end_inset
+
+?
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Rank-Deficient Least Squares Problems
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Rank-Deficient Least Squares Problems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Least squares problems 
+\begin_inset Formula $\vec{A}\vec{x}\approx\vec{b}$
+\end_inset
+
+ is the most challenging if 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is (nearly) rank deficient
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is rank deficient, there are an infinite number of 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ that minimizes 
+\begin_inset Formula $\Vert\vec{b}-\vec{A}\vec{x}\Vert$
+\end_inset
+
+.
+ This is because if 
+\begin_inset Formula $\vec{y}\in\mbox{null}(\vec{A})$
+\end_inset
+
+, for any 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ that minimizes 
+\begin_inset Formula $\Vert\vec{b}-\vec{A}\vec{x}\Vert$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{x}+\vec{y}$
+\end_inset
+
+ also minimizes 
+\begin_inset Formula $\Vert\vec{b}-\vec{A}\vec{x}\Vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+Uniqueness
+\begin_inset Quotes erd
+\end_inset
+
+ is recovered by requiring 
+\begin_inset Formula $\vec{x}\perp\mbox{null}(\vec{A})$
+\end_inset
+
+ .
+ Or equivalently, minimize 
+\begin_inset Formula $\Vert\vec{x}\Vert$
+\end_inset
+
+ subject to 
+\begin_inset Formula $(\vec{b}-\vec{A}\vec{x})\perp\text{range}(A)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In practice, however, we often have near rank deficiency instead of exact
+ rank deficiency
+\end_layout
+
+\begin_layout Itemize
+For rank deficiency, (left or right) null space is the space span by (left
+ or right) singular vectors corresponding to zero singular values
+\end_layout
+
+\begin_layout Itemize
+For nearly rank deficient least squares problem, define 
+\begin_inset Quotes eld
+\end_inset
+
+numerical null space
+\begin_inset Quotes erd
+\end_inset
+
+ to be singular vectors corresponding to smallest singular values
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Solving Rank-Deficient Least Squares Problems by SVD
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is full rank, 
+\begin_inset Formula $\vec{A}=\hat{\vec{U}}\hat{\vec{\Sigma}}\vec{V}^{T}=\sum_{j=1}^{\min\{m,n\}}\sigma_{j}\vec{u}_{j}\vec{v}_{j}^{T}$
+\end_inset
+
+, and 
+\begin_inset Formula $\vec{A}^{+}=\sum_{j=1}^{\min\{m,n\}}\frac{1}{\sigma_{j}}\vec{v}_{j}\vec{u}_{j}^{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is rank deficient, 
+\begin_inset Formula $\vec{A}^{+}=\sum_{j=1}^{r}\frac{1}{\sigma_{j}}\vec{v}_{j}\vec{u}_{j}^{T}$
+\end_inset
+
+, where 
+\begin_inset Formula $r$
+\end_inset
+
+ is rank of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is nearly rank deficient, 
+\begin_inset Formula $\tilde{\vec{A}}^{+}=\sum_{j=1}^{r}\frac{1}{\sigma_{j}}\vec{v}_{j}\vec{u}_{j}^{T}$
+\end_inset
+
+, where 
+\begin_inset Formula $r$
+\end_inset
+
+ is 
+\emph on
+numerical rank
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, i.e., largest 
+\begin_inset Formula $j$
+\end_inset
+
+ such that 
+\begin_inset Formula $\sigma_{j}\geq\epsilon\sigma_{1}$
+\end_inset
+
+ for some small 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+.
+ This is called 
+\emph on
+truncated SVD
+\end_layout
+
+\begin_layout Itemize
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $\tilde{\vec{A}}=\sum_{j=1}^{r}\sigma_{j}\vec{u}_{j}\vec{v}_{j}^{T}$
+\end_inset
+
+ is a low-rank approximation to 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "90text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Rank-deficient least squares via truncated SVD
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute reduced SVD factorization 
+\begin_inset Formula $\vec{A}=\hat{\vec{U}}\hat{\vec{\Sigma}}\vec{V}^{T}$
+\end_inset
+
+ and estimate 
+\begin_inset Formula $r$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute vector 
+\begin_inset Formula $\vec{c}=\left(\hat{\vec{U}}_{:,1:r}\right)^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Solve diagonal system 
+\begin_inset Formula $\hat{\vec{\Sigma}}_{1:r,1:r}\vec{w}=\vec{c}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{w}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Set 
+\begin_inset Formula $\vec{x}=\vec{V}_{1:m,1:r}\vec{w}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+A Note on Pseudoinverse
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ is rank deficient, the pseudoinverse of 
+\begin_inset Formula $A$
+\end_inset
+
+ is defined as 
+\begin_inset Formula 
+\[
+\vec{A}^{+}=\sum_{j=1}^{r}\frac{1}{\sigma_{j}}\vec{v}_{j}\vec{u}_{j}^{T},
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $r$
+\end_inset
+
+ is rank of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+It is unique minimum Frobenius norm solution to 
+\begin_inset Formula 
+\[
+\min_{X\in\mathbb{R}^{n\times m}}\Vert AX-I_{m}\Vert_{F}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+It is also unique matrix 
+\begin_inset Formula $X\in\mathbb{R}^{n\times m}$
+\end_inset
+
+ that satisfies four 
+\emph on
+Moore-Penrose conditions
+\emph default
+:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $AXA=A$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $XAX=X$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $(AX)^{T}=AX$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $(XA)^{T}=XA$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+QR with Column Pivoting
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Another approach is to use QR with column pivoting, or QRCP
+\end_layout
+
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, and 
+\begin_inset Formula $r$
+\end_inset
+
+ be its rank.
+ In 
+\series bold
+exact arithmetic
+\series default
+, QR with column pivoting is rank revealing if 
+\begin_inset Formula 
+\[
+Q^{T}A\Pi=\underset{\begin{array}{cc}
+r & n-r\end{array}}{\left[\begin{array}{cc}
+R_{11} & R_{12}\\
+0 & 0
+\end{array}\right]}\begin{array}{c}
+r\\
+m-r
+\end{array}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\Pi$
+\end_inset
+
+ is a permutation matrix.
+ 
+\begin_inset Formula $\mbox{range}(A)=\mbox{span}\{q_{1},\dots,q_{r}\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In exact arithmetic, a rank-revealing QRCP is obtained by permuting columns
+ such that diagonal entry in 
+\begin_inset Formula $\vec{R}$
+\end_inset
+
+ is maximized at each step
+\end_layout
+
+\begin_layout Itemize
+In particular, at 
+\begin_inset Formula $k$
+\end_inset
+
+th step, 
+\begin_inset Formula 
+\[
+(Q_{k-1}\cdots Q_{1})A(\Pi_{1}\cdots\Pi_{k-1})=R^{(k-1)}=\underset{\begin{array}{cc}
+k-1 & n-k+1\end{array}}{\left[\begin{array}{cc}
+R_{11}^{(k-1)} & R_{12}^{(k-1)}\\
+0 & R_{22}^{(k-1)}
+\end{array}\right]}\begin{array}{c}
+k-1\\
+m-k+1
+\end{array}
+\]
+
+\end_inset
+
+permute column with maximum 
+\begin_inset Formula $2$
+\end_inset
+
+-norm in 
+\begin_inset Formula $R_{22}^{(k-1)}$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+th column
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Solving Rank-Deficient Least Squares Problems by QRCP
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+With rounding errors, one terminates if the computed 
+\begin_inset Formula $R_{22}^{(k-1)}$
+\end_inset
+
+ (
+\begin_inset Formula $\tilde{R}_{22}^{(k-1)}$
+\end_inset
+
+) has a sufficient small 
+\begin_inset Formula $2$
+\end_inset
+
+-norm compared to that of 
+\begin_inset Formula $A$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $\tilde{R}_{22}^{(k-1)}$
+\end_inset
+
+ is small, then 
+\begin_inset Formula $A$
+\end_inset
+
+ is (numerically) rank deficient
+\end_layout
+
+\begin_layout Itemize
+However, if 
+\begin_inset Formula $rank(A)=k$
+\end_inset
+
+, it does not follow that 
+\begin_inset Formula $\tilde{R}_{22}^{(k-1)}$
+\end_inset
+
+ is small, so it may not reveal rank deficiency (and still lead to instability)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+In practice, QRCP needs to be coupled with a condition number estimator
+ to help reveal the rank
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "90text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Rank-deficient least squares via truncated QRCP
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute QRCP 
+\begin_inset Formula $\vec{A}\vec{P}=\vec{Q}\vec{R}$
+\end_inset
+
+ and estimate 
+\begin_inset Formula $r$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute vector 
+\begin_inset Formula $\vec{c}=\left(\vec{Q}_{:,1:r}\right)^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Solve triangular system 
+\begin_inset Formula $\vec{R}_{1:r,1:r}\vec{y}=\vec{c}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Set 
+\begin_inset Formula $\vec{x}=\vec{P}_{1:m,1:r}\vec{y}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Truncated QRCP is far less expensive than truncated SVD, and is robust with
+ a good condition number estimator
+\end_layout
+
+\begin_layout Itemize
+Unlike SVD, QRCP uses a subset of columns of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Software for Linear Algebra
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Software for Linear Algebra
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+LAPACK: Linear Algebra PACKage (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+www.netlib.org/lapack/lug
+\end_layout
+
+\end_inset
+
+)
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Standard library for solving linear systems and eigenvalue problems
+\end_layout
+
+\begin_layout Itemize
+Successor of LINPACK (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+www.netlib.org/linpack
+\end_layout
+
+\end_inset
+
+) and EISPACK (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+www.netlib.org/eispack
+\end_layout
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Depends on BLAS (Basic Linear Algebra Subprograms)
+\end_layout
+
+\begin_layout Itemize
+Parallel extensions include ScaLAPACK and PLAPACK (with MPI)
+\end_layout
+
+\begin_layout Itemize
+Note: Uses Fortran conventions for matrix arrangements
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+MATLAB
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Factorization 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+: lu(A) and chol(A)
+\end_layout
+
+\begin_layout Itemize
+Solve 
+\begin_inset Formula $\vec{A}\vec{x}=\vec{b}$
+\end_inset
+
+: 
+\begin_inset Formula $x=A\backslash b$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Uses back/forward substitution for triangular matrices
+\end_layout
+
+\begin_layout Itemize
+Uses Cholesky factorization for positive-definite matrices
+\end_layout
+
+\begin_layout Itemize
+Uses LU factorization with column pivoting for nonsymmetric matrices
+\end_layout
+
+\begin_layout Itemize
+Uses Householder QR for least squares problems
+\end_layout
+
+\begin_layout Itemize
+Uses some special routines for matrices with special sparsity patterns
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Uses LAPACK and other packages internally
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Solvers for sparse matrices (e.g., SuperLU, TAUCS, SuiteSparse)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Some Commonly Used Functions
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align block
+
+\size footnotesize
+Example BLAS routines: Matrix-vector multip.: dgemv; Matrix-matrix multip:
+ dgemm
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size footnotesize
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="6">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+LU Factorization
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Solve linear system
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Est.
+ cond
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+General
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Symmetric
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+General
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Symmetric
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+LAPACK
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dgetrf
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dpotrf/dsytrf
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+dgesv
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+dposv/dposvx
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dgecon
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+LINPACK
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dgefa
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dpofa/dsifa
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dgesl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dposl/dsisl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dgeco
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+MATLAB
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+lu
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+chol
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+
+\backslash
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+
+\backslash
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+rcond
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size footnotesize
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="7">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Linear least squares
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Eigenvalue/vector
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+SVD
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+QR
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Solve
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Rank-deficient
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+General
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Sym.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+LAPACK
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dgeqrf
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+dgels
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+dgelsy/s/d
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+dgeev
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+dsyev
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\size footnotesize
+dgesvd
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+LINPACK
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dqrdc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dqrsl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dqrst
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+dsvdc
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+MATLAB
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+qr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+
+\backslash
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+
+\backslash
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+eig
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+eig
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+svd
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For BLAS, LINPACK, and LAPACK, first letter s stands for single-precision
+ real, d for double-precision real, c for single-precision complex, and
+ z for double-precision complex.
+ Boldface LAPACK routines are 
+\series bold
+driver
+\series default
+ routines; others are 
+\series bold
+computational
+\series default
+ routines.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Using LAPACK Routines in C Programs
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+LAPACK was written in Fortran 77.
+ Special attention is required when calling from C.
+\end_layout
+
+\begin_layout Itemize
+Key differences between C and Fortran
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Storage of matrices: column major (Fortran) versus row major (C/C++)
+\end_layout
+
+\begin_layout Enumerate
+Argument passing for subroutines in C and Fortran: pass by reference (Fortran)
+ and pass by value (C/C++)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Example C code (example.c) for solving linear system using sgesv
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+See class website for sample code
+\end_layout
+
+\begin_layout Itemize
+To compile, issue command 
+\begin_inset Quotes eld
+\end_inset
+
+cc -o example example.c -llapack -lblas
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Hint: To find a function name, refer to LAPACK Users' Guide
+\end_layout
+
+\begin_layout Itemize
+To find out arguments for a given function, search on netlib.org
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
