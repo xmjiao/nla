@@ -1,0 +1,3351 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 2: Algorithmic Consideration;
+\begin_inset Newline newline
+\end_inset
+
+Orthogonality; Vector Norms
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Algorithmic Considerations (MC §1.2)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algorithms for Matrix-Vector Multiplication
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ and 
+\begin_inset Formula $x\in\mathbb{R}^{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+MATLAB-style code for 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $b=Ax$
+\end_inset
+
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "44col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+Row oriented
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:m$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $b(i)=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $b(i)=b(i)+A(i,j)*x(j)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+end
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+end
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hfill
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "44col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+Column oriented 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $b(:)=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:m$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $b(i)=b(i)+A(i,j)*x(j)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+end
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+end
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Number of operations is 
+\begin_inset Formula $O(mn)$
+\end_inset
+
+, but big-Oh notation is insufficient
+\end_layout
+
+\begin_layout Itemize
+Number of operations is 
+\begin_inset Formula $2mn$
+\end_inset
+
+: coefficient of leading-order term is important for comparison
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Flop Count
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+It is important to assess 
+\emph on
+efficiency
+\emph default
+ of algorithms.
+ But how?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+We could implement different algorithms and do direct comparison, but implementa
+tion details can affect true performance
+\end_layout
+
+\begin_layout Itemize
+We could estimate cost of all operations, but it is very tedious
+\end_layout
+
+\begin_layout Itemize
+Relatively simple and effective approach is to estimate amount of floating-point
+ operations, or 
+\begin_inset Quotes eld
+\end_inset
+
+flops
+\begin_inset Quotes erd
+\end_inset
+
+, and focus on asymptotic analysis as sizes of matrices approach infinity
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Idealization
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Count each operation 
+\begin_inset Formula $+$
+\end_inset
+
+,
+\begin_inset Formula $-$
+\end_inset
+
+, 
+\begin_inset Formula $*$
+\end_inset
+
+, 
+\begin_inset Formula $/$
+\end_inset
+
+, and 
+\begin_inset Formula $\sqrt{\ }$
+\end_inset
+
+ as one flop
+\end_layout
+
+\begin_layout Itemize
+This estimation is crude, as it omits data movement in memory, which is
+ non-negligible on modern computer architectures (e.g., different loop orders
+ can affect cache performance)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Matrix-vector product requires about 
+\begin_inset Formula $2mn$
+\end_inset
+
+ flops
+\end_layout
+
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $m=n$
+\end_inset
+
+, it takes quadratic time in 
+\begin_inset Formula $n$
+\end_inset
+
+, or 
+\begin_inset Formula $O(n^{2})$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algorithms for Saxpy: Scalar 
+\begin_inset Formula $a$
+\end_inset
+
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ plus 
+\begin_inset Formula $y$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Saxpy computes 
+\begin_inset Formula $ax+y$
+\end_inset
+
+ and updates 
+\begin_inset Formula $y$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+y=ax+y\Rightarrow y_{i}=ax_{i}+y_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $x,y\in\mathbb{R}^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $a\in\mathbb{R}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+MATLAB-style code
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $y(i)=y(i)+a*x(i)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+end
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hfill
+\end_layout
+
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "43col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+Pseudo-code
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $y_{i}\leftarrow y_{i}+a\,x_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Number of flops is 
+\begin_inset Formula $2n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Pseudo-code cannot run on any computer, but are human readable and straightforwa
+rd to convert into real codes in any programming language (e.g., C, FORTRAN,
+ MATLAB, etc.)
+\end_layout
+
+\begin_layout Itemize
+We use pseudo-code on slides for conciseness
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Gaxpy: Generalized saxpy
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Computes 
+\begin_inset Formula $y=y+Ax$
+\end_inset
+
+, where 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ and 
+\begin_inset Formula $x\in\mathbb{R}^{n}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "44col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+Row oriented
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:m$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $y_{i}=y_{i}+a_{ij}x_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hfill
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "44col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+Column oriented 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:m$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $y_{i}=y_{i}+a_{ij}x_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Inner loop of column-oriented algorithm can be converted to 
+\begin_inset Formula $y=y+x_{j}a_{:,j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Number of flops is 
+\begin_inset Formula $2mn$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Matrix Multiplication Update
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Computes 
+\begin_inset Formula $C=C+AB$
+\end_inset
+
+, where 
+\begin_inset Formula $A\in\mathbb{R}^{m\times r}$
+\end_inset
+
+, 
+\begin_inset Formula $B\in\mathbb{R}^{r\times n}$
+\end_inset
+
+, and 
+\begin_inset Formula $C\in\mathbb{R}^{m\times n}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+c_{ij}=c_{ij}+\sum_{k=1}^{r}a_{ik}b_{kj}
+\]
+
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "60col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:m$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1:r$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1.5cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $c_{ij}=c_{ij}+a_{ik}b_{kj}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Number of flops is 
+\begin_inset Formula $2mnr$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In BLAS (Basic Linear Algebra Subroutines), functions are grouped into level-1,
+ 2, and 3, depending on whether complexity is linear, quadratic, or cubic
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Six Variants of Algorithms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+There are six variants depending on permutation of 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $j$
+\end_inset
+
+, and 
+\begin_inset Formula $k$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+ijk,\hspace{1em}jik,\hspace{1em}ikj,\hspace{1em}jki,\hspace{1em}kij,\hspace{1em}kji
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Inner product: 
+\begin_inset Formula $c_{ij}=c_{ij}+a_{i,:}b_{j}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "60col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:m$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $c_{ij}=c_{ij}+a_{i,:}b_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Saxpy: computes as 
+\begin_inset Formula $c_{j}=c_{j}+Ab_{j}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "60col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $c_{j}=c_{j}+Ab_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Outer product: computes as 
+\begin_inset Formula $C=C+\sum_{k=1}^{r}a_{k}b_{:,k}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "60col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1:r$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $C=C+a_{k}b_{:,k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Orthogonal Vectors and Matrices (NLA §2)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Inner Product
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Euclidean length
+\emph default
+ of 
+\begin_inset Formula $\vec{u}$
+\end_inset
+
+ is square root of inner product of 
+\begin_inset Formula $\vec{u}$
+\end_inset
+
+ with itself, i.e., 
+\begin_inset Formula $\sqrt{\vec{u}^{T}\vec{u}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Inner product of two 
+\series bold
+unit
+\series default
+ vectors 
+\begin_inset Formula $\vec{u}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{v}$
+\end_inset
+
+ is cosine of angle 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ between 
+\begin_inset Formula $\vec{u}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{v}$
+\end_inset
+
+, i.e., 
+\begin_inset Formula $\cos\alpha=\vec{u}^{T}\vec{v}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Inner product is 
+\emph on
+bilinear
+\emph default
+, in the sense that it is linear in each vertex separately: 
+\begin_inset Formula 
+\begin{align*}
+(\vec{u}_{1}+\vec{u}_{2})^{T}\vec{v} & =\vec{u}_{1}^{T}\vec{v}+\vec{u}_{2}^{T}\vec{v}\\
+\vec{u}^{T}(\vec{v}_{1}+\vec{v}_{2}) & =\vec{u}^{T}\vec{v}_{1}+\vec{u}^{T}\vec{v}_{2}\\
+(\alpha\vec{u})^{T}(\beta\vec{v}) & =\alpha\beta\vec{u}^{T}\vec{v}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Orthogonal Vectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Definition
+A pair of vectors are 
+\emph on
+orthogonal
+\emph default
+ if 
+\begin_inset Formula $\vec{x}^{T}\vec{y}=0$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In other words, angle between them is 
+\begin_inset Formula $90$
+\end_inset
+
+ degrees
+\end_layout
+
+\begin_layout Definition
+Two sets of vectors 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ are orthogonal if every 
+\begin_inset Formula $\vec{x}\in X$
+\end_inset
+
+ is orthogonal to every 
+\begin_inset Formula $\vec{y}\in Y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Subspaces 
+\begin_inset Formula $S^{\perp}$
+\end_inset
+
+ is 
+\emph on
+orthogonal complement
+\emph default
+ of 
+\begin_inset Formula $S$
+\end_inset
+
+ if they are orthogonal and complementary subspaces
+\end_layout
+
+\begin_layout Itemize
+For 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, 
+\begin_inset Formula $\mbox{null}(\vec{A})$
+\end_inset
+
+ is 
+\emph on
+orthogonal complement 
+\emph default
+of 
+\begin_inset Formula $\mbox{range}(A^{T})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+A set of nonzero vectors 
+\begin_inset Formula $S$
+\end_inset
+
+ is 
+\emph on
+orthogonal
+\emph default
+ if they are pairwise orthogonal.
+ They are 
+\emph on
+orthonormal
+\emph default
+ if it is orthogonal and in addition each vector has unit Euclidean length.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Orthogonal Vectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+The vectors in an orthogonal set 
+\begin_inset Formula $S$
+\end_inset
+
+ are linearly independent.
+\end_layout
+
+\begin_layout Proof
+Prove by contradiction.
+ If a vector can be expressed as linear combination of the other vectors
+ in the set, then it is orthogonal to itself.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Question
+\series default
+: If the column vectors of an 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ are orthogonal, what is the rank of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Answer
+\series default
+: 
+\begin_inset Formula $n=\min\{m,n\}$
+\end_inset
+
+.
+ In other words, 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has full rank.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Components of Vector
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Given an orthonormal set 
+\begin_inset Formula $\{\vec{q}_{1},\vec{q}_{2},\dots,\vec{q}_{m}\}$
+\end_inset
+
+ forming a basis of 
+\begin_inset Formula $\mathbb{R}^{m}$
+\end_inset
+
+, vector 
+\begin_inset Formula $\vec{v}$
+\end_inset
+
+ can be decomposed into orthogonal components as 
+\begin_inset Formula $\vec{v}=\sum_{i=1}^{m}(\vec{q}_{i}^{T}\vec{v})\vec{q}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Another way to express the decomposition is 
+\begin_inset Formula $\vec{v}=\sum_{i=1}^{m}(\vec{q}_{i}\vec{q}_{i}^{T})\vec{v}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{q}_{i}\vec{q}_{i}^{T}$
+\end_inset
+
+ is an 
+\emph on
+orthogonal projection matrix
+\end_layout
+
+\begin_layout Itemize
+More generally, given an orthonormal set 
+\begin_inset Formula $\{\vec{q}_{1},\vec{q}_{2},\dots,\vec{q}_{n}\}$
+\end_inset
+
+ with 
+\begin_inset Formula $n\leq m$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\vec{v}=\vec{r}+\sum_{i=1}^{n}(\vec{q}_{i}^{T}\vec{v})\vec{q}_{i}=\vec{r}+\sum_{i=1}^{n}(\vec{q}_{i}\vec{q}_{i}^{T})\vec{v}\ \mbox{and }\vec{r}^{T}\vec{q}_{i}=0,1\leq i\leq n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ be composed of column vectors 
+\begin_inset Formula $\{\vec{q}_{1},\vec{q}_{2},\dots,\vec{q}_{n}\}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\vec{Q}\vec{Q}^{T}=\sum_{i=1}^{n}(\vec{q}_{i}\vec{q}_{i}^{T})$
+\end_inset
+
+ is an orthogonal projection matrix (more in Lecture 4)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Orthogonal Matrices
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Definition
+A matrix is 
+\emph on
+orthogonal
+\emph default
+ if 
+\begin_inset Formula $\vec{Q}^{T}=\vec{Q}^{-1}$
+\end_inset
+
+, i.e., if 
+\begin_inset Formula $\vec{Q}^{T}\vec{Q}=\vec{Q}\vec{Q}^{T}=\vec{I}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Its column vectors are 
+\emph on
+orthonormal
+\emph default
+.
+ In other words, 
+\begin_inset Formula $\vec{q}_{i}^{T}\vec{q}_{j}=\delta_{ij}$
+\end_inset
+
+, the 
+\emph on
+Kronecker delta
+\emph default
+.
+\end_layout
+
+\begin_layout Itemize
+For complex matrices, we say the matrix is 
+\emph on
+unitary
+\emph default
+ if 
+\begin_inset Formula $\vec{Q}^{H}=\vec{Q}^{-1}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Question
+\series default
+: What is the geometric meaning of multiplication by an orthogonal matrix?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Answer
+\series default
+: It preserves angles and Euclidean length.
+ In the real case, multiplication by an orthogonal matrix 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ is a rotation (if 
+\begin_inset Formula $\mbox{det}(\vec{Q})=1)$
+\end_inset
+
+ or reflection (if 
+\begin_inset Formula $\mbox{det}(\vec{Q})=-1$
+\end_inset
+
+).
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Vector Norms (NLA §3)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Definition of Norms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Norm captures 
+\begin_inset Quotes eld
+\end_inset
+
+size
+\begin_inset Quotes erd
+\end_inset
+
+ of vector or 
+\begin_inset Quotes eld
+\end_inset
+
+distance
+\begin_inset Quotes erd
+\end_inset
+
+ between vectors
+\end_layout
+
+\begin_layout Itemize
+There are many different measures for 
+\begin_inset Quotes eld
+\end_inset
+
+sizes
+\begin_inset Quotes erd
+\end_inset
+
+ but a norm must satisfy some requirements:
+\end_layout
+
+\begin_layout Definition
+A 
+\emph on
+norm
+\emph default
+ is a function 
+\begin_inset Formula $\Vert\cdot\Vert:\mathbb{R}^{n}\rightarrow\mathbb{R}$
+\end_inset
+
+ that assigns a real-valued length to each vector.
+ It must satisfy the following conditions: 
+\begin_inset Formula 
+\begin{align*}
+(1) & \Vert\vec{x}\Vert\geq0,\mbox{ and }\Vert\vec{x}\Vert=0\mbox{ only if }\vec{x}=\vec{0},\\
+(2) & \Vert\vec{x}+\vec{y}\Vert\leq\Vert\vec{x}\Vert+\Vert\vec{y}\Vert,\\
+(3) & \Vert\alpha\vec{x}\Vert=\vert\alpha\vert\Vert\vec{x}\Vert.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+An example is Euclidean length (i.e, 
+\begin_inset Formula $\Vert\vec{x}\Vert=\sqrt{\sum_{i=1}^{n}\vert x_{i}\vert^{2}}$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula $p$
+\end_inset
+
+-norms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Euclidean length is a special case of 
+\begin_inset Formula $p$
+\end_inset
+
+-norms, defined as 
+\begin_inset Formula 
+\[
+\Vert\vec{x}\Vert_{p}=\left(\sum_{i=1}^{n}\vert x_{i}\vert^{p}\right)^{1/p}
+\]
+
+\end_inset
+
+for 
+\begin_inset Formula $1\leq p\leq\infty$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Euclidean norm is 
+\begin_inset Formula $2$
+\end_inset
+
+-norm 
+\begin_inset Formula $\Vert\vec{x}\Vert_{2}$
+\end_inset
+
+ (i.e., 
+\begin_inset Formula $p=2$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $1$
+\end_inset
+
+-norm: 
+\begin_inset Formula $\Vert\vec{x}\Vert_{1}=\sum_{i=1}^{n}\vert x_{i}\vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\infty$
+\end_inset
+
+-norm: 
+\begin_inset Formula $\Vert\vec{x}\Vert_{\infty}$
+\end_inset
+
+ .
+ What is its value?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: 
+\begin_inset Formula $\Vert\vec{x}\Vert_{\infty}=\max_{1\leq i\leq n}\vert x_{i}\vert$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Why we require 
+\begin_inset Formula $p\ge1?$
+\end_inset
+
+ What happens if 
+\begin_inset Formula $0\leq p<1?$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Some Properties of Vector Norms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+H
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+"o
+\end_layout
+
+\end_inset
+
+lder inequality: 
+\begin_inset Formula $\vert x^{T}y\vert\leq\Vert x\Vert_{p}\Vert y\Vert_{q},\quad\frac{1}{p}+\frac{1}{q}=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In particular when 
+\begin_inset Formula $p=q=2$
+\end_inset
+
+: 
+\begin_inset Formula $\vert x^{T}y\vert\leq\Vert x\Vert_{2}\Vert y\Vert_{2}$
+\end_inset
+
+ (Cauchy-Schwarz inequality)
+\end_layout
+
+\begin_layout Itemize
+All norms are 
+\emph on
+equivalent
+\emph default
+, in that there exists 
+\begin_inset Formula $c_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{2}$
+\end_inset
+
+ s.t.
+\begin_inset Formula 
+\[
+c_{1}\Vert x\Vert_{\alpha}\leq\Vert x\Vert_{\beta}\leq c_{2}\Vert x\Vert_{\alpha}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $c_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{2}$
+\end_inset
+
+ are constants and may depend on 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ e.g., 
+\begin_inset Formula 
+\[
+\Vert x\Vert_{2}\leq\Vert x\Vert_{1}\leq\sqrt{n}\Vert x\Vert_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+2-norm is preserved under orthogonal transformation 
+\begin_inset Formula $Qx$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\Vert Qx\Vert_{2}=\Vert x\Vert_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Weighted 
+\begin_inset Formula $p$
+\end_inset
+
+-norms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+A generalization of 
+\begin_inset Formula $p$
+\end_inset
+
+-norm is 
+\emph on
+weighted 
+\begin_inset Formula $p$
+\end_inset
+
+-norm
+\emph default
+, which assigns different weights (priorities) to different components.
+ 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+It is anisotropic instead of isotropic
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Algebraically, 
+\begin_inset Formula $\Vert\vec{x}\Vert_{W}=\Vert\vec{W}\vec{x}\Vert$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{W}$
+\end_inset
+
+ is diagonal matrix with 
+\begin_inset Formula $i$
+\end_inset
+
+th diagonal entry 
+\begin_inset Formula $w_{i}\neq0$
+\end_inset
+
+ being weight for 
+\begin_inset Formula $i$
+\end_inset
+
+th component
+\end_layout
+
+\begin_layout Itemize
+In other words,
+\begin_inset Formula 
+\[
+\Vert\vec{x}\Vert_{W}=\left(\sum_{i=1}^{n}\vert w_{i}x_{i}\vert^{p}\right)^{1/p}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+What happens if we allow 
+\begin_inset Formula $w_{i}=0$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Can we further generalize it to allow 
+\begin_inset Formula $\vec{W}$
+\end_inset
+
+ being arbitrary matrix?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+No.
+ But we can allow 
+\begin_inset Formula $\vec{W}$
+\end_inset
+
+ to be arbitrary nonsingular matrix.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+-norm of Vectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Given a positive definite matrix 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+, the 
+\begin_inset Formula $A$
+\end_inset
+
+-norm on 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+ is
+\begin_inset Formula 
+\[
+\Vert\vec{x}\Vert_{\vec{A}}=\sqrt{\vec{x}^{T}\vec{A}\vec{x}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note: Weighted 
+\begin_inset Formula $p$
+\end_inset
+
+-norm with 
+\begin_inset Formula $W$
+\end_inset
+
+ is 
+\begin_inset Formula $A$
+\end_inset
+
+-norm with 
+\begin_inset Formula $A=W^{2}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+These conventions are somewhat inconsistent, but they are both commonly
+ used in the literature
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

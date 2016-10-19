@@ -1,0 +1,1371 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+%\def\vec#1{\mbox{\boldmath $#1$}}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 3: Matrix Norms; 
+\begin_inset Newline newline
+\end_inset
+
+Singular Value Decomposition
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+SUNY Stony Brook
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Matrix Norms (NLA §3)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Frobenius Norm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+One can define a norm by viewing 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ matrix as vectors in 
+\begin_inset Formula $\mbox{\mathbb{R}}^{mn}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+One useful norm is Frobenius norm (a.k.a.
+ Hilbert-Schmidt norm) 
+\begin_inset Formula 
+\[
+\Vert\vec{A}\Vert_{F}=\sqrt{\sum_{i=1}^{n}\sum_{j=1}^{m}\vert a_{ij}\vert^{2}}=\sqrt{\sum_{j=1}^{n}\Vert\vec{a}_{j}\Vert_{2}^{2}}
+\]
+
+\end_inset
+
+i.e., 
+\begin_inset Formula $2$
+\end_inset
+
+-norm of 
+\begin_inset Formula $(mn)$
+\end_inset
+
+-vector
+\end_layout
+
+\begin_layout Itemize
+Furthermore, 
+\begin_inset Formula 
+\[
+\Vert\vec{A}\Vert_{F}=\sqrt{\mbox{tr}(\vec{A}^{T}\vec{A}})
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\mbox{tr}(\vec{B})$
+\end_inset
+
+ denotes trace of 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+, the sum of its diagonal entries
+\end_layout
+
+\begin_layout Itemize
+Note that for 
+\begin_inset Formula $A\in\mathbb{R}^{n\times\ell}$
+\end_inset
+
+ and 
+\begin_inset Formula $B\in\mathbb{R}^{\ell\times m}$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+\Vert\vec{A}\vec{B}\Vert_{F}\leq\Vert\vec{A}\Vert_{F}\Vert\vec{B}\Vert_{F}
+\]
+
+\end_inset
+
+because 
+\begin_inset Formula 
+\[
+\Vert\vec{A}\vec{B}\Vert_{F}^{2}=\sum_{i=1}^{n}\sum_{j=1}^{m}\vert\vec{a}_{i}^{T}\vec{b}_{j}\vert^{2}\leq\sum_{i=1}^{n}\sum_{j=1}^{m}\left(\Vert\vec{a}_{i}^{T}\Vert_{2}\Vert\vec{b}_{j}\Vert_{2}\right)^{2}=\Vert\vec{A}\Vert_{F}^{2}\Vert\vec{B}\Vert_{F}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+General Definition of Matrix Norms
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+However, viewing 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ matrix as vectors in 
+\begin_inset Formula $\mbox{\mathbb{R}}^{mn}$
+\end_inset
+
+ is not always useful, because matrix operations do not behave this way
+\end_layout
+
+\begin_layout Itemize
+Similar to vector norms, 
+\emph on
+general matrix norms
+\emph default
+ has the following properties (for 
+\begin_inset Formula $\vec{A},\vec{B}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+)
+\begin_inset Formula 
+\begin{align*}
+(1) & \Vert\vec{A}\Vert\geq0,\mbox{ and }\Vert\vec{A}\Vert=0\mbox{ only if }\vec{A}=\vec{0},\\
+(2) & \Vert\vec{A}+\vec{B}\Vert\leq\Vert\vec{A}\Vert+\Vert\vec{B}\Vert,\\
+(3) & \Vert\alpha\vec{A}\Vert=\vert\alpha\vert\Vert\vec{A}\Vert.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In addition, a matrix norm for 
+\begin_inset Formula $A,B\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ typically satisfies
+\begin_inset Formula 
+\[
+\Vert AB\Vert\leq\Vert A\Vert\Vert B\Vert,\qquad(\mbox{submultiplicativity})
+\]
+
+\end_inset
+
+which is a generalization of Cauchy-Schwarz inequality
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Norms Induced by Vector Norms
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Matrix norms can be 
+\emph on
+induced 
+\emph default
+from vector norms, which can better capture behaviors of matrix-vector multiplic
+ations
+\end_layout
+
+\begin_layout Definition
+Given vector norms 
+\begin_inset Formula $\Vert\cdot\Vert_{(n)}$
+\end_inset
+
+ and 
+\begin_inset Formula $\Vert\cdot\Vert_{(m)}$
+\end_inset
+
+ on domain and range of 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, respectively, the induced matrix norm 
+\begin_inset Formula $\Vert A\Vert_{(m,n)}$
+\end_inset
+
+ is the smallest number 
+\begin_inset Formula $C\in\mathbb{R}$
+\end_inset
+
+ for which the following inequality holds for all 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\Vert\vec{A}\vec{x}\Vert_{(m)}\leq C\Vert\vec{x}\Vert_{(n)}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In other words, it is supremum of 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\Vert\vec{A}\vec{x}\Vert_{(m)}/\Vert\vec{x}\Vert_{(n)}$
+\end_inset
+
+ for all 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}\backslash\{\vec{0}\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Maximum factor by which 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ can 
+\begin_inset Quotes eld
+\end_inset
+
+stretch
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\Vert\vec{A}\Vert_{(m,n)}=\sup_{\vec{x}\in\mathbb{R}^{n},\vec{x}\neq\vec{0}}\Vert\vec{A}\vec{x}\Vert_{(m)}/\Vert\vec{x}\Vert_{(n)}=\sup_{\vec{x}\in\mathbb{R}^{n},\Vert\vec{x}\Vert_{(n)}=1}\Vert\vec{A}\vec{x}\Vert_{(m)}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Is vector norm consistent with matrix norm of 
+\begin_inset Formula $m\times1$
+\end_inset
+
+-matrix?
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+1-norm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+By definition
+\begin_inset Formula 
+\[
+\Vert\vec{A}\Vert_{1}=\sup_{\vec{x}\in\mathbb{R}^{n},\Vert\vec{x}\Vert_{1}=1}\Vert\vec{A}\vec{x}\Vert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+What is it equal to?
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Maximum of 1-norm of column vectors of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Or maximum of column sum of absolute values of 
+\begin_inset Formula $A$
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+column-sum norm
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To show it, note that for 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $\Vert\vec{x}\Vert_{1}=1$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\Vert\vec{A}\vec{x}\Vert_{1}=\left\Vert \sum_{j=1}^{n}x_{j}\vec{a}_{j}\right\Vert _{1}\leq\sum_{j=1}^{n}\vert x_{j}\vert\Vert\vec{a}_{j}\Vert_{1}\leq\max_{1\leq j\leq n}\Vert\vec{a}_{j}\Vert_{1}\Vert\vec{x}\Vert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $k=\arg\max_{1\leq j\leq n}\Vert\vec{a}_{j}\Vert_{1}$
+\end_inset
+
+, then 
+\begin_inset Formula $\Vert\vec{A}\vec{e}_{k}\Vert_{1}=\Vert\vec{a}_{k}\Vert_{1}$
+\end_inset
+
+, so 
+\begin_inset Formula $\max_{1\leq j\leq n}\Vert\vec{a}_{j}\Vert_{1}$
+\end_inset
+
+ is tight upper bound
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula $\infty$
+\end_inset
+
+-norm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+By definition
+\begin_inset Formula 
+\[
+\Vert\vec{A}\Vert_{\infty}=\sup_{\vec{x}\in\mathbb{R}^{n},\Vert\vec{x}\Vert_{\infty}=1}\Vert\vec{A}\vec{x}\Vert_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+What is 
+\begin_inset Formula $\Vert\vec{A}\Vert_{\infty}$
+\end_inset
+
+ equal to? 
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Maximum of 
+\begin_inset Formula $1$
+\end_inset
+
+-norm of column vectors of 
+\begin_inset Formula $\vec{A}^{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Or maximum of row sum of absolute values of 
+\begin_inset Formula $A$
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+row-sum norm
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To show it, note that for 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $\Vert\vec{x}\Vert_{\infty}=1$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\Vert\vec{A}\vec{x}\Vert_{\infty}=\max_{1\leq i\leq m}\vert\vec{a}_{i,:}x\vert\leq\max_{1\leq i\leq m}\Vert\vec{a}_{i,:}^{T}\Vert_{1}\Vert\vec{x}\Vert_{\infty}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{a}_{i,:}$
+\end_inset
+
+ denotes 
+\begin_inset Formula $i$
+\end_inset
+
+th row vector of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\Vert\vec{a}_{i,:}^{T}\Vert_{1}=\sum_{j=1}^{n}\vert a_{ij}\vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Furthermore, 
+\begin_inset Formula $\Vert\vec{a}_{i,:}^{T}\Vert_{1}$
+\end_inset
+
+ is a tight bound.
+\end_layout
+
+\begin_layout Itemize
+Which vector can we choose for 
+\begin_inset Formula $x$
+\end_inset
+
+ for equality to hold?
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+2-norm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+What is 2-norm of a matrix?
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+Answer: Its largest singular value, which we will explain in later lectures
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+What is 2-norm of a diagonal matrix 
+\begin_inset Formula $D$
+\end_inset
+
+?
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+Answer: 
+\begin_inset Formula $\Vert\vec{D}\Vert_{2}=\max_{i=1}^{n}\{\vert d_{ii}\vert\}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+What is 2-norm of rank-one matrix 
+\begin_inset Formula $\vec{u}\vec{v}^{T}$
+\end_inset
+
+? Hint: Use Cauchy-Schwarz inequality.
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+Answer: 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\Vert\vec{u}\vec{v}^{T}\Vert_{2}=\Vert\vec{u}\Vert_{2}\Vert\vec{v}\Vert_{2}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Bounding Matrix-Matrix Multiplication
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Let 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ be an 
+\begin_inset Formula $l\times m$
+\end_inset
+
+ matrix and 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ an 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ matrix, then
+\begin_inset Formula 
+\[
+\Vert\vec{A}\vec{B}\Vert_{(l,n)}\leq\Vert\vec{A}\Vert_{(l,m)}\Vert\vec{B}\Vert_{(m,n)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+To show it, note for 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\Vert\vec{A}\vec{B}\vec{x}\Vert_{(l)}\leq\Vert\vec{A}\Vert_{(l,m)}\Vert\vec{B}\vec{x}\Vert_{(m)}\leq\Vert\vec{A}\Vert_{(l,m)}\Vert\vec{B}\Vert_{(m,n)}\Vert\vec{x}\Vert_{(n)},
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In general, this inequality is not an equality
+\end_layout
+
+\begin_layout Itemize
+In particular, 
+\begin_inset Formula $\Vert\vec{A}^{p}\Vert\leq\Vert\vec{A}\Vert^{p}$
+\end_inset
+
+ but 
+\begin_inset Formula $\Vert\vec{A}^{p}\Vert\neq\Vert\vec{A}\Vert^{p}$
+\end_inset
+
+ in general for 
+\begin_inset Formula $p\geq2$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Invariance under Orthogonal Transformation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Given matrix 
+\begin_inset Formula $\vec{Q}\in\mathbb{R}^{\ell\times m}$
+\end_inset
+
+ with 
+\begin_inset Formula $\ell\ge m$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\vec{Q}^{T}\vec{Q}=I$
+\end_inset
+
+, then 
+\begin_inset Formula $\vec{Q}\vec{x}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{m}$
+\end_inset
+
+ corresponds to orthogonal transformation to coordinate system in 
+\begin_inset Formula $\mathbb{R}^{\ell}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{Q}\in\mathbb{R}^{m\times m}$
+\end_inset
+
+, then 
+\begin_inset Formula $Q$
+\end_inset
+
+ is said to be an 
+\emph on
+orthogonal
+\emph default
+ matrix
+\end_layout
+
+\begin_layout Theorem
+For any 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{Q}\in\mathbb{R}^{\ell\times m}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{Q}^{T}\vec{Q}=I$
+\end_inset
+
+ and 
+\begin_inset Formula $\ell\ge m$
+\end_inset
+
+ , we have 
+\begin_inset Formula 
+\[
+\Vert\vec{Q}\vec{A}\Vert_{2}=\Vert\vec{A}\Vert_{2}\mbox{ and }\Vert\vec{Q}\vec{A}\Vert_{F}=\Vert\vec{A}\Vert_{F}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In other words, 
+\begin_inset Formula $2$
+\end_inset
+
+-norm and Frobenius norms are invariant under orthogonal transformation.
+\end_layout
+
+\begin_layout Standard
+Proof for 2-norm: 
+\begin_inset Formula $\Vert\vec{Q}\vec{y}\Vert_{2}=\Vert\vec{y}\Vert_{2}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{y}\in\mathbb{R}^{m}$
+\end_inset
+
+ and therefore 
+\begin_inset Formula $\Vert\vec{Q}\vec{A}\vec{x}\Vert_{2}=\Vert\vec{A}\vec{x}\Vert_{2}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}$
+\end_inset
+
+.
+ It then follows from definition of 2-norm.
+ 
+\end_layout
+
+\begin_layout Standard
+Proof for Frobenius norm: 
+\begin_inset Formula $\Vert\vec{Q}\vec{A}\Vert_{F}^{2}=\mbox{tr}\left((\vec{Q}\vec{A})^{T}\vec{Q}\vec{A}\right)=\mbox{tr}\left(\vec{A}^{T}\vec{Q}^{T}\vec{Q}\vec{A}\right)=\mbox{tr}\left(\vec{A}^{T}\vec{A}\right)=\Vert\vec{A}\Vert_{F}^{2}.$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Singular Value Decomposition (NLA§4-5)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Singular Value Decomposition (SVD)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Given 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, its 
+\emph on
+SVD
+\emph default
+ is
+\begin_inset Formula 
+\[
+\vec{A}=\vec{U}\vec{\Sigma}\vec{V}^{T}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{U}\in\mathbb{R}^{m\times m}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{V}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ are orthogonal, and 
+\begin_inset Formula $\Sigma\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ is diagonal
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $A\in\mathbb{\mathbb{C}}^{m\times n}$
+\end_inset
+
+, then its SVD is 
+\begin_inset Formula $\vec{A}=\vec{U}\vec{\Sigma}\vec{V}^{H}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{U}\in\mathbb{C}^{m\times m}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{V}\in\mathbb{C}^{n\times n}$
+\end_inset
+
+ are unitary, and 
+\begin_inset Formula $\Sigma\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ is diagonal
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Singular values
+\emph default
+ are diagonal entries of 
+\begin_inset Formula $\vec{\Sigma}$
+\end_inset
+
+, with entries 
+\begin_inset Formula $\sigma_{1}\geq\sigma_{2}\ge\cdots\ge\sigma_{n}\ge0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Left singular vectors
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ are column vectors of 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Right singular vectors
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ are column vectors of 
+\begin_inset Formula $\vec{V}$
+\end_inset
+
+ and are the preimages of the principal semiaxes of 
+\begin_inset Formula $\vec{A}S$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+SVD plays prominent role in data analysis and matrix analysis
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Geometric Observation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Image of unit sphere under any 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ matrix is a 
+\emph on
+hyperellipse
+\end_layout
+
+\begin_layout Itemize
+Give unit sphere 
+\begin_inset Formula $S$
+\end_inset
+
+ in 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{A}S$
+\end_inset
+
+ denotes shape after transformation
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Singular values
+\emph default
+ correspond to the principal semiaxes of hyerellipse
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Left singular vectors
+\emph default
+ are oriented in directions of principal semiaxes of 
+\begin_inset Formula $\vec{A}S$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Right singular vectors
+\emph default
+ are preimages of principal semiaxes of 
+\begin_inset Formula $\vec{A}S$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{A}\vec{v}_{j}=\sigma_{j}\vec{u}_{j}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\leq j\leq n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%Verify these geometric observations pictorially
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Two Different Types of SVD
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\series bold
+Full SVD
+\series default
+: 
+\begin_inset Formula $\vec{U}\in\mathbb{R}^{m\times m}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{\Sigma}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, and 
+\begin_inset Formula $\vec{V}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\vec{A}=\vec{U}\vec{\Sigma}\vec{V}^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Thin SVD
+\series default
+ (
+\series bold
+Reduced SVD
+\series default
+): 
+\begin_inset Formula $\hat{\vec{U}}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, 
+\begin_inset Formula $\hat{\vec{\Sigma}}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ (assume 
+\begin_inset Formula $m\geq n$
+\end_inset
+
+)
+\begin_inset Formula 
+\[
+\vec{A}=\hat{\vec{U}}\hat{\vec{\Sigma}}\vec{V}^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Furthermore, notice that 
+\begin_inset Formula 
+\[
+\vec{A}=\sum_{i=1}^{\min\{m,n\}}\sigma_{i}\vec{u}_{i}\vec{v}_{i}^{T}
+\]
+
+\end_inset
+
+so we can keep only entries of 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{V}$
+\end_inset
+
+ corresponding to nonzero 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\end_body
+\end_document

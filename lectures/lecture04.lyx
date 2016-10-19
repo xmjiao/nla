@@ -1,0 +1,2038 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+%\def\vec#1{\mbox{\boldmath $#1$}}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 4: More on SVD; Projectors
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+SUNY Stony Brook
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Singular Value Decomposition (NLA§4-5)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Singular Value Decomposition (SVD)
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Given 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, its 
+\emph on
+SVD
+\emph default
+ is
+\begin_inset Formula 
+\[
+\vec{A}=\vec{U}\vec{\Sigma}\vec{V}^{T}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{U}\in\mathbb{R}^{m\times m}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{V}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ are orthogonal, and 
+\begin_inset Formula $\Sigma\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ is diagonal
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $A\in\mathbb{\mathbb{C}}^{m\times n}$
+\end_inset
+
+, then its SVD is 
+\begin_inset Formula $\vec{A}=\vec{U}\vec{\Sigma}\vec{V}^{H}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{U}\in\mathbb{C}^{m\times m}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{V}\in\mathbb{C}^{n\times n}$
+\end_inset
+
+ are unitary, and 
+\begin_inset Formula $\Sigma\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ is diagonal
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Singular values
+\emph default
+ are diagonal entries of 
+\begin_inset Formula $\vec{\Sigma}$
+\end_inset
+
+, with entries 
+\begin_inset Formula $\sigma_{1}\geq\sigma_{2}\ge\cdots\ge\sigma_{n}\ge0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Left singular vectors
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ are column vectors of 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Right singular vectors
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ are column vectors of 
+\begin_inset Formula $\vec{V}$
+\end_inset
+
+ and are the preimages of the principal semiaxes of 
+\begin_inset Formula $\vec{A}S$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+SVD plays prominent role in data analysis and matrix analysis
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Two Different Types of SVD
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\series bold
+Full SVD
+\series default
+: 
+\begin_inset Formula $\vec{U}\in\mathbb{R}^{m\times m}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{\Sigma}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, and 
+\begin_inset Formula $\vec{V}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\vec{A}=\vec{U}\vec{\Sigma}\vec{V}^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Thin SVD
+\series default
+ (
+\series bold
+Reduced SVD
+\series default
+): 
+\begin_inset Formula $\hat{\vec{U}}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, 
+\begin_inset Formula $\hat{\vec{\Sigma}}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ (assume 
+\begin_inset Formula $m\geq n$
+\end_inset
+
+)
+\begin_inset Formula 
+\[
+\vec{A}=\hat{\vec{U}}\hat{\vec{\Sigma}}\vec{V}^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Furthermore, notice that 
+\begin_inset Formula 
+\[
+\vec{A}=\sum_{i=1}^{\min\{m,n\}}\sigma_{i}\vec{u}_{i}\vec{v}_{i}^{T}
+\]
+
+\end_inset
+
+so we can keep only entries of 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{V}$
+\end_inset
+
+ corresponding to nonzero 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Existence of SVD
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+(Existence) Every matrix 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ has an SVD.
+ 
+\end_layout
+
+\begin_layout Standard
+Proof: Let 
+\begin_inset Formula $\sigma_{1}=\Vert A\Vert_{2}$
+\end_inset
+
+.
+ There exists 
+\begin_inset Formula $\vec{v}_{1}\in\mathbb{R}^{n}$
+\end_inset
+
+ with 
+\begin_inset Formula $\Vert\vec{v}_{1}\Vert_{2}=1$
+\end_inset
+
+ and 
+\begin_inset Formula $\Vert\vec{A}\vec{v}_{1}\Vert_{2}=\sigma_{1}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\vec{U}_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{V}_{1}$
+\end_inset
+
+ be orthogonal matrices whose first columns are 
+\begin_inset Formula $\vec{u}_{1}=\vec{A}\vec{v}_{1}/\sigma_{1}$
+\end_inset
+
+ (or any unit-length vector if 
+\begin_inset Formula $\sigma_{1}=0$
+\end_inset
+
+) and 
+\begin_inset Formula $\vec{v}_{1}$
+\end_inset
+
+, respectively.
+ Note that
+\begin_inset Formula 
+\begin{equation}
+\vec{U}_{1}^{T}\vec{A}\vec{V}_{1}=\vec{S}=\left[\begin{array}{cc}
+\sigma_{1} & \vec{\omega}^{T}\\
+\vec{0} & \vec{B}
+\end{array}\right].\label{eq:decom}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Furthermore, 
+\begin_inset Formula $\vec{\omega}=0$
+\end_inset
+
+ because 
+\begin_inset Formula $\Vert\vec{S}\Vert_{2}=\sigma_{1}$
+\end_inset
+
+, and 
+\begin_inset Formula 
+\[
+\left\Vert \left[\begin{array}{cc}
+\sigma_{1} & \vec{\omega}^{T}\\
+\vec{0} & \vec{B}
+\end{array}\right]\left[\begin{array}{c}
+\sigma_{1}\\
+\vec{\vec{\omega}}
+\end{array}\right]\right\Vert _{2}\geq\sigma_{1}^{2}+\vec{\omega}^{T}\vec{\omega}=\sqrt{\sigma_{1}^{2}+\vec{\omega}^{T}\vec{\omega}}\left\Vert \left[\begin{array}{c}
+\sigma_{1}\\
+\vec{\vec{\omega}}
+\end{array}\right]\right\Vert _{2},
+\]
+
+\end_inset
+
+implying that 
+\begin_inset Formula $\sigma_{1}\geq\sqrt{\sigma_{1}^{2}+\vec{\omega}^{T}\vec{\omega}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{\omega}=\vec{0}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Existence of SVD Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+We then prove by induction using (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:decom"
+
+\end_inset
+
+).
+ If 
+\begin_inset Formula $m=1$
+\end_inset
+
+ or 
+\begin_inset Formula $n=1$
+\end_inset
+
+, then 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ is empty and we have 
+\begin_inset Formula $\vec{A}=\vec{U}_{1}\vec{S}\vec{V}_{1}^{T}$
+\end_inset
+
+.
+ Otherwise, suppose 
+\begin_inset Formula $\vec{B}=\vec{U}_{2}\vec{\Sigma}_{2}\vec{V}_{2}^{T}$
+\end_inset
+
+, and then 
+\begin_inset Formula 
+\[
+\vec{A}=\underbrace{\vec{U}_{1}\left[\begin{array}{cc}
+1 & \vec{0}^{T}\\
+\vec{0} & \vec{U}_{2}
+\end{array}\right]}_{\vec{U}}\underbrace{\left[\begin{array}{cc}
+\sigma_{1} & \vec{0}^{T}\\
+\vec{0} & \vec{\Sigma}_{2}
+\end{array}\right]}_{\vec{\Sigma}}\underbrace{\left[\begin{array}{cc}
+1 & \vec{0}^{T}\\
+\vec{0} & \vec{V}_{2}^{T}
+\end{array}\right]\vec{V}_{1}^{T}}_{\vec{V}^{T}},
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{V}$
+\end_inset
+
+ are orthogonal.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Uniqueness of SVD
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+(Uniqueness) The singular values 
+\begin_inset Formula $\{\sigma_{j}\}$
+\end_inset
+
+ are uniquely determined.
+ If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is square and the 
+\begin_inset Formula $\sigma_{j}$
+\end_inset
+
+ are distinct, the left and right singular vectors are uniquely determined
+ 
+\series bold
+up to signs
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+Geometric argument: If the lengths of semiaxes of a hyperellipse are distinct,
+ then the semiaxes themselves are determined by the geometry up to signs.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Uniqueness of SVD Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Algebraic argument: Based on 
+\begin_inset Formula $2$
+\end_inset
+
+-norm and prove by induction.
+ Consider the case where the 
+\begin_inset Formula $\sigma_{j}$
+\end_inset
+
+ are distinct.
+ The 
+\begin_inset Formula $2$
+\end_inset
+
+-norm is unique, so is 
+\begin_inset Formula $\sigma_{1}$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\vec{v}_{1}$
+\end_inset
+
+ is not unique up to sign, then the orthonormal bases of these vectors are
+ right singular vectors of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, implying that 
+\begin_inset Formula $\sigma_{1}$
+\end_inset
+
+ is not a simple singular value.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once 
+\begin_inset Formula $\sigma_{1},\vec{u}_{1},$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{v}_{1}$
+\end_inset
+
+ are determined, the remainder of SVD is determined by the space orthogonal
+ to 
+\begin_inset Formula $\vec{v}_{1}$
+\end_inset
+
+.
+ Because 
+\begin_inset Formula $\vec{v}_{1}$
+\end_inset
+
+ is unique up to sign, the orthogonal subspace is uniquely defined.
+ Then prove by induction.
+ 
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Question: What if we change the sign of a singular vector?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Question: What if 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ is not distinct?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+SVD vs.
+ Eigenvalue Decomposition
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Eigenvalue decomposition of nondefective matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\begin_inset Formula $\vec{A}=\vec{X}\vec{\Lambda}\vec{X}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Differences between SVD and eigenvalue decomposition
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Not every matrix has eigenvalue decomposition, but every matrix has singular
+ value decomposition
+\end_layout
+
+\begin_layout Itemize
+Eigenvalues may not always be real numbers, but singular values are always
+ non-negative real numbers
+\end_layout
+
+\begin_layout Itemize
+Eigenvectors are not always orthogonal to each other (orthogonal for symmetric
+ matrices), but left (or right) singular vectors are orthogonal to each
+ other
+\end_layout
+
+\end_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Similarities
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Singular values of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ are square roots of eigenvalues of 
+\begin_inset Formula $\vec{A}\vec{A}^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{A}^{T}\vec{A}$
+\end_inset
+
+, and their eigenvectors are left and right singular vectors, respectively
+\end_layout
+
+\begin_layout Itemize
+Singular values of Hermitian matrices are absolute values of eigenvalues,
+ and eigenvectors are singular vectors (up to signs)
+\end_layout
+
+\begin_layout Itemize
+This relationship can be used to compute singular values by hand
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Matrix Properties via SVD
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Let 
+\begin_inset Formula $r$
+\end_inset
+
+ be number of nonzero singular values of 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mbox{rank}(\vec{A})$
+\end_inset
+
+ is 
+\begin_inset Formula $r$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mbox{range}(\vec{A})=\mbox{span}\{\vec{u}_{1},\vec{u}_{2},\dots,\vec{u}_{r}\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mbox{null}(\vec{A})=\mbox{span}\{\vec{v}_{r+1},\vec{v}_{r+2},\dots,\vec{v}_{n}\}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+2-norm and Frobenius norm
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\Vert\vec{A}\Vert_{2}=\sigma_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\Vert\vec{A}\Vert_{F}=\sqrt{\sum_{i}\sigma_{i}^{2}}$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Determinant of matrix
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times m}$
+\end_inset
+
+, 
+\begin_inset Formula $\vert\det(\vec{A})\vert=\prod_{i=1}^{m}\sigma_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+However, SVD may not be the most efficient way in solving problems
+\end_layout
+
+\begin_layout Itemize
+Algorithms for SVD are similar to those for eigenvalue decomposition and
+ we will discuss them later
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Projectors (NLA§6)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Projectors (Projection Matrices)
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+A 
+\emph on
+projector 
+\emph default
+(aka 
+\emph on
+projection matrix
+\emph default
+) satisfies 
+\begin_inset Formula $\vec{P}^{2}=\vec{P}$
+\end_inset
+
+.
+ They are also said to be 
+\emph on
+idempotent
+\emph default
+.
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Orthogonal
+\emph default
+ projector
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Oblique
+\emph default
+ projector
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+An 
+\emph on
+orthogonal projector
+\emph default
+ is one that projects onto a subspace 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ along a space 
+\begin_inset Formula $\vec{S_{2}}$
+\end_inset
+
+, where 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{2}$
+\end_inset
+
+ are orthogonal.
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $S_{1}=\mbox{range}(P)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $S_{2}=\mbox{null}(P)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Example: 
+\begin_inset Formula $\left[\begin{array}{cc}
+0 & 0\\
+\alpha & 1
+\end{array}\right]$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+is an oblique projector if 
+\begin_inset Formula $\alpha\neq0$
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Itemize
+is orthogonal projector if 
+\begin_inset Formula $\alpha=0$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Orthogonal Projector
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+A projector 
+\begin_inset Formula $\vec{P}$
+\end_inset
+
+ is orthogonal if and only if 
+\begin_inset Formula $\vec{P}=\vec{P}^{T}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note: An alternative definition of 
+\emph on
+orthogonal projection
+\emph default
+ is 
+\begin_inset Formula $\vec{P}^{2}=\vec{P}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{P}=\vec{P}^{T}$
+\end_inset
+
+, and it projects onto 
+\begin_inset Formula $S=\mbox{range}(P)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+\begin_inset Quotes eld
+\end_inset
+
+If
+\begin_inset Quotes erd
+\end_inset
+
+ direction: If 
+\begin_inset Formula $\vec{P}=\vec{P}^{T}$
+\end_inset
+
+, then 
+\begin_inset Formula $(\vec{P}\vec{x})^{T}(\vec{I}-\vec{P})\vec{y}=\vec{x}^{T}(\vec{P}-\vec{P}^{2})\vec{y}=0$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Proof
+\begin_inset Quotes eld
+\end_inset
+
+Only if
+\begin_inset Quotes erd
+\end_inset
+
+ direction: Use SVD.
+ Suppose 
+\begin_inset Formula $\vec{P}$
+\end_inset
+
+ projects onto 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ along 
+\begin_inset Formula $S_{2}$
+\end_inset
+
+ where 
+\begin_inset Formula $S_{1}\perp S_{2}$
+\end_inset
+
+, and 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ has dimension 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\{\vec{q}_{1},\dots,,\vec{q}_{n}\}$
+\end_inset
+
+ be orthonormal basis of 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\{\vec{q}_{n+1},\dots,\vec{q}_{m}\}$
+\end_inset
+
+ be a basis for 
+\begin_inset Formula $S_{2}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ be unitary matrix whose 
+\begin_inset Formula $j$
+\end_inset
+
+th column is 
+\begin_inset Formula $q_{j}$
+\end_inset
+
+, and we have 
+\begin_inset Formula $\vec{P}\vec{Q}=(\vec{q}_{1},\vec{q}_{2},\dots,\vec{q}_{n},\vec{0},\dots,\vec{0}),$
+\end_inset
+
+ so 
+\begin_inset Formula $\vec{Q}^{T}\vec{P}\vec{Q}=\mbox{diag}(1,1,\cdots,1,0,\cdots)=\vec{\Sigma},$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{P}=\vec{Q}\vec{\Sigma}\vec{Q}^{T}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+Question: Are orthogonal projectors orthogonal matrices? 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Complementary Projectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Complementary projectors: 
+\begin_inset Formula $\vec{P}$
+\end_inset
+
+ vs.
+ 
+\begin_inset Formula $\vec{I}-\vec{P}$
+\end_inset
+
+.
+ We write 
+\begin_inset Formula $\vec{I}-\vec{P}$
+\end_inset
+
+ as 
+\begin_inset Formula $\vec{P}_{\bot}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+What space does 
+\begin_inset Formula $\vec{I}-\vec{P}$
+\end_inset
+
+ project?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: 
+\begin_inset Formula $\mbox{null}(\vec{P})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mbox{range}(\vec{I}-\vec{P})\supseteq\mbox{null}(\vec{P})$
+\end_inset
+
+ because 
+\begin_inset Formula $\vec{P}\vec{v}=\vec{0}\Rightarrow(\vec{I}-\vec{P})\vec{v}=\vec{v}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mbox{range}(\vec{I}-\vec{P})\subseteq\mbox{null}(\vec{P})$
+\end_inset
+
+ because for any 
+\begin_inset Formula $\vec{v}$
+\end_inset
+
+ 
+\begin_inset Formula $(\vec{I}-\vec{P})\vec{v}=\vec{v}-\vec{P}\vec{v}\in\mbox{null}(\vec{P}).$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+A projector separates 
+\begin_inset Formula $\mathbb{R}^{m}$
+\end_inset
+
+ into two complementary subspace: range space and null space (i.e., 
+\begin_inset Formula $\mbox{range}(\vec{P})+\mbox{null}(\vec{P})=\mathbb{R}^{m}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mbox{range}(\vec{P})\cap\mbox{null}(\vec{P})=\{\vec{0}\}$
+\end_inset
+
+ for projector 
+\begin_inset Formula $\vec{P}\in\mathbb{R}^{m\times m}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+It projects onto range space along null space
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+In other words, 
+\begin_inset Formula $\vec{x}=\vec{P}\vec{x}+\vec{r}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{r}\in\mbox{null}(\vec{P})$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Question: Are range space and null space of projector orthogonal to each
+ other? 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Uniqueness of Orthogonal Projector
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Orthogonal projector for a subspace is unique
+\end_layout
+
+\begin_layout Itemize
+In other words, for 
+\begin_inset Formula $S\subseteq\mathbb{R}^{n}$
+\end_inset
+
+ be a subspace, if 
+\begin_inset Formula $P_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{2}$
+\end_inset
+
+ are each orthogonal projector onto 
+\begin_inset Formula $S$
+\end_inset
+
+, then 
+\begin_inset Formula $P_{1}=P_{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Proof: For any 
+\begin_inset Formula $z\in\mathbb{R}^{n}$
+\end_inset
+
+, 
+\begin_inset Formula 
+\begin{align*}
+\Vert(P_{1}-P_{2})z\Vert_{2}^{2} & =z^{T}(P_{1}-P_{2})(P_{1}-P_{2})z\\
+ & =z^{T}P_{1}(P_{1}-P_{2})z-z^{T}P_{2}(P_{1}-P_{2})z\\
+ & =z^{T}P_{1}(I-P_{2})z+z^{T}P_{2}(I-P_{1})z\\
+ & =(P_{1}z)^{T}(I-P_{2})z+(P_{2}z)^{T}(I-P_{1})z\\
+ & =0
+\end{align*}
+
+\end_inset
+
+Therefore, 
+\begin_inset Formula $\Vert P_{1}-P_{2}\Vert_{2}=0$
+\end_inset
+
+, and 
+\begin_inset Formula $P_{1}=P_{2}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Projections with Orthonormal Basis
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Given unit vector 
+\begin_inset Formula $\vec{q}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{P}_{\vec{q}}=\vec{q}\vec{q}^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{P}_{\bot\vec{q}}=\vec{I}-\vec{P}_{\vec{q}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Given any matrix 
+\begin_inset Formula $\vec{Q}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ whose columns 
+\begin_inset Formula $q_{j}$
+\end_inset
+
+ are orthonormal, 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula $\vec{P}=\vec{Q}\vec{Q}^{T}=\sum_{j}q_{j}q_{j}^{T}$
+\end_inset
+
+ is orthogonal projector onto 
+\begin_inset Formula $\mbox{range}(Q)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+SVD-related projections
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $\vec{A}=\vec{U}\vec{\Sigma}\vec{V}^{T}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ is SVD of 
+\begin_inset Formula $A$
+\end_inset
+
+, and 
+\begin_inset Formula $r=\mbox{rank}(A)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Partition 
+\begin_inset Formula $U$
+\end_inset
+
+ and 
+\begin_inset Formula $V$
+\end_inset
+
+ to 
+\begin_inset Formula 
+\[
+U=\underset{r\ \ m-r}{\left[U_{r}\vert\tilde{U}_{r}\right]},\quad V=\underset{r\ \ n-r}{\left[V_{r}\vert\tilde{V}_{r}\right]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+What do 
+\begin_inset Formula $U_{r}U_{r}^{T}$
+\end_inset
+
+, 
+\begin_inset Formula $\tilde{U}_{r}\tilde{U}_{r}^{T}$
+\end_inset
+
+, 
+\begin_inset Formula $V_{r}V_{r}^{T}$
+\end_inset
+
+, and 
+\begin_inset Formula $\tilde{V}{}_{r}\tilde{V}_{r}^{T}$
+\end_inset
+
+ project onto, respectively?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: 
+\begin_inset Formula $\mbox{range}(A)$
+\end_inset
+
+, 
+\begin_inset Formula $\mbox{null}(A^{T})$
+\end_inset
+
+, 
+\begin_inset Formula $\mbox{range}(A^{T})$
+\end_inset
+
+, 
+\begin_inset Formula $\mbox{null}(A)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Projection with Arbitrary Basis
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For arbitrary vector 
+\begin_inset Formula $\vec{a}$
+\end_inset
+
+, we write 
+\begin_inset Formula $\vec{P}_{\vec{a}}=\frac{\vec{a}\vec{a}^{T}}{\vec{a}^{T}\vec{a}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{P}_{\bot\vec{a}}=\vec{I}-\vec{P}_{\vec{a}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Given any matrix 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ that 
+\series bold
+has full rank
+\series default
+ and 
+\begin_inset Formula $m\geq n$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\vec{A}=\vec{U}\vec{\Sigma}\vec{V}^{T}$
+\end_inset
+
+ be its SVD
+\begin_inset Formula 
+\[
+\vec{P}=\vec{U}\vec{U}^{T}=\vec{A}(\vec{A}^{T}\vec{A})^{-1}\vec{A}^{T}
+\]
+
+\end_inset
+
+is orthogonal projection onto 
+\begin_inset Formula $\mbox{range}(P)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $(\vec{A}^{T}\vec{A})^{-1}\vec{A}^{T}$
+\end_inset
+
+ is called the 
+\emph on
+pseudo-inverse
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, denoted as 
+\begin_inset Formula $\vec{A}^{+}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Therefore, 
+\begin_inset Formula 
+\[
+\vec{P}=\vec{U}\vec{U}^{T}=\vec{A}\vec{A}^{+}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In addition, 
+\begin_inset Formula $A^{+}A=I$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note: If 
+\begin_inset Formula $m<n$
+\end_inset
+
+, 
+\begin_inset Formula $A^{+}=A^{T}(\vec{A}\vec{A}^{T})^{-1}$
+\end_inset
+
+, and 
+\begin_inset Formula $AA^{+}=I$
+\end_inset
+
+ and 
+\begin_inset Formula $A^{+}A$
+\end_inset
+
+ is orthogonal projection onto 
+\begin_inset Formula $\mbox{range}(A^{T})$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Distance Between Subspaces
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{2}$
+\end_inset
+
+ are subspaces of 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+, 
+\begin_inset Formula $\mbox{dim}(S_{1})=\mbox{dim}(S_{2})$
+\end_inset
+
+, and 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ is orthogonal projection onto 
+\begin_inset Formula $S_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The 
+\emph on
+distance
+\emph default
+ between 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{2}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\mbox{dist}(S_{1},S_{2})=\Vert P_{1}-P_{2}\Vert_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $W=\underset{k\,\,\,\,n-k}{\left[W_{1}\vert W_{2}\right]},Z=\underset{k\,\,\,\,n-k}{\left[Z_{1}\vert Z_{2}\right]}$
+\end_inset
+
+ are 
+\begin_inset Formula $n$
+\end_inset
+
+-by-
+\begin_inset Formula $n$
+\end_inset
+
+ orthogonal matrices.
+ If 
+\begin_inset Formula $S_{1}=\mbox{range}(W_{1})$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{2}=\mbox{range}(Z_{1})$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\[
+\mbox{dist}(S_{1},S_{2})=\Vert W_{1}^{T}Z_{2}\Vert_{2}=\Vert Z_{1}^{T}W_{2}\Vert_{2}
+\]
+
+\end_inset
+
+(proof omitted here)
+\end_layout
+
+\begin_layout Itemize
+In general, 
+\begin_inset Formula $0\leq\mbox{dist}(S_{1},S_{2})\leq1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If subspaces are lines or planes, 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\mbox{dist}(S_{1},S_{2})$
+\end_inset
+
+ is sine of angle between them
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
