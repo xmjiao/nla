@@ -1,0 +1,1578 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 14: Eigenvalue Problems; Eigenvalue Revealing Factorizations
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook Universit
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Properties of Eigenvalue Problems (NLA§24)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Eigenvalue and Eigenvectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Eigenvalue problem
+\emph default
+ of 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\vec{A}\vec{x}=\lambda\vec{x}
+\]
+
+\end_inset
+
+with eigenvalues 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ and eigenvectors 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ (nonzero)
+\end_layout
+
+\begin_layout Itemize
+The set of all the eigenvalues of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is the 
+\emph on
+spectrum
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Eigenvalue are generally used where a matrix is to be compounded iteratively
+\end_layout
+
+\begin_layout Itemize
+Eigenvalues are useful for algorithmic and physical reasons
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Algorithmically, eigenvalue analysis can reduce a coupled system to a collection
+ of scalar problems
+\end_layout
+
+\begin_layout Itemize
+Physically, eigenvalue analysis can be used to study resonance of musical
+ instruments and stability of physical systems
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Eigenvalue Decomposition
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Eigenvalue decomposition
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is
+\begin_inset Formula 
+\[
+\vec{A}=\vec{X}\vec{\Lambda}\vec{X}^{-1}\ \mbox{or}\ \vec{A}\vec{X}=\vec{X}\vec{\Lambda}
+\]
+
+\end_inset
+
+with eigenvectors 
+\begin_inset Formula $\vec{x}_{i}$
+\end_inset
+
+ as columns of 
+\begin_inset Formula $\vec{X}$
+\end_inset
+
+ and eigenvalues 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ along diagonal of 
+\begin_inset Formula $\vec{\Lambda}$
+\end_inset
+
+.
+ Alternatively, 
+\begin_inset Formula 
+\[
+\vec{A}\vec{x}_{i}=\lambda_{i}\vec{x}_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Eigenvalue decomposition is change of basis to 
+\begin_inset Quotes eld
+\end_inset
+
+eigenvector coordinates
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{A}\vec{x}=\vec{b}\ \ \rightarrow\ (\vec{X}^{-1}\vec{b})=\vec{\Lambda}(\vec{X}^{-1}\vec{x})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note that eigenvalue decomposition may not exist
+\end_layout
+
+\begin_layout Itemize
+Question: How does eigenvalue decomposition differ from SVD?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Geometric Multiplicity
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Eigenvectors corresponding to a single eigenvalue 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ form an 
+\emph on
+eigenspace 
+\begin_inset Formula $E_{\lambda}\subseteq\mathbb{C}^{n\times n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Eigenspace is 
+\emph on
+invariant
+\emph default
+ in that 
+\begin_inset Formula $\vec{A}E_{\lambda}\subseteq E_{\lambda}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Dimension of 
+\begin_inset Formula $E_{\lambda}$
+\end_inset
+
+ is the maximum number of linearly independent eigenvectors that can be
+ found
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Geometric multiplicity
+\emph default
+ of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is dimension of 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $E_{\lambda}$
+\end_inset
+
+, i.e., 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+
+\begin_inset Formula $\mbox{dim}(\mbox{null}(\vec{A}-\lambda\vec{I}))$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algebraic Multiplicity
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The 
+\emph on
+characteristic polynomial
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is degree 
+\begin_inset Formula $m$
+\end_inset
+
+ polynomial 
+\begin_inset Formula 
+\[
+p_{\vec{A}}(z)=\mbox{det}(z\vec{I}-\vec{A})=(z-\lambda_{1})(z-\lambda_{2})\cdots(z-\lambda_{n})
+\]
+
+\end_inset
+
+which is 
+\emph on
+monic
+\emph default
+ in that coefficient of 
+\begin_inset Formula $z^{n}$
+\end_inset
+
+ is 
+\begin_inset Formula $1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is eigenvalue of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ iff 
+\begin_inset Formula $p_{\vec{A}}(\lambda)=0$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is eigenvalue, then by definition, 
+\begin_inset Formula $\lambda\vec{x}-\vec{A}\vec{x}=(\lambda\vec{I}-\vec{A})\vec{x}=0$
+\end_inset
+
+, so 
+\begin_inset Formula $(\lambda\vec{I}-\vec{A})$
+\end_inset
+
+ is singular and its determinant is 
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+If 
+\begin_inset Formula $(\lambda\vec{I}-\vec{A})$
+\end_inset
+
+ is singular, then for 
+\begin_inset Formula $\vec{x}\in\mbox{null}(\lambda\vec{I}-\vec{A})$
+\end_inset
+
+ we have 
+\begin_inset Formula $\lambda\vec{x}-\vec{A}\vec{x}=0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Algebraic multiplicity
+\emph default
+ of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is its multiplicity as a root of 
+\begin_inset Formula $p_{\vec{A}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Any matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has 
+\begin_inset Formula $m$
+\end_inset
+
+ eigenvalues, counted with algebraic multiplicity
+\end_layout
+
+\begin_layout Itemize
+Question: What are the eigenvalues of a triangular matrix?
+\end_layout
+
+\begin_layout Itemize
+Question: How are geometric multiplicity and algebraic multiplicity related?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Similarity Transformations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The map 
+\begin_inset Formula $\vec{A}\rightarrow\vec{Y}^{-1}\vec{A}\vec{Y}$
+\end_inset
+
+ is a 
+\emph on
+similarity transformation
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ for any nonsingular 
+\begin_inset Formula $\vec{Y}\in\mathbb{C}^{n\times n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ are 
+\emph on
+similar
+\emph default
+ if there is a similarity transformation 
+\begin_inset Formula $\vec{B}=\vec{Y}^{-1}\vec{A}\vec{Y}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+If 
+\begin_inset Formula $\vec{Y}$
+\end_inset
+
+ is nonsingular, then 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{Y}^{-1}\vec{A}\vec{Y}$
+\end_inset
+
+ have the same characteristic polynomials, eigenvalues, and algebraic and
+ geometric multiplicities.
+\end_layout
+
+\begin_layout Enumerate
+For characteristic polynomial: 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula 
+\[
+\mbox{det}(z\vec{I}-\vec{Y}^{-1}\vec{A}\vec{Y})=\mbox{det}(\vec{Y}^{-1}(z\vec{I}-\vec{A})\vec{Y})=\mbox{det}(z\vec{I}-\vec{A})
+\]
+
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+so algebraic multiplicities remain the same
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $\vec{x}\in E_{\lambda}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, then 
+\begin_inset Formula $\vec{Y}^{-1}\vec{x}$
+\end_inset
+
+ is in eigenspace of 
+\begin_inset Formula $\vec{Y}^{-1}\vec{A}\vec{Y}$
+\end_inset
+
+ corresponding to 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, and vice versa, so geometric multiplicities remain the same
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algebraic Multiplicity 
+\begin_inset Formula $\geq$
+\end_inset
+
+ Geometric Multiplicity
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Let 
+\begin_inset Formula $k$
+\end_inset
+
+ be be geometric multiplicity of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\hat{\vec{V}}\in\mathbb{C}^{n\times k}$
+\end_inset
+
+ constitute of orthonormal basis of the 
+\begin_inset Formula $E_{\lambda}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Extend 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\hat{\vec{V}}$
+\end_inset
+
+ to unitary 
+\begin_inset Formula $\vec{V}\equiv[\hat{\vec{V}},\tilde{\vec{V}}]\in\mathbb{C}^{n\times k}$
+\end_inset
+
+ and form
+\begin_inset Formula 
+\[
+\vec{B}=\vec{V}^{*}\vec{A}\vec{V}=\left[\begin{array}{cc}
+\hat{\vec{V}}^{*}\vec{A}\hat{\vec{V}} & \hat{\vec{V}}^{*}\vec{A}\tilde{\vec{V}}\\
+\tilde{\vec{V}}^{*}\vec{A}\hat{\vec{V}} & \tilde{\vec{V}}^{*}\vec{A}\tilde{\vec{V}}
+\end{array}\right]=\left[\begin{array}{cc}
+\lambda\vec{I} & \vec{C}\\
+0 & \vec{D}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mbox{det}(z\vec{I}-\vec{B})=\mbox{det}(z\vec{I}-\lambda\vec{I})\mbox{det}(z\vec{I}-\vec{D})=(z-\lambda)^{k}\mbox{det}(z\vec{I}-\vec{D})$
+\end_inset
+
+, so the algebraic multiplicity of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ as an eigenvalue of 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ is 
+\begin_inset Formula $\geq k$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ are similar, so the algebraic multiplicity of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ as an eigenvalue of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is at least 
+\begin_inset Formula $\geq k$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Examples: 
+\begin_inset Formula 
+\[
+\vec{A}=\left[\begin{array}{ccc}
+2\\
+ & 2\\
+ &  & 2
+\end{array}\right],\hspace{1cm}\vec{B}=\left[\begin{array}{ccc}
+2 & 1\\
+ & 2 & 1\\
+ &  & 2
+\end{array}\right]
+\]
+
+\end_inset
+
+Their characteristic polynomial is 
+\begin_inset Formula $(z-2)^{3}$
+\end_inset
+
+, so algebraic multiplicity of 
+\begin_inset Formula $\lambda=2$
+\end_inset
+
+ is 
+\begin_inset Formula $3$
+\end_inset
+
+.
+ But geometric multiplicity of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\begin_inset Formula $3$
+\end_inset
+
+ and that of 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ is 
+\begin_inset Formula $1$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Defective and Diagonalizable Matrices
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+An eigenvalue of a matrix is 
+\emph on
+defective
+\emph default
+ if its algebraic multiplicity 
+\begin_inset Formula $>$
+\end_inset
+
+ its geometric multiplicity
+\end_layout
+
+\begin_layout Itemize
+A matrix is 
+\emph on
+defective
+\emph default
+ if it has a defective eigenvalue.
+ Otherwise, it is called 
+\emph on
+nondefective
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Theorem
+An 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is nondefective iff it has an eigenvalue decomposition 
+\begin_inset Formula $\vec{A}=\vec{X}\vec{\Lambda}\vec{X}^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+(
+\begin_inset Formula $\Leftarrow$
+\end_inset
+
+) 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ is nondefective, and 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is similar to 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+, so 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is nondefective.
+\end_layout
+
+\begin_layout Itemize
+(
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+) A nondefective matrix has 
+\begin_inset Formula $m$
+\end_inset
+
+ linearly independent eigenvectors.
+ Take them as columns of 
+\begin_inset Formula $\vec{X}$
+\end_inset
+
+ to obtain 
+\begin_inset Formula $\vec{A}=\vec{X}\vec{\Lambda}\vec{X}^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Nondefective matrices are therefore also said to be 
+\emph on
+diagonalizable
+\emph default
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Determinant and Trace
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Determinant of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\begin_inset Formula $\mbox{det}(\vec{A})=\prod_{j=1}^{n}\lambda_{j}$
+\end_inset
+
+, because 
+\begin_inset Formula 
+\[
+\mbox{det}(\vec{A})=(-1)^{n}\mbox{det}(-\vec{A})=(-1)^{n}p_{\vec{A}}(0)=\prod_{j=1}^{n}\lambda_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Trace of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\begin_inset Formula $\mbox{tr}(\vec{A})=\sum_{j=1}^{n}\lambda_{j}$
+\end_inset
+
+, since 
+\begin_inset Formula 
+\[
+p_{\vec{A}}(z)=\mbox{det}(z\vec{I}-\vec{A})=z^{n}-\sum_{j=1}^{n}a_{jj}z^{n-1}+O(z^{n-2})
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+p_{\vec{A}}(z)=\prod_{j=1}^{n}(z-\lambda_{j})=z^{n}-\sum_{j=1}^{n}\lambda_{j}z^{n-1}+O(z^{n-2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: Are these results valid for defective or nondefective matrices?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Eigenvalue Revealing Factorizations (NLA§24)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Unitary Diagonalization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+A matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\emph on
+unitarily diagonalizable
+\emph default
+ if 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{\Lambda}\vec{Q}^{*}$
+\end_inset
+
+ for a unitary matrix 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+A Hermitian matrix is unitarily diagonalizable, with real eigenvalues
+\end_layout
+
+\begin_layout Itemize
+A matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\emph on
+normal
+\emph default
+ if 
+\begin_inset Formula $\vec{A}^{*}\vec{A}=\vec{A}\vec{A}^{*}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Examples of normal matrices include Hermitian matrices, skew Hermitian matrices
+\end_layout
+
+\begin_layout Itemize
+Hermitian 
+\begin_inset Formula $\Leftrightarrow$
+\end_inset
+
+ matrix is normal and all eigenvalues are real
+\end_layout
+
+\begin_layout Itemize
+skew Hermitian 
+\begin_inset Formula $\Leftrightarrow$
+\end_inset
+
+ matrix is normal and all eigenvalues are imaginary
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is both triangular and normal, then 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is diagonal
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Unitarily diagonalizable 
+\begin_inset Formula $\Leftrightarrow$
+\end_inset
+
+ normal
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ is easy.
+ Prove 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\Leftarrow$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ by induction using Schur factorization next
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Schur Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Schur factorization
+\emph default
+ is 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{T}\vec{Q}^{*}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ is unitary and 
+\begin_inset Formula $\vec{T}$
+\end_inset
+
+ is upper triangular 
+\end_layout
+
+\begin_layout Theorem
+Every square matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has a Schur factorization.
+\end_layout
+
+\begin_layout Standard
+Proof by induction on dimension of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+.
+ Case 
+\begin_inset Formula $n=1$
+\end_inset
+
+ is trivial.
+ 
+\end_layout
+
+\begin_layout Standard
+For 
+\begin_inset Formula $n\ge2$
+\end_inset
+
+, let 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ be any unit eigenvector of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, with corresponding eigenvalue 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+ be unitary matrix with 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ as first column.
+ Then 
+\begin_inset Formula 
+\[
+\vec{U}^{*}\vec{A}\vec{U}=\left[\begin{array}{cc}
+\lambda & \vec{w}^{*}\\
+0 & \vec{C}
+\end{array}\right].
+\]
+
+\end_inset
+
+By induction hypothesis, there is a Schur factorization 
+\begin_inset Formula $\tilde{\vec{T}}=\vec{V}^{*}\vec{C}\vec{V}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula 
+\[
+\vec{Q}=\vec{U}\left[\begin{array}{cc}
+1 & 0\\
+0 & \vec{V}
+\end{array}\right],\quad\vec{T}=\left[\begin{array}{cc}
+\lambda & \vec{w}^{*}\vec{V}\\
+0 & \tilde{\vec{T}}
+\end{array}\right],
+\]
+
+\end_inset
+
+and then 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{T}\vec{Q}^{*}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Eigenvalue Revealing Factorizations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Eigenvalue-revealing factorization of square matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Diagonalization 
+\begin_inset Formula $\vec{A}=\vec{X}\vec{\Lambda}\vec{X}^{-1}$
+\end_inset
+
+ (nondefective 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Unitary Diagonalization 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{\Lambda}\vec{Q}^{*}$
+\end_inset
+
+ (normal 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Unitary triangularization (Schur factorization) 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{T}\vec{Q}^{*}$
+\end_inset
+
+ (any 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Jordan normal form 
+\begin_inset Formula $\vec{A}=\vec{X}\vec{J}\vec{X}^{-1}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{J}$
+\end_inset
+
+ block diagonal with 
+\begin_inset Formula $\vec{J}_{i}=\left[\begin{array}{cccc}
+\lambda_{i} & 1\\
+ & \lambda_{i} & \ddots\\
+ &  & \ddots & 1\\
+ &  &  & \lambda_{i}
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+In general, Schur factorization is used, because
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Unitary matrices are involved, so algorithm tends to be more stable
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is normal, then Schur form is diagonal
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_body
+\end_document

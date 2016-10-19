@@ -1,0 +1,2850 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 15: Reduction to Hessenberg and Tridiagonal Forms;
+\begin_inset Newline newline
+\end_inset
+
+Rayleigh Quotient Iteration
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Schur Factorization (NLA§26)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+Obvious
+\begin_inset Quotes erd
+\end_inset
+
+ Algorithms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Most obvious method is to find roots of characteristic polynomial 
+\begin_inset Formula $p_{\vec{A}}(\lambda)$
+\end_inset
+
+, but it is very ill-conditioned
+\end_layout
+
+\begin_layout Itemize
+Another idea is power iteration, using fact that 
+\begin_inset Formula 
+\[
+\frac{\vec{x}}{\Vert\vec{x}\Vert},\frac{\vec{A}\vec{x}}{\Vert\vec{A}\vec{x}\Vert},\frac{\vec{A}^{2}\vec{x}}{\Vert\vec{A}^{2}\vec{x}\Vert},\frac{\vec{A}^{3}\vec{x}}{\Vert\vec{A}^{3}\vec{x}\Vert},\dots
+\]
+
+\end_inset
+
+ converge to an eigenvector corresponding to the largest eigenvalue of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ in absolute value, but it may converge very slowly
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Instead, compute a eigenvalue-revealing factorization, such as Schur factorizati
+on 
+\begin_inset Formula 
+\[
+\vec{A}=\vec{Q}\vec{T}\vec{Q}^{*}
+\]
+
+\end_inset
+
+by introducing zeros, using algorithms similar to 
+\begin_inset Formula $QR$
+\end_inset
+
+ factorization
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+A Fundamental Difficulty
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+However, eigenvalue-revealing factorization cannot be done in finite number
+ of steps:
+\end_layout
+
+\begin_layout Standard
+\align center
+Any eigenvalue solver must be iterative
+\end_layout
+
+\begin_layout Itemize
+To see this, consider a general polynomial of degree 
+\begin_inset Formula $m$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+p(z)=z^{n}+a_{n-1}z^{n-1}+\cdots+a_{1}z+a_{0}
+\]
+
+\end_inset
+
+There is no closed-form expression for the roots of 
+\begin_inset Formula $p$
+\end_inset
+
+: (Abel, 1842)
+\begin_inset Newline newline
+\end_inset
+
+In general, the roots of polynomial equations higher than fourth degree
+ cannot be written in terms of a finite number of operations
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+A Fundamental Difficulty Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+However, the roots of 
+\begin_inset Formula $p_{\vec{A}}$
+\end_inset
+
+ are the eigenvalues of the 
+\emph on
+companion matrix
+\emph default
+
+\begin_inset Formula 
+\[
+\vec{A}=\left[\begin{array}{ccccc}
+0 &  &  &  & -a_{0}\\
+1 & 0 &  &  & -a_{1}\\
+ & 1 & \ddots &  & \vdots\\
+ &  & \ddots & 0 & -a_{n-2}\\
+ &  &  & 1 & -a_{n-1}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Therefore, in general, we cannot find the eigenvalues of a matrix in a finite
+ number of steps
+\end_layout
+
+\begin_layout Itemize
+In practice, however, there are algorithms that converge to desired precision
+ in a few iterations
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Schur Factorization and Diagonalization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Most eigenvalue algorithms compute Schur factorization 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{T}\vec{Q}^{*}$
+\end_inset
+
+ by transforming 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ with similarity transformations
+\begin_inset Formula 
+\[
+\underbrace{\vec{Q}_{j}^{*}\cdots\vec{Q}_{2}^{*}\vec{Q}_{1}^{*}}_{\vec{Q}^{*}}\vec{A}\underbrace{\vec{Q}_{1}\vec{Q}_{2}\cdots\vec{Q}_{j}}_{\vec{Q}},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{Q}_{i}$
+\end_inset
+
+ are unitary matrices, which converge to 
+\begin_inset Formula $\vec{T}$
+\end_inset
+
+ as 
+\begin_inset Formula $j\rightarrow\infty$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note: Real matrices might need complex Schur forms and eigenvalues
+\end_layout
+
+\begin_layout Itemize
+Question: For Hermitian 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, what matrix will the sequence converge to?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Schur Factorization and Diagonalization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Most eigenvalue algorithms compute Schur factorization 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{T}\vec{Q}^{*}$
+\end_inset
+
+ by transforming 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ with similarity transformations
+\begin_inset Formula 
+\[
+\underbrace{\vec{Q}_{j}^{*}\cdots\vec{Q}_{2}^{*}\vec{Q}_{1}^{*}}_{\vec{Q}^{*}}\vec{A}\underbrace{\vec{Q}_{1}\vec{Q}_{2}\cdots\vec{Q}_{j}}_{\vec{Q}},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{Q}_{i}$
+\end_inset
+
+ are unitary matrices, which converge to 
+\begin_inset Formula $\vec{T}$
+\end_inset
+
+ as 
+\begin_inset Formula $j\rightarrow\infty$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note: Real matrices might need complex Schur forms and eigenvalues
+\end_layout
+
+\begin_layout Itemize
+Question: For Hermitian 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, what matrix will the sequence converge to?
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Reduction to Hessenberg and Tridiagonal Forms (NLA§26)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Two Phases of Eigenvalue Computations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+General 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+: First convert to 
+\emph on
+upper-Hessenberg
+\emph default
+ form, then to upper triangular
+\size tiny
+ 
+\begin_inset Formula 
+\[
+\underset{\vec{A}\neq\vec{A}^{*}}{\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times
+\end{array}\right]}\underrightarrow{\mbox{Phase 1}}\underset{\mbox{upper-Hessenberg}}{\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+ & \times & \times & \times & \times\\
+ &  & \times & \times & \times\\
+ &  &  & \times & \times
+\end{array}\right]}\underrightarrow{\mbox{Phase 2}}\underset{\mbox{triangular}}{\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+ & \times & \times & \times & \times\\
+ &  & \times & \times & \times\\
+ &  &  & \times & \times\\
+ &  &  &  & \times
+\end{array}\right]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Hermitian 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+: First convert to 
+\emph on
+tridiagonal
+\emph default
+ form, then to diagonal
+\size tiny
+ 
+\begin_inset Formula 
+\[
+\underset{\vec{A}=\vec{A}^{*}}{\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times
+\end{array}\right]}\underrightarrow{\mbox{Phase 1}}\underset{\mbox{tridiagonal}}{\left[\begin{array}{ccccc}
+\times & \times\\
+\times & \times & \times\\
+ & \times & \times & \times\\
+ &  & \times & \times & \times\\
+ &  &  & \times & \times
+\end{array}\right]}\underrightarrow{\mbox{Phase 2}}\underset{\mbox{diagonal}}{\left[\begin{array}{ccccc}
+\times\\
+ & \times\\
+ &  & \times\\
+ &  &  & \times\\
+ &  &  &  & \times
+\end{array}\right]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In general, phase 1 is direct and requires 
+\begin_inset Formula $O(n^{3})$
+\end_inset
+
+ flops, and phase 2 is iterative and requires 
+\begin_inset Formula $O(n)$
+\end_inset
+
+ iterations, and 
+\begin_inset Formula $O(n^{3})$
+\end_inset
+
+ flops for non-Hermitian matrices and 
+\begin_inset Formula $O(n^{2})$
+\end_inset
+
+ flops for Hermitian matrices
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Introducing Zeros by Similarity Transformations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+First attempt: Compute Schur factorization 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{T}\vec{Q}^{*}$
+\end_inset
+
+ by applying Householder reflectors from both left and right
+\size tiny
+ 
+\begin_inset Formula 
+\[
+\underset{\vec{A}}{\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times
+\end{array}\right]}\underrightarrow{\vec{Q}_{1}^{*}\cdot}\ \underset{\vec{Q}_{1}^{*}\vec{A}}{\left[\begin{array}{ccccc}
+{\bf x} & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+0 & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+0 & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+0 & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+0 & {\bf x} & {\bf x} & {\bf x} & {\bf x}
+\end{array}\right]}\underrightarrow{\cdot\vec{Q}_{1}}\underset{\vec{Q}_{1}^{*}\vec{A}\vec{Q}_{1}}{\left[\begin{array}{ccccc}
+{\bf x} & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+{\bf x} & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+{\bf x} & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+{\bf x} & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+{\bf x} & {\bf x} & {\bf x} & {\bf x} & {\bf x}
+\end{array}\right]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Unfortunately, the right multiplication destroys the zeros introduced by
+ 
+\begin_inset Formula $\vec{Q}_{1}^{*}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This would not work because of Abel's theorem
+\end_layout
+
+\begin_layout Itemize
+However, the subdiagonal entries typically decrease in magnitude
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+The Hessenberg Form
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Second attempt: try to compute upper Hessenberg matrix 
+\begin_inset Formula $\vec{H}$
+\end_inset
+
+ similar to 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+:
+\size tiny
+
+\begin_inset Formula 
+\[
+\underset{\vec{A}}{\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times
+\end{array}\right]}\underrightarrow{\vec{Q}_{1}^{*}\cdot}\ \underset{\vec{Q}_{1}^{*}\vec{A}}{\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+{\bf x} & {\bf x} & {\bf x} & {\bf x} & x\\
+0 & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+0 & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+0 & {\bf x} & {\bf x} & {\bf x} & {\bf x}
+\end{array}\right]}\underrightarrow{\cdot\vec{Q}_{1}}\underset{\vec{Q}_{1}^{*}\vec{A}\vec{Q}_{1}}{\left[\begin{array}{ccccc}
+\times & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+\times & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+ & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+ & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+ & {\bf x} & {\bf x} & {\bf x} & {\bf x}
+\end{array}\right]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The zeros introduced by 
+\begin_inset Formula $\vec{Q}_{1}^{*}\vec{A}$
+\end_inset
+
+ were not destroyed this time!
+\end_layout
+
+\begin_layout Itemize
+Continue with remaining columns would result in Hessenberg form:
+\size tiny
+
+\begin_inset Formula 
+\[
+\underrightarrow{\vec{Q}_{2}^{*}\cdot}\ \underset{\vec{Q}_{2}^{*}\vec{Q}_{1}^{*}\vec{A}\vec{Q}_{1}}{\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+ & {\bf x} & {\bf x} & {\bf x} & {\bf x}\\
+ & 0 & {\bf x} & {\bf x} & {\bf x}\\
+ & 0 & {\bf x} & {\bf x} & {\bf x}
+\end{array}\right]}\underrightarrow{\cdot\vec{Q}_{2}}\underset{\vec{Q}_{2}^{*}\vec{Q}_{1}^{*}\vec{A}\vec{Q}_{1}\vec{Q}_{2}}{\left[\begin{array}{ccccc}
+\times & \times & {\bf x} & {\bf x} & {\bf x}\\
+\times & \times & {\bf x} & {\bf x} & {\bf x}\\
+ & \times & {\bf x} & {\bf x} & {\bf x}\\
+ &  & {\bf x} & {\bf x} & {\bf x}\\
+ &  & {\bf x} & {\bf x} & {\bf x}
+\end{array}\right]}\cdots
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+The Hessenberg Form
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+After 
+\begin_inset Formula $n-2$
+\end_inset
+
+ steps, we obtain the Hessenberg form:
+\begin_inset Formula 
+\[
+\underbrace{\vec{Q}_{m-2}^{*}\cdots\vec{Q}_{2}^{*}\vec{Q}_{1}^{*}}_{\vec{Q}^{*}}\vec{A}\underbrace{\vec{Q}_{1}\vec{Q}_{2}\cdots\vec{Q}_{m-2}}_{\vec{Q}}=\vec{H}=\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+\times & \times & \times & \times & \times\\
+ & \times & \times & \times & \times\\
+ &  & \times & \times & \times\\
+ &  &  & \times & \times
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For Hermitian matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{H}$
+\end_inset
+
+ is Hermitian and hence is tridiagonal
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Householder Reduction to Hessenberg
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Householder Reduction to Hessenberg Form
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1$
+\end_inset
+
+ 
+\series bold
+to
+\series default
+ 
+\begin_inset Formula $n-2$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{x}=\vec{A}_{k+1:n,k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}_{k}=\mbox{sign}(x_{1})\Vert\vec{x}\Vert_{2}\vec{e}_{1}+\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\vec{v}_{k}=\vec{v}_{k}/\Vert\vec{v}_{k}\Vert_{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\vec{A}_{k+1:n,k:n}=\vec{A}_{k+1:n,k:n}-2\vec{v}_{k}(\vec{v}_{k}^{*}\vec{A}_{k+1:n,k:n})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\vec{A}_{1:n,k+1:n}=\vec{A}_{1:n,k+1:n}-2(\vec{A}_{1:n,k+1:n}\vec{v}_{k})\vec{v}_{k}^{*}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note: 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ is never formed explicitly.
+\end_layout
+
+\begin_layout Itemize
+Operation count
+\begin_inset Formula 
+\[
+\sim\sum_{k=1}^{n-2}4(n-k)^{2}+4n(n-k)\sim4n^{3}/3+4n^{3}-4n^{3}/2=10n^{3}/3
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Reduction to Tridiagonal Form
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is Hermitian, then 
+\begin_inset Formula 
+\[
+\underbrace{\vec{Q}_{n-2}^{*}\cdots\vec{Q}_{2}^{*}\vec{Q}_{1}^{*}}_{\vec{Q}^{*}}\vec{A}\underbrace{\vec{Q}_{1}\vec{Q}_{2}\cdots\vec{Q}_{n-2}}_{\vec{Q}}=\vec{H}=\left[\begin{array}{ccccc}
+\times & \times\\
+\times & \times & \times\\
+ & \ddots & \ddots & \ddots\\
+ &  & \times & \times & \times\\
+ &  &  & \times & \times
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For Hermitian 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, operation count would be same as Householder QR: 
+\begin_inset Formula $4n^{3}/3$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+First, taking advantage of sparsity, cost of applying right reflectors is
+ also 
+\begin_inset Formula $4(n-k)^{k}$
+\end_inset
+
+ instead of 
+\begin_inset Formula $4n(n-k)$
+\end_inset
+
+, so cost is 
+\begin_inset Formula 
+\[
+\sim\sum_{k=1}^{n-2}8(n-k)^{2}\sim8n^{3}/3
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Second, taking advantage of symmetry, cost is reduced by 
+\begin_inset Formula $50\%$
+\end_inset
+
+ to 
+\begin_inset Formula $4n^{3}/3$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Stability of Hessenberg Reduction
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+Householder reduction to Hessenberg form is backward stable, in that 
+\begin_inset Formula 
+\[
+\tilde{\vec{Q}}\tilde{\vec{H}}\tilde{\vec{Q}}^{*}=\vec{A}+\delta\vec{A},\hspace{1cm}\frac{\Vert\delta\vec{A}\Vert}{\Vert\vec{A}\Vert}=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+for some 
+\begin_inset Formula $\delta\vec{A}\in\mathbb{C}^{n\times n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+
+\end_layout
+
+\begin_layout Standard
+Note: Similar to Householder QR, 
+\begin_inset Formula $\tilde{\vec{Q}}$
+\end_inset
+
+ is exactly unitary based on some 
+\begin_inset Formula $\tilde{\vec{v}}_{k}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Rayleigh Quotient Iteration (NLA§27)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Solving Eigenvalue Problems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+All eigenvalue solvers must be iterative
+\end_layout
+
+\begin_layout Itemize
+Iterative algorithms have multiple facets:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Basic idea behind the algorithms
+\end_layout
+
+\begin_layout Enumerate
+Convergence and techniques to speed-up convergence
+\end_layout
+
+\begin_layout Enumerate
+Efficiency of implementation
+\end_layout
+
+\begin_layout Enumerate
+Termination criteria 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+We will focus on first two aspects
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simplification: Real Symmetric Matrices
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+We will consider eigenvalue problems for real symmetric matrices, i.e.
+ 
+\begin_inset Formula $\vec{A}=\vec{A}^{T}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+, and 
+\begin_inset Formula $\vec{A}\vec{x}=\lambda\vec{x}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Note: 
+\begin_inset Formula $\vec{x}^{*}=\vec{x}^{T}$
+\end_inset
+
+, and 
+\begin_inset Formula $\Vert\vec{x}\Vert=\sqrt{\vec{x}^{T}\vec{x}}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has real eigenvalues 
+\begin_inset Formula $\lambda_{1}$
+\end_inset
+
+,
+\begin_inset Formula $\lambda_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $\dots$
+\end_inset
+
+, 
+\begin_inset Formula $\lambda_{n}$
+\end_inset
+
+ and orthonormal eigenvectors 
+\begin_inset Formula $\vec{q}_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{q}_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $\dots$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{q}_{n}$
+\end_inset
+
+, where 
+\begin_inset Formula $\Vert\vec{q}_{j}\Vert=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Eigenvalues are often also ordered in a particular way (e.g., ordered from
+ large to small in magnitude)
+\end_layout
+
+\begin_layout Itemize
+In addition, we focus on symmetric tridiagonal form 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Why? Because phase 1 of two-phase algorithm reduces matrix into tridiagonal
+ form
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Rayleigh Quotient
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The Rayleigh quotient of 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}$
+\end_inset
+
+ is the scalar 
+\begin_inset Formula 
+\[
+r(\vec{x})=\frac{\vec{x}^{T}\vec{A}\vec{x}}{\vec{x}^{T}\vec{x}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For an eigenvector 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+, its Rayleigh quotient is 
+\begin_inset Formula $r(x)=\vec{x}^{T}\lambda\vec{x}/\vec{x}^{T}\vec{x}=\lambda$
+\end_inset
+
+, the corresponding eigenvalue of 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For general 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+, 
+\begin_inset Formula $r(\vec{x})=\alpha$
+\end_inset
+
+ that minimizes 
+\begin_inset Formula $\Vert\vec{A}\vec{x}-\alpha\vec{x}\Vert_{2}$
+\end_inset
+
+.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Why?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ is eigenvector of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\begin_inset Formula $\Longleftrightarrow\nabla r(\vec{x})=\frac{2}{\vec{x}^{T}\vec{x}}(\vec{A}\vec{x}-r(\vec{x})\vec{x})=0$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{x}\neq0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $r(\vec{x})$
+\end_inset
+
+ is smooth and 
+\begin_inset Formula $\nabla r(\vec{q}_{j})=0$
+\end_inset
+
+ for any 
+\begin_inset Formula $j$
+\end_inset
+
+, and therefore is quadratically accurate:
+\begin_inset Formula 
+\[
+r(\vec{x})-r(\vec{q}_{J})=O(\Vert\vec{x}-\vec{q}_{J}\Vert^{2})\ \mbox{ as }\vec{x}\rightarrow\vec{q}_{J}\ \mbox{for some }J
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Power Iteration
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Simple power iteration for largest eigenvalue
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: Power Iteration
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}^{(0)}=$
+\end_inset
+
+some unit-length vector
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{w}=\vec{A}\vec{v}^{(k-1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}^{(k)}=\vec{w}/\Vert\vec{w}\Vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\lambda^{(k)}=r(\vec{v}^{(k)})=(\vec{v}^{(k)})^{T}\vec{A}\vec{v}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Termination condition is omitted for simplicity 
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Note that 
+\begin_inset Formula $\lambda^{(k)}$
+\end_inset
+
+ is not used
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Convergence of Power Iteration
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Expand initial 
+\begin_inset Formula $\vec{v}^{(0)}$
+\end_inset
+
+ in orthonormal eigenvectors 
+\begin_inset Formula $\vec{q}_{i}$
+\end_inset
+
+, and apply 
+\begin_inset Formula $\vec{A}^{k}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+\vec{v}^{(0)} & =a_{1}\vec{q}_{1}+a_{2}\vec{q}_{2}+\cdots+a_{n}\vec{q}_{n}\\
+\vec{v}^{(k)} & =c_{k}\vec{A}^{k}\vec{v}^{(0)}\\
+ & =c_{k}(a_{1}\lambda_{1}^{k}\vec{q}_{1}+a_{2}\lambda_{2}^{k}\vec{q}_{2}+\cdots+a_{n}\lambda_{n}^{k}\vec{q}_{n})\\
+ & =c_{k}\lambda_{1}^{k}(a_{1}\vec{q}_{1}+a_{2}(\lambda_{2}/\lambda_{1})^{k}\vec{q}_{2}+\cdots+a_{n}(\lambda_{n}/\lambda_{1})^{k}\vec{q}_{n})
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vert\lambda_{1}\vert>\vert\lambda_{2}\vert\geq\cdots\geq\vert\lambda_{m}\vert\geq0$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{q}_{1}^{T}\vec{v}^{(0)}\neq0$
+\end_inset
+
+, this gives
+\begin_inset Formula 
+\[
+\Vert\vec{v}^{(k)}-(\pm\vec{q}_{1})\Vert=O\left(\vert\lambda_{2}/\lambda_{1}\vert^{k}\right),\ \vert\lambda^{(k)}-\lambda_{1}\vert=O\left(\vert\lambda_{2}/\lambda_{1}\vert^{2k}\right)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\pm$
+\end_inset
+
+ sign is chosen to be sign of 
+\begin_inset Formula $\vec{q}_{1}^{T}\vec{v}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+It finds the largest eigenvalue (unless eigenvector is orthogonal to 
+\begin_inset Formula $\vec{v}^{(0)}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Error reduces by only a constant factor (
+\begin_inset Formula $\approx|\lambda_{2}/\lambda_{1}|$
+\end_inset
+
+) each step, and very slowly especially when 
+\begin_inset Formula $|\lambda_{2}|\approx|\lambda_{1}|$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Inverse Iteration
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Apply power iteration on 
+\begin_inset Formula $(\vec{A}-\mu\vec{I})^{-1}$
+\end_inset
+
+, with eigenvalues 
+\begin_inset Formula $\{(\lambda_{j}-\mu)^{-1}\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\mu\approx\lambda_{J}$
+\end_inset
+
+ for some 
+\begin_inset Formula $J$
+\end_inset
+
+, then 
+\begin_inset Formula $(\lambda_{J}-\mu)^{-1}$
+\end_inset
+
+ may be far larger than 
+\begin_inset Formula $(\lambda_{j}-\mu)^{-1}$
+\end_inset
+
+, 
+\begin_inset Formula $j\neq J$
+\end_inset
+
+, so power iteration may converge rapidly
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: Inverse Iteration
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}^{(0)}=$
+\end_inset
+
+some unit-length vector
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ Solve 
+\begin_inset Formula $(\vec{A}-\mu\vec{I})\vec{w}=\vec{v}^{(k-1)}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{w}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}^{(k)}=\vec{w}/\Vert\vec{w}\Vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\lambda^{(k)}=r(\vec{v}^{(k)})=(\vec{v}^{(k)})^{T}\vec{A}\vec{v}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Converges to eigenvector 
+\begin_inset Formula $\vec{q}_{J}$
+\end_inset
+
+ if parameter 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is close to 
+\begin_inset Formula $\lambda_{J}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\Vert\vec{v}^{(k)}-(\pm\vec{q}_{J})\Vert=O\left(\left|\frac{\mu-\lambda_{J}}{\mu-\lambda_{K}}\right|^{k}\right),\ \vert\lambda^{(k)}-\lambda_{J}\vert=O\left(\left|\frac{\mu-\lambda_{J}}{\mu-\lambda_{K}}\right|^{2k}\right)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\lambda_{J}$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda_{K}$
+\end_inset
+
+ are closest and second closest eigenvalues to 
+\begin_inset Formula $\mu$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Standard method for determining eigenvector given eigenvalue
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Rayleigh Quotient Iteration
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Parameter 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is constant in inverse iteration, but convergence is better for 
+\begin_inset Formula $\mu$
+\end_inset
+
+ close to the eigenvalue
+\end_layout
+
+\begin_layout Itemize
+Improvement: At each iteration, set 
+\begin_inset Formula $\mu$
+\end_inset
+
+ to last computed Rayleigh quotient
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: Rayleigh Quotient Iteration
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}^{(0)}=$
+\end_inset
+
+some unit-length vector
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\lambda^{(0)}=r(\vec{v}^{(0)})=(\vec{v}^{(0)})^{T}\vec{A}\vec{v}^{(0)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ Solve 
+\begin_inset Formula $(\vec{A}-\lambda^{(k-1)}\vec{I})\vec{w}=\vec{v}^{(k-1)}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{w}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}^{(k)}=\vec{w}/\Vert\vec{w}\Vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\lambda^{(k)}=r(\vec{v}^{(k)})=(\vec{v}^{(k)})^{T}\vec{A}\vec{v}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Cost per iteration is linear for tridiagonal matrix
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Convergence of Rayleigh Quotient Iteration
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Cubic convergence in Rayleigh quotient iteration
+\begin_inset Formula 
+\[
+\Vert\vec{v}^{(k+1)}-(\pm\vec{q}_{J})\Vert=O(\Vert\vec{v}^{(k)}-(\pm\vec{q}_{J})\Vert^{3})
+\]
+
+\end_inset
+
+and 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula 
+\[
+\vert\lambda^{(k+1)}-\lambda_{J}\vert=O\left(\vert\lambda^{(k)}-\lambda_{J}\vert^{3}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In other words, each iteration triples number of digits of accuracy
+\end_layout
+
+\begin_layout Itemize
+Proof idea: If 
+\begin_inset Formula $\vec{v}^{(k)}$
+\end_inset
+
+ is close to an eigenvector, 
+\begin_inset Formula $\Vert\vec{v}^{(k)}-(\pm\vec{q}_{J})\Vert\leq\epsilon$
+\end_inset
+
+, then accuracy of Rayleigh quotient estimate 
+\begin_inset Formula $\lambda^{(k)}$
+\end_inset
+
+ is 
+\begin_inset Formula $\vert\lambda^{(k)}-\lambda_{J}\vert=O(\epsilon^{2})$
+\end_inset
+
+.
+ One step of inverse iteration then gives
+\begin_inset Formula 
+\[
+\Vert\vec{v}^{(k+1)}-\vec{q}_{J}\Vert=O(\vert\lambda^{(k)}-\lambda_{J}\vert\Vert\vec{v}^{(k)}-\vec{q}_{J}\Vert)=O(\epsilon^{3})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Rayleigh quotient is great in finding largest (or smallest) eigenvalue and
+ its corresponding eigenvector.
+ What if we want to find all eigenvalues?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+What is the use of Rayleigh quotient iterations in practice?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Operation Counts
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+In Rayleigh quotient iteration,
+\end_layout
+
+\begin_layout Itemize
+if 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is full matrix, then solving 
+\begin_inset Formula $(\vec{A}-\mu\vec{I})\vec{w}=\vec{v}^{(k-1)}$
+\end_inset
+
+ may take 
+\begin_inset Formula $O(n^{3})$
+\end_inset
+
+ flops per step
+\end_layout
+
+\begin_layout Itemize
+if 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is upper Hessenberg, then each step takes 
+\begin_inset Formula $O(n^{2})$
+\end_inset
+
+ flops
+\end_layout
+
+\begin_layout Itemize
+if 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is tridiagonal, then each step takes 
+\begin_inset Formula $O(n)$
+\end_inset
+
+ flops
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

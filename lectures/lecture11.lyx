@@ -1,0 +1,2469 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 11: Householder Triangulation;
+\begin_inset Newline newline
+\end_inset
+
+Givens Rotation; Least Squares Problems
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Householder Triangularization (NLA§10)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Gram-Schmidt as Triangular Orthogonalization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Every step of Gram-Schmidt can be viewed as multiplication with triangular
+ matrix.
+ For example, at first step:
+\begin_inset Formula 
+\[
+\left[\vec{v}_{1}\vert\vec{v}_{2}\vert\cdots\vert\vec{v}_{n}\right]\underbrace{\left[\begin{array}{cccc}
+\frac{1}{r_{11}} & \frac{-r_{12}}{r_{11}} & \frac{-r_{13}}{r_{11}} & \cdots\\
+ & 1\\
+ &  & 1\\
+ &  &  & \ddots
+\end{array}\right]}_{\vec{R}_{1}}=\left[\vec{q}_{1}\vert\vec{v}_{2}^{(2)}\vert\cdots\vert\vec{v}_{n}^{(2)}\right],\ \ 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Gram-Schmidt therefore multiplies triangular matrices to orthogonalize column
+ vectors, and in turns can be viewed as 
+\emph on
+triangular orthogonalization
+\emph default
+ 
+\begin_inset Formula 
+\[
+\vec{A}\underbrace{\vec{R}_{1}\vec{R}_{2}\cdots\vec{R}_{n}}_{\widehat{\vec{R}}^{-1}}=\widehat{\vec{Q}}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{R}_{i}$
+\end_inset
+
+ is triangular matrix
+\end_layout
+
+\begin_layout Itemize
+A 
+\begin_inset Quotes eld
+\end_inset
+
+dual
+\begin_inset Quotes erd
+\end_inset
+
+ approach would be 
+\emph on
+orthogonal triangularization
+\emph default
+, i.e., multiply 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ by orthogonal matrices to make it triangular matrix
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Householder Triangularization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Method introduced by Alston Scott Householder in 1958
+\end_layout
+
+\begin_layout Itemize
+It multiplies orthogonal matrices to make column triangular, e.g.
+\begin_inset Formula 
+\[
+\underset{\vec{A}}{\left[\begin{array}{ccc}
+\times & \times & \times\\
+\times & \times & \times\\
+\times & \times & \times\\
+\times & \times & \times\\
+\times & \times & \times
+\end{array}\right]}\overset{\vec{Q}_{1}}{\rightarrow}\underset{\vec{Q}_{1}\vec{A}}{\left[\begin{array}{ccc}
+\mathbf{x} & \mathbf{x} & \mathbf{x}\\
+0 & \mathbf{x} & \mathbf{x}\\
+0 & \mathbf{x} & \mathbf{x}\\
+0 & \mathbf{x} & \mathbf{x}\\
+0 & \mathbf{x} & \mathbf{x}
+\end{array}\right]}\overset{\vec{Q}_{2}}{\rightarrow}\underset{\vec{Q}_{2}\vec{Q}_{1}\vec{A}}{\left[\begin{array}{ccc}
+\times & \times & \times\\
+ & \mathbf{x} & \mathbf{x}\\
+ & 0 & \mathbf{x}\\
+ & 0 & \mathbf{x}\\
+ & 0 & \mathbf{x}
+\end{array}\right]}\overset{\vec{Q}_{3}}{\rightarrow}\underset{\vec{Q}_{3}\vec{Q}_{2}\vec{Q}_{1}\vec{A}}{\left[\begin{array}{ccc}
+\times & \times & \times\\
+ & \times & \times\\
+ &  & \mathbf{x}\\
+ & \mathbf{} & 0\\
+ &  & 0
+\end{array}\right]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+After 
+\begin_inset Formula $n$
+\end_inset
+
+ steps, we get a product of orthogonal matrices
+\begin_inset Formula 
+\[
+\underbrace{\vec{Q}_{n}\cdots\vec{Q}_{2}\vec{Q}_{1}}_{\vec{Q}^{T}}\vec{A}=\vec{R}
+\]
+
+\end_inset
+
+and in turn we get full QR factorization 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{R}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{Q}_{k}$
+\end_inset
+
+ introduces zeros below diagonal of 
+\begin_inset Formula $k$
+\end_inset
+
+th column while preserving zeros below diagonal in preceding columns
+\end_layout
+
+\begin_layout Itemize
+The key question is how to find 
+\begin_inset Formula $\vec{Q}_{k}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Householder Reflectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+First, consider 
+\begin_inset Formula $\vec{Q}_{1}$
+\end_inset
+
+: 
+\begin_inset Formula $\vec{Q}_{1}\vec{a}_{1}=\Vert\vec{a}_{1}\Vert\vec{e}_{1}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{e}_{1}=(1,0,\cdots,0)^{T}$
+\end_inset
+
+.
+ Why the length is 
+\begin_inset Formula $\Vert\vec{a}_{1}\Vert$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{Q}_{1}$
+\end_inset
+
+ reflects 
+\begin_inset Formula $\vec{a}_{1}$
+\end_inset
+
+ across hyperplane 
+\begin_inset Formula $H$
+\end_inset
+
+ orthogonal to 
+\begin_inset Formula $\vec{v}=\Vert\vec{a}_{1}\Vert\vec{e}_{1}-\vec{a}_{1}$
+\end_inset
+
+, and therefore 
+\begin_inset Formula 
+\[
+\vec{Q}_{1}=\vec{I}-2\frac{\vec{v}\vec{v}^{T}}{\vec{v}^{T}\vec{v}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+More generally, 
+\begin_inset Formula 
+\[
+\vec{Q}_{k}=\left[\begin{array}{cc}
+\vec{I} & \vec{0}\\
+\vec{0} & \vec{F}
+\end{array}\right]
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{I}$
+\end_inset
+
+ is 
+\begin_inset Formula $(k-1)\times(k-1)$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{F}$
+\end_inset
+
+ is 
+\begin_inset Formula $(m-k+1)\times(m-k+1)$
+\end_inset
+
+ such that 
+\begin_inset Formula $\vec{F}\vec{x}=\Vert\vec{x}\Vert_{2}\vec{e}_{1}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ is 
+\begin_inset Formula $(a_{k,k,}a_{k,k+1},\cdots,a_{k,m})^{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+What is 
+\begin_inset Formula $\vec{F}$
+\end_inset
+
+? It has similar form as 
+\begin_inset Formula $\vec{Q}_{1}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{v}=\Vert\vec{x}\Vert\vec{e}_{1}-\vec{x}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Choice of Reflectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+We could choose 
+\begin_inset Formula $\vec{F}$
+\end_inset
+
+ such that 
+\begin_inset Formula $\vec{F}\vec{x}=-\Vert\vec{x}\Vert\vec{e}_{1}$
+\end_inset
+
+ instead of 
+\begin_inset Formula $\vec{F}\vec{x}=\Vert\vec{x}\Vert\vec{e}_{1}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+More generally, 
+\begin_inset Formula $\vec{F}\vec{x}=z\Vert\vec{x}\Vert\vec{e}_{1}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vert z\vert=1$
+\end_inset
+
+ if 
+\begin_inset Formula $z\in\mathbb{C}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This leads to an infinite number of possible 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+QR
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ factorizations of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If we require 
+\begin_inset Formula $z\in\mathbb{R}$
+\end_inset
+
+, we still have two choices
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Numerically, it is undesirable for 
+\begin_inset Formula $\vec{v}^{T}\vec{v}$
+\end_inset
+
+ to be close to zero for 
+\begin_inset Formula $\vec{v}=z\Vert\vec{x}\Vert\vec{e}_{1}-\vec{x}$
+\end_inset
+
+, and 
+\begin_inset Formula $\Vert\vec{v}\Vert$
+\end_inset
+
+ is larger if 
+\begin_inset Formula $z=-\mbox{sign}(x_{1})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Therefore, 
+\begin_inset Formula $\vec{v}=-\mbox{sign}(x_{1})\Vert\vec{x}\Vert\vec{e}_{1}-\vec{x}$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $\vec{I}-2\frac{\vec{v}\vec{v}^{T}}{\vec{v}^{T}\vec{v}}$
+\end_inset
+
+ is independent of sign, clear out the factor 
+\begin_inset Formula $-1$
+\end_inset
+
+ and obtain 
+\begin_inset Formula $\vec{v}=\mbox{sign}(x_{1})\Vert\vec{x}\Vert\vec{e}_{1}+\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For completeness, if 
+\begin_inset Formula $x_{1}=0$
+\end_inset
+
+, set 
+\begin_inset Formula $z$
+\end_inset
+
+ to 1 (instead of 
+\begin_inset Formula $0$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+We define 
+\begin_inset Formula $\mbox{sign}(x)=\begin{cases}
+1 & \mbox{if }x\geq0\\
+-1 & \mbox{otherwise}
+\end{cases}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Householder Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "70text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Householder QR Factorization
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1$
+\end_inset
+
+ 
+\series bold
+to
+\series default
+ 
+\begin_inset Formula $n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{x}=\vec{A}_{k:m,k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+ 
+\begin_inset Formula $\vec{v}_{k}=\mbox{sign}(x_{1})\Vert\vec{x}\Vert\vec{e}_{1}+\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\vec{v}_{k}=\vec{v}_{k}/\Vert\vec{v}_{k}\Vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}_{k:m,k:n}=\vec{A}_{k:m,k:n}-2\vec{v}_{k}(\vec{v}_{k}^{T}\vec{A}_{k:m,k:n})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Leave 
+\begin_inset Formula $\vec{R}$
+\end_inset
+
+ in place of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Matrix 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ is not formed explicitly but reflection vector 
+\begin_inset Formula $\vec{v}_{k}$
+\end_inset
+
+ is stored
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Question: Can 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ be reused to store both 
+\begin_inset Formula $\vec{R}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{v}_{k}$
+\end_inset
+
+ completely?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: We can use lower triangular portion of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ to store all but one entry in each 
+\begin_inset Formula $v_{k}$
+\end_inset
+
+.
+ An additional array of size 
+\begin_inset Formula $n$
+\end_inset
+
+ may be needed, or take advantage of 
+\begin_inset Formula $\Vert v_{k}\Vert=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Question: What happens if 
+\begin_inset Formula $\vec{v}_{k}$
+\end_inset
+
+ is 
+\begin_inset Formula $\vec{0}$
+\end_inset
+
+ in line 3 of the loop?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: 
+\begin_inset Formula $r_{kk}=0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Applying or Forming 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Compute 
+\begin_inset Formula $\vec{Q}^{T}\vec{b}=\vec{Q}_{n}\cdots\vec{Q}_{1}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "60text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Implicit calculation of 
+\begin_inset Formula $\vec{Q}^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1$
+\end_inset
+
+ 
+\series bold
+to
+\series default
+ 
+\begin_inset Formula $n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{b}_{k:m}=\vec{b}_{k:m}-2\vec{v}_{k}(\vec{v}_{k}^{T}\vec{b}_{k:m})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Compute 
+\begin_inset Formula $\vec{Q}\vec{x}=\vec{Q}_{1}\vec{Q}_{2}\cdots\vec{Q}_{n}\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "60text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Implicit calculation of 
+\begin_inset Formula $\vec{Q}\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=n$
+\end_inset
+
+ 
+\series bold
+downto
+\series default
+ 1
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{x}_{k:m}=\vec{x}_{k:m}-2\vec{v}_{k}(\vec{v}_{k}^{T}\vec{x}_{k:m})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: How to form 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\vec{Q}}$
+\end_inset
+
+, respectively?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: Apply 
+\begin_inset Formula $\vec{x}=\vec{I}_{m\times m}$
+\end_inset
+
+ or first 
+\begin_inset Formula $n$
+\end_inset
+
+ columns of 
+\begin_inset Formula $\vec{I}$
+\end_inset
+
+, respectively
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Operation Count
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Most work done at step 
+\begin_inset Formula $\vec{A}_{k:m,k:n}=\vec{A}_{k:m,k:n}-2\vec{v}_{k}(\vec{v}_{k}^{T}\vec{A}_{k:m,k:n})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Flops per iteration: 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\sim2(m-k)(n-k)$
+\end_inset
+
+ for dot products 
+\begin_inset Formula $\vec{v}_{k}^{T}\vec{A}_{k:m,k:n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\sim(m-k)(n-k)$
+\end_inset
+
+ for outer product 
+\begin_inset Formula $2\vec{v}_{k}(\cdots)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\sim(m-k)(n-k)$
+\end_inset
+
+ for subtraction
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\sim4(m-k)(n-k)$
+\end_inset
+
+ total
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Including outer loop, total flops is 
+\begin_inset Formula 
+\begin{align*}
+\sum_{k=1}^{n}4(m-k)(n-k) & =4\sum_{k=1}^{n}(mn-km-kn+k^{2})\\
+ & \sim4mn^{2}-4(m+n)n^{2}/2+4n^{3}/3\\
+ & =2mn^{2}-\frac{2}{3}n^{3}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $m\approx n$
+\end_inset
+
+, it is more efficient than Gram-Schmidt method, but is similar to Gram-Schmidt
+ if 
+\begin_inset Formula $m\gg n$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Givens Rotations
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Givens Rotations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Instead of using reflection, we can rotate 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ to obtain 
+\begin_inset Formula $\Vert\vec{x}\Vert\vec{e}_{1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+A Given rotation 
+\begin_inset Formula $\vec{R}=\left[\begin{array}{cc}
+\cos\theta & -\sin\theta\\
+\sin\theta & \cos\theta
+\end{array}\right]$
+\end_inset
+
+ rotates 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{2}$
+\end_inset
+
+ counterclockwise by 
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Choose 
+\begin_inset Formula $\theta$
+\end_inset
+
+ to be angle between 
+\begin_inset Formula $(x_{i},x_{j})^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $(1,0)^{T}$
+\end_inset
+
+, and we have 
+\begin_inset Formula 
+\[
+\left[\begin{array}{cc}
+\cos\theta & -\sin\theta\\
+\sin\theta & \cos\theta
+\end{array}\right]\left[\begin{array}{c}
+x_{i}\\
+x_{j}
+\end{array}\right]=\left[\begin{array}{c}
+\sqrt{x_{i}^{2}+x_{j}^{2}}\\
+0
+\end{array}\right]
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\[
+\cos\theta=\frac{x_{i}}{\sqrt{x_{i}^{2}+x_{j}^{2}}},\ \sin\theta=\frac{-x_{j}}{\sqrt{x_{i}^{2}+x_{j}^{2}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Givens QR
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Introduce zeros in column bottom-up, one zero at a time
+\begin_inset Formula 
+\[
+\left[\begin{array}{ccc}
+\times & \times & \times\\
+\times & \times & \times\\
+\times & \times & \times\\
+\times & \times & \times\\
+\times & \times & \times
+\end{array}\right]\overset{(4,5)}{\rightarrow}\left[\begin{array}{ccc}
+\times & \times & \times\\
+\times & \times & \times\\
+\times & \times & \times\\
+\mathbf{x} & \mathbf{x} & \mathbf{x}\\
+0 & \mathbf{x} & \mathbf{x}
+\end{array}\right]\overset{(3,4)}{\rightarrow}\left[\begin{array}{ccc}
+\times & \times & \times\\
+\times & \times & \times\\
+\mathbf{x} & \mathbf{x} & \mathbf{x}\\
+0 & \mathbf{x} & \mathbf{x}\\
+ & \times & \times
+\end{array}\right]...
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+To zero 
+\begin_inset Formula $a_{ij}$
+\end_inset
+
+, left-multiply matrix 
+\begin_inset Formula $\vec{F}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{F}_{i:i+1,i:i+1}$
+\end_inset
+
+ being rotation matrix and 
+\begin_inset Formula $F_{kk}=1$
+\end_inset
+
+ for 
+\begin_inset Formula $k\neq i,i+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Flop count of Givens QR is 
+\begin_inset Formula $3mn^{2}-n^{3}$
+\end_inset
+
+, which is about 50% more expensive than Householder triangularization
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Adding a Row
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ with 
+\begin_inset Formula $m\ge n$
+\end_inset
+
+, and 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has full rank
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $\tilde{\vec{A}}=\left[\begin{array}{c}
+\vec{A}_{1}\\
+\vec{z}^{T}\\
+\vec{A}_{2}
+\end{array}\right]$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{A}=\left[\begin{array}{c}
+\vec{A}_{1}\\
+\vec{A}_{2}
+\end{array}\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{z}^{T}$
+\end_inset
+
+ is a new row inserted
+\end_layout
+
+\begin_layout Itemize
+Obtain 
+\begin_inset Formula $\tilde{\vec{A}}=\tilde{\vec{Q}}\tilde{\vec{R}}$
+\end_inset
+
+ from 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{R}$
+\end_inset
+
+ efficiently using Givens rotation:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $\vec{A}=\left[\begin{array}{c}
+\vec{A}_{1}\\
+\vec{A}_{2}
+\end{array}\right]=\left[\begin{array}{c}
+\vec{Q}_{1}\\
+\vec{Q}_{2}
+\end{array}\right]\vec{R}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+Then 
+\begin_inset Formula $\tilde{\vec{A}}=\left[\begin{array}{c}
+\vec{A}_{1}\\
+\vec{z}^{T}\\
+\vec{A}_{2}
+\end{array}\right]=\left[\begin{array}{cc}
+\vec{0} & \vec{Q}_{1}\\
+1 & \vec{0}^{T}\\
+\vec{0} & \vec{Q}_{2}
+\end{array}\right]\left[\begin{array}{c}
+\vec{z}^{T}\\
+\vec{R}
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Perform series of Givens rotation 
+\begin_inset Formula $\tilde{\vec{R}}=\vec{U}_{n}^{T}\dots\vec{U}_{2}^{T}\vec{U}_{1}^{T}\left[\begin{array}{c}
+\vec{z}^{T}\\
+\vec{R}
+\end{array}\right]$
+\end_inset
+
+, and then 
+\begin_inset Formula $\tilde{Q}=\left[\begin{array}{cc}
+\vec{0} & \vec{Q}_{1}\\
+1 & \vec{0}^{T}\\
+\vec{0} & \vec{Q}_{2}
+\end{array}\right]\vec{U}_{1}\vec{U}_{2}\dots\vec{U}_{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Updating 
+\begin_inset Formula $\tilde{\vec{R}}$
+\end_inset
+
+ costs 
+\begin_inset Formula $3n^{2}$
+\end_inset
+
+ flops, and updating 
+\begin_inset Formula $\tilde{Q}$
+\end_inset
+
+ costs 
+\begin_inset Formula $6mn$
+\end_inset
+
+ flops
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Adding a Column
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ with 
+\begin_inset Formula $m\ge n$
+\end_inset
+
+, and 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has full rank
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $\tilde{\vec{A}}=\left[\begin{array}{ccc}
+\vec{A}_{1} & \vec{z} & \vec{A}_{2}\end{array}\right]$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{A}=\left[\begin{array}{cc}
+\vec{A}_{1} & \vec{A}_{2}\end{array}\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{z}$
+\end_inset
+
+ is new column
+\end_layout
+
+\begin_layout Itemize
+Obtain 
+\begin_inset Formula $\tilde{\vec{A}}=\tilde{\vec{Q}}\tilde{\vec{R}}$
+\end_inset
+
+ from 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{R}$
+\end_inset
+
+ efficiently using Givens rotation:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $\vec{A}=\left[\begin{array}{cc}
+\vec{A}_{1} & \vec{A}_{2}\end{array}\right]=\vec{Q}\left[\begin{array}{cc}
+\vec{R}_{1} & \vec{R}_{2}\end{array}\right]$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Then 
+\begin_inset Formula $\tilde{\vec{A}}=\left[\begin{array}{ccc}
+\vec{A}_{1} & \vec{z} & \vec{A}_{2}\end{array}\right]=\vec{Q}\left[\begin{array}{ccc}
+\vec{R}_{1} & \vec{w} & \vec{R}_{2}\end{array}\right]$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{w}=\vec{Q}^{T}\vec{z}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Perform series of Givens rotation 
+\begin_inset Formula $\tilde{\vec{R}}=\vec{U}_{k+1}\cdots\vec{U}_{n}\left[\begin{array}{ccc}
+\vec{R}_{1} & \vec{w} & \vec{R}_{2}\end{array}\right]$
+\end_inset
+
+, where 
+\begin_inset Formula $U_{n}$
+\end_inset
+
+ performs on rows 
+\begin_inset Formula $n$
+\end_inset
+
+ and 
+\begin_inset Formula $n-1$
+\end_inset
+
+, 
+\begin_inset Formula $U_{n-1}$
+\end_inset
+
+ performs on rows 
+\begin_inset Formula $n-1$
+\end_inset
+
+ and 
+\begin_inset Formula $n-2$
+\end_inset
+
+, etc.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $\tilde{Q}=\vec{Q}\vec{U}_{n}^{T}\cdots\vec{U}_{k+1}^{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+It takes 
+\begin_inset Formula $O(mn)$
+\end_inset
+
+ time overall
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section
+Linear Least Squares Problems (NLA§11)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Linear Least Squares Problems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Overdetermined system of equations 
+\begin_inset Formula $\vec{A}\vec{x}\approx\vec{b}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has more rows than columns and has full rank, in general has no solutions
+\end_layout
+
+\begin_layout Itemize
+Example application: Polynomial least squares fitting
+\end_layout
+
+\begin_layout Itemize
+In general, minimize the residual 
+\begin_inset Formula $\vec{r}=\vec{b}-\vec{A}\vec{x}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+In terms of 2-norm, we obtain linear least squares problem: Given 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, 
+\begin_inset Formula $m\geq n$
+\end_inset
+
+, and 
+\begin_inset Formula $\vec{b}\in\mathbb{R}^{m}$
+\end_inset
+
+, find 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}$
+\end_inset
+
+ such that 
+\begin_inset Formula $\Vert\vec{b}-\vec{A}\vec{x}\Vert_{2}$
+\end_inset
+
+ is minimized
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has full rank, the minimizer 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ is the solution to the normal equation
+\begin_inset Formula 
+\[
+\vec{A}^{T}\vec{A}\vec{x}=\vec{A}^{T}\vec{b}
+\]
+
+\end_inset
+
+or in terms of the 
+\emph on
+pseudoinverse
+\emph default
+ 
+\begin_inset Formula $\vec{A}^{+}$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+\vec{x}=\vec{A}^{+}\vec{b},\ \mbox{ where }\vec{A}^{+}=(\vec{A}^{T}\vec{A})^{-1}\vec{A}^{T}\in\mathbb{R}^{n\times m}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Geometric Interpretation
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\vec{A}\vec{x}$
+\end_inset
+
+ is in 
+\begin_inset Formula $\mbox{range}(\vec{A})$
+\end_inset
+
+, and the point in 
+\begin_inset Formula $\mbox{range}(\vec{A})$
+\end_inset
+
+ closest to 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+ is its orthogonal projection onto 
+\begin_inset Formula $\mbox{range}(\vec{A})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Residual 
+\begin_inset Formula $\vec{r}$
+\end_inset
+
+ is then orthogonal to 
+\begin_inset Formula $\mbox{range}(\vec{A})$
+\end_inset
+
+, and hence 
+\begin_inset Formula $\vec{A}^{T}\vec{r}=\vec{A}^{T}(\vec{b}-\vec{A}\vec{x})=\vec{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{A}\vec{x}$
+\end_inset
+
+ is orthogonal projection of 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{x}=\vec{A}^{+}\vec{b}$
+\end_inset
+
+, so 
+\begin_inset Formula $\vec{P}=\vec{A}\vec{A}^{+}=\vec{A}(\vec{A}^{T}\vec{A})^{-1}\vec{A}^{T}$
+\end_inset
+
+ is orthogonal projection
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Solution of Lease Squares Problems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+One approach is to solve normal equation 
+\begin_inset Formula $\vec{A}^{T}\vec{A}\vec{x}=\vec{A}^{T}\vec{b}$
+\end_inset
+
+ directly using Cholesky factorization
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Is unstable, but is very efficient if 
+\begin_inset Formula $m\gg n$
+\end_inset
+
+ (
+\begin_inset Formula $mn^{2}+\frac{1}{3}n^{3}$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+More robust approach is to use QR factorization 
+\begin_inset Formula $\vec{A}=\hat{\vec{Q}}\hat{\vec{R}}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+ can be projected onto 
+\begin_inset Formula $\mbox{range}(\vec{A})$
+\end_inset
+
+ by 
+\begin_inset Formula $\vec{P}=\hat{\vec{Q}}\hat{\vec{Q}}^{T}$
+\end_inset
+
+, and therefore 
+\begin_inset Formula $\hat{\vec{Q}}\hat{\vec{R}}\vec{x}=\hat{\vec{Q}}\hat{\vec{Q}}^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Left-multiply by 
+\begin_inset Formula $\hat{\vec{Q}}^{T}$
+\end_inset
+
+ and we get 
+\begin_inset Formula $\hat{\vec{R}}\vec{x}=\hat{\vec{Q}}^{T}\vec{b}$
+\end_inset
+
+ (note 
+\begin_inset Formula $\vec{A}^{+}=\hat{\vec{R}}^{-1}\hat{\vec{Q}}^{T}$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "75text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Least squares via QR Factorization
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute reduced QR factorization 
+\begin_inset Formula $\vec{A}=\hat{\vec{Q}}\hat{\vec{R}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Compute vector 
+\begin_inset Formula $\vec{c}=\hat{\vec{Q}}^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Solve upper-triangular system 
+\begin_inset Formula $\hat{\vec{R}}\vec{x}=\vec{c}$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Computation is dominated by QR factorization (
+\begin_inset Formula $2mn^{2}-\frac{2}{3}n^{3}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Question: If Householder QR is used, how to compute 
+\begin_inset Formula $\hat{\vec{Q}}^{T}\vec{b}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: Compute 
+\begin_inset Formula $\vec{Q}^{T}\vec{b}$
+\end_inset
+
+ (where 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ is from full QR factorization) and then take first 
+\begin_inset Formula $n$
+\end_inset
+
+ entries of resulting 
+\begin_inset Formula $\vec{Q}^{T}\vec{b}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

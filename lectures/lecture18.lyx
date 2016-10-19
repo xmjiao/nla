@@ -1,0 +1,1399 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 18: Computing SVD; Sensitivity of Eigenvalues;
+\begin_inset Newline newline
+\end_inset
+
+Review for Midterm #2
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Computing SVD (NLA§31)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Computing the SVD
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Intuitive idea for computing SVD of 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Form 
+\begin_inset Formula $\vec{A}^{*}\vec{A}$
+\end_inset
+
+ and compute its eigenvalue decomposition 
+\begin_inset Formula $\vec{A}^{*}\vec{A}=\vec{V}\vec{\Lambda}\vec{V}^{*}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $\vec{\Sigma}=\sqrt{\vec{\Lambda}}$
+\end_inset
+
+, i.e., 
+\begin_inset Formula $\mbox{diag}(\sqrt{\lambda_{1}},\sqrt{\lambda_{2}},\dots,\sqrt{\lambda_{n}})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Solve system 
+\begin_inset Formula $\vec{U}\vec{\Sigma}=\vec{A}\vec{V}$
+\end_inset
+
+ to obtain 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+This method can be very efficient if 
+\begin_inset Formula $m\gg n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+However, it is not very stable, especially for smaller singular values because
+ of the squaring of the condition number
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For SVD of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, 
+\begin_inset Formula $\vert\tilde{\sigma}_{k}-\sigma_{k}\vert=O(\epsilon_{\mbox{machine}}\Vert\vec{A}\Vert)$
+\end_inset
+
+, where 
+\begin_inset Formula $\tilde{\sigma}_{k}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{k}$
+\end_inset
+
+ denote the computed and exact 
+\begin_inset Formula $k$
+\end_inset
+
+th singular value
+\end_layout
+
+\begin_layout Itemize
+If computed from eigenvalue decomposition of 
+\begin_inset Formula $\vec{A}^{*}\vec{A}$
+\end_inset
+
+, 
+\begin_inset Formula $\vert\tilde{\sigma}_{k}-\sigma_{k}\vert=O(\epsilon_{\mbox{machine}}\Vert\vec{A}\Vert^{2}/\sigma_{k})$
+\end_inset
+
+, which is problematic if 
+\begin_inset Formula $\sigma_{k}\ll\Vert\vec{A}\Vert$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If one is interested in only relatively large singular values, then using
+ eigenvalue decomposition is not a problem.
+ For general situations, a more stable algorithm is desired.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Computing the SVD
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Typical algorithm for computing SVD are similar to computation of eigenvalues
+\end_layout
+
+\begin_layout Itemize
+Consider 
+\begin_inset Formula $\vec{A}\in\mathbb{C}^{m\times m}$
+\end_inset
+
+, then Hermitian matrix 
+\begin_inset Formula $\vec{H}=\left[\begin{array}{cc}
+\vec{0} & \vec{A}^{*}\\
+\vec{A} & \vec{0}
+\end{array}\right]$
+\end_inset
+
+ has eigenvalue decomposition
+\begin_inset Formula 
+\[
+\vec{H}\left[\begin{array}{cc}
+\vec{V} & \vec{V}\\
+\vec{U} & -\vec{U}
+\end{array}\right]=\left[\begin{array}{cc}
+\vec{V} & \vec{V}\\
+\vec{U} & -\vec{U}
+\end{array}\right]\left[\begin{array}{cc}
+\vec{\Sigma} & 0\\
+0 & -\vec{\Sigma}
+\end{array}\right],
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{A}=\vec{U}\vec{\Sigma}\vec{V}^{*}$
+\end_inset
+
+ gives the SVD.
+ This approach is stable.
+\end_layout
+
+\begin_layout Itemize
+In practice, such a reduction is done implicitly without forming the large
+ matrix
+\end_layout
+
+\begin_layout Itemize
+Typically done in two or more stages: 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+First, reduce to bidiagonal form by applying different orthogonal transformation
+s on left and right, 
+\end_layout
+
+\begin_layout Itemize
+Second, reduce to diagonal form using a variant of QR algorithm or divide-and-co
+nquer algorithm
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section
+Sensitivity of Eigenvalues (MC§7.2)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sensitivity of Eigenvalues
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Condition number of matrix 
+\begin_inset Formula $\vec{X}$
+\end_inset
+
+ determines sensitivity of eigenvalues
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $\vec{A}\in\mathbb{C}^{n\times n}$
+\end_inset
+
+ be a nondefective matrix, and suppose 
+\begin_inset Formula $\vec{A}=\vec{X}\vec{\Lambda}\vec{X}^{-1}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{X}$
+\end_inset
+
+ is nonsingular and 
+\begin_inset Formula $\vec{\Lambda}$
+\end_inset
+
+ is diagonal.
+ Let 
+\begin_inset Formula $\delta\vec{A}\in\mathbb{C}^{n\times n}$
+\end_inset
+
+ be some perturbation of 
+\begin_inset Formula $A$
+\end_inset
+
+, and let 
+\begin_inset Formula $\mu$
+\end_inset
+
+ be an eigenvalue of 
+\begin_inset Formula $\vec{A}+\delta\vec{A}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has an eigenvalue 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\[
+\vert\mu-\lambda\vert\leq\kappa_{p}(\vec{X})\Vert\delta\vec{A}\Vert_{p}
+\]
+
+\end_inset
+
+ for 
+\begin_inset Formula $1\leq p\leq\infty$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\kappa_{p}(\vec{X})$
+\end_inset
+
+  measures how far eigenvectors are from linear dependence
+\end_layout
+
+\begin_layout Itemize
+For normal matrices, condition number 
+\begin_inset Formula $\kappa_{2}(\vec{X})=1$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa_{p}(\vec{X})=O(1)$
+\end_inset
+
+, so eigenvalues of normal matrices are always well-conditioned
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sensitivity of Eigenvalues
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Let 
+\begin_inset Formula $\delta\vec{\Lambda}=\vec{X}^{-1}\left(\delta\vec{A}\right)\vec{X}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+\Vert\delta\vec{\Lambda}\Vert_{p}\leq\Vert\vec{X}^{-1}\Vert_{p}\Vert\delta\vec{A}\Vert_{p}\Vert\vec{X}\Vert_{p}=\kappa_{p}(\vec{X})\Vert\delta\vec{A}\Vert_{p}.
+\]
+
+\end_inset
+
+Let 
+\begin_inset Formula $\vec{y}$
+\end_inset
+
+ be an engenvector of 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\Lambda+\delta\Lambda$
+\end_inset
+
+ associated with 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $\mu$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is not an eigenvalue of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, so 
+\begin_inset Formula $\mu I-\vec{\Lambda}$
+\end_inset
+
+ is nonsingular.
+ 
+\begin_inset Formula $(\vec{\Lambda}+\delta\vec{\Lambda})\vec{y}=\mu\vec{y}\Rightarrow(\mu\vec{I}-\vec{\Lambda})\vec{y}=\left(\delta\vec{\Lambda}\right)\vec{y}\Rightarrow\vec{y}=(\mu\vec{I}-\vec{\Lambda})^{-1}\left(\delta\vec{\Lambda}\right)\vec{y}$
+\end_inset
+
+.
+ Thus 
+\begin_inset Formula 
+\[
+\Vert(\mu\vec{I}-\vec{\Lambda})^{-1}\Vert_{p}^{-1}\leq\Vert\delta\vec{\Lambda}\Vert_{p}.
+\]
+
+\end_inset
+
+
+\begin_inset Formula $\Vert(\mu\vec{I}-\vec{\Lambda})^{-1}\Vert_{p}=\vert\mu-\lambda\vert^{-1}$
+\end_inset
+
+, where 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is the eigenvalue of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ closest to 
+\begin_inset Formula $\mu$
+\end_inset
+
+.
+ Thus, 
+\begin_inset Formula 
+\[
+\vert\mu-\lambda\vert\leq\Vert\delta\vec{\Lambda}\Vert_{p}\leq\kappa_{p}(\vec{X})\Vert\delta\vec{A}\Vert_{p}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Left and Right Eigenvectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+To analyze sensitivity of individual eigenvalues, we need to define left
+ and right eigenvectors
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $Ax=\lambda x$
+\end_inset
+
+ for nonzero 
+\begin_inset Formula $x$
+\end_inset
+
+ then 
+\begin_inset Formula $x$
+\end_inset
+
+ is 
+\emph on
+right eigenvector
+\emph default
+ associated with 
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $y^{*}A=\lambda y^{*}$
+\end_inset
+
+ for nonzero 
+\begin_inset Formula $y$
+\end_inset
+
+, then 
+\begin_inset Formula $y$
+\end_inset
+
+ is 
+\emph on
+left eigenvector
+\emph default
+ associated with 
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Left eigenvectors of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ are right eigenvectors of 
+\begin_inset Formula $\vec{A}^{*}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $\vec{A}\in\mathbb{C}^{n\times n}$
+\end_inset
+
+ have distinct eigenvalues 
+\begin_inset Formula $\lambda_{1},\lambda_{2},\dots,\lambda_{n}$
+\end_inset
+
+ with associated linearly independent right eigenvectors 
+\begin_inset Formula $\vec{x}_{1},\dots,\vec{x}_{n}$
+\end_inset
+
+ and left eigenvectors 
+\begin_inset Formula $\vec{y}_{1},\dots,\vec{y}_{n}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $\vec{y}_{j}^{*}\vec{x}_{i}\neq0$
+\end_inset
+
+ if 
+\begin_inset Formula $i=j$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{y}_{j}^{*}\vec{x}_{i}=0$
+\end_inset
+
+ if 
+\begin_inset Formula $i\neq j$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+If 
+\begin_inset Formula $i\neq j$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{y}_{j}^{*}A\vec{x}_{i}=\lambda_{i}\vec{y}_{j}^{*}x_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{y}_{j}^{*}A\vec{x}_{i}=\lambda_{j}\vec{y}_{j}^{*}x_{i}$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $\lambda_{i}\neq\lambda_{j}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{y}_{j}^{*}x_{i}=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+If 
+\begin_inset Formula $i=j$
+\end_inset
+
+, since 
+\begin_inset Formula $\{\vec{x}_{i}\}$
+\end_inset
+
+ form a basis for 
+\begin_inset Formula $\mathbb{C}^{n}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{y}_{i}^{*}x_{i}=0$
+\end_inset
+
+ together with 
+\begin_inset Formula $\vec{y}_{i}^{*}x_{j}=0$
+\end_inset
+
+ would imply that 
+\begin_inset Formula $\vec{y}_{i}=0$
+\end_inset
+
+.
+ This leads to a contradiction.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sensitivity of Individual Eigenvalues
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+We analyze sensitivity of individual eigenvalues that are distinct
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $\vec{A}\in\mathbb{C}^{n\times n}$
+\end_inset
+
+ have 
+\begin_inset Formula $n$
+\end_inset
+
+ distinct eigenvalues.
+ Let 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ be an eigenvalue with associated right and left eigenvectors 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+, respectively, normalized so that 
+\begin_inset Formula $\Vert x\Vert_{2}=\Vert\vec{y}\Vert_{2}=1$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\delta A$
+\end_inset
+
+ be a small perturbation satisfying 
+\begin_inset Formula $\Vert\delta A\Vert_{2}=\epsilon$
+\end_inset
+
+, and let 
+\begin_inset Formula $\lambda+\delta\lambda$
+\end_inset
+
+ be the eigenvalue of 
+\begin_inset Formula $A+\delta A$
+\end_inset
+
+ that approximates 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+\vert\delta\lambda\vert\leq\frac{1}{\vert y^{*}x\vert}\epsilon+O(\epsilon^{2}).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\kappa=1/\vert\vec{y}^{*}\vec{x}\vert$
+\end_inset
+
+ is condition number for eigenvalue 
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+A simple eigenvalue is sensitive if its associated right and left eigenvectors
+ are nearly orthogonal
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sensitivity of Individual Eigenvalues
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+We know that 
+\begin_inset Formula $\vert\delta\lambda\vert\leq\kappa_{p}(\vec{X})\epsilon=O(\epsilon)$
+\end_inset
+
+.
+ In addition, 
+\begin_inset Formula $\delta\vec{x}=O(\epsilon)$
+\end_inset
+
+ when 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is a simple eigenvalue (proof omitted).
+ Because 
+\begin_inset Formula $\left(\vec{A}+\delta\vec{A}\right)\left(\vec{x}+\delta\vec{x}\right)=\left(\lambda+\delta\lambda\right)\left(\vec{x}+\delta\vec{x}\right)$
+\end_inset
+
+, thus 
+\begin_inset Formula 
+\[
+\left(\delta\vec{A}\right)\vec{x}+\vec{A}\left(\delta\vec{x}\right)+O(\epsilon^{2})=(\delta\lambda)\vec{x}+\lambda(\delta\vec{x})+O(\epsilon^{2}).
+\]
+
+\end_inset
+
+Left multiplying by 
+\begin_inset Formula $\vec{y}^{*}$
+\end_inset
+
+ and using equation 
+\begin_inset Formula $\vec{y}^{*}\vec{A}=\lambda\vec{y}^{*}$
+\end_inset
+
+, we obtain
+\begin_inset Formula 
+\[
+\vec{y}^{*}\left(\delta\vec{A}\right)\vec{x}+O(\epsilon^{2})=\left(\delta\lambda\right)\vec{y}^{*}\vec{x}+O(\epsilon^{2})
+\]
+
+\end_inset
+
+and hence 
+\begin_inset Formula 
+\[
+\delta\lambda=\frac{\vec{y}^{*}\left(\delta\vec{A}\right)\vec{x}}{\vec{y}^{*}\vec{x}}+O(\epsilon^{2}).
+\]
+
+\end_inset
+
+Since 
+\begin_inset Formula $\left|\vec{y}^{*}\left(\delta\vec{A}\right)\vec{x}\right|\leq\Vert\vec{y}\Vert_{2}\left\Vert \left(\delta\vec{A}\right)\right\Vert _{2}\left\Vert \vec{x}\right\Vert _{2}=\epsilon$
+\end_inset
+
+, 
+\begin_inset Formula $\vert\delta\lambda\vert\leq\frac{1}{\vert y^{*}x\vert}\epsilon+O(\epsilon^{2})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sensitivity of Multiple Eigenvalues and Eigenvectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Sensitivity of multiple eigenvalues is more complicated
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For multiple eigenvalues, left and right eigenvectors can be orthogonal,
+ hence very ill-conditioned
+\end_layout
+
+\begin_layout Itemize
+In general, multiple or close eigenvalues can be poorly conditioned, especially
+ if matrix is defective
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Condition numbers of eigenvectors are also difficult to analyze
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If matrix has well-conditioned and well-separated eigenvalues, then eigenvectors
+ are well-conditioned
+\end_layout
+
+\begin_layout Itemize
+If eigenvalues are ill-conditioned or closely clustered, then eigenvectors
+ may be poorly conditioned
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Review for Midterm #2
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algorithms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+QR factorization
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Classical and modified Gram-Schmidt
+\end_layout
+
+\begin_layout Itemize
+QR factorization using Householder triangularization
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Solutions of linear least squares
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Solution using Householder QR and other QR factorization
+\end_layout
+
+\begin_layout Itemize
+Alternative solutions: normal equation; SVD
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Eigenvalue Problem
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Eigenvalue problem
+\emph default
+ of 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\begin_inset Formula $\vec{A}\vec{x}=\lambda\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Characteristic polynomial
+\emph default
+ is 
+\begin_inset Formula $\mbox{det}(\vec{A}-\lambda\vec{I})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Eigenvalue decomposition
+\emph default
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\begin_inset Formula $\vec{A}=\vec{X}\vec{\Lambda}\vec{X}^{-1}$
+\end_inset
+
+ (does not always exist)
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Geometric multiplicity
+\emph default
+ of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+
+\begin_inset Formula $\mbox{dim}(\mbox{null}(\vec{A}-\lambda\vec{I}))$
+\end_inset
+
+, and 
+\emph on
+algebraic multiplicity
+\emph default
+ of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is its multiplicity as a root of 
+\begin_inset Formula $p_{\vec{A}}$
+\end_inset
+
+, where algebraic multiplicity 
+\begin_inset Formula $\geq$
+\end_inset
+
+ geometric multiplicity
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Similar
+\emph default
+ matrices have the same eigenvalues, and algebraic and geometric multiplicities
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Schur factorization
+\emph default
+ 
+\begin_inset Formula $\vec{A}=\vec{Q}\vec{T}\vec{Q}^{*}$
+\end_inset
+
+ uses unitary similarity transformations
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Eigenvalue Algorithms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Underlying concepts: power iterations, Rayleigh quotient, inverse iterations,
+ convergence rate
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Schur factorization
+\emph default
+ is typically done in two steps
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Reduction to Hessenberg form for non-Hermitian matrices or reduction to
+ tridiagonal form for hermitian matrices by unitary similarity transformation
+\end_layout
+
+\begin_layout Itemize
+Finding eigenvalues of Hessenberg or 
+\series bold
+tridiagonal
+\series default
+ form
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Finding eigenvalue of tridiagonal forms
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+QR algorithm with shifts, and their interpretations as (inverse) simultaneous
+ iterations
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_body
+\end_document

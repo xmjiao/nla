@@ -1,0 +1,2300 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 10: Review for Midterm #1;
+\begin_inset Newline newline
+\end_inset
+
+Gram-Schmidt Orthogonalization
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Review of Midterm #1
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Midterm #1
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Wednesday, Oct.
+ 5th, 2016 in classroom
+\end_layout
+
+\begin_layout Itemize
+It will cover material up to Cholesky factorization
+\end_layout
+
+\begin_layout Itemize
+It is a closed-book exam
+\end_layout
+
+\begin_layout Itemize
+You can bring a single-sided, one-page, letter-size cheat sheet, which you
+ must prepare by yourself
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Fundamental Concepts
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Norms, orthogonality, conditioning, stability
+\end_layout
+
+\begin_layout Itemize
+Conditioning of problems
+\end_layout
+
+\begin_layout Itemize
+Stability and backward stability of algorithms
+\end_layout
+
+\begin_layout Itemize
+Efficiency of algorithms, operation counts
+\end_layout
+
+\begin_layout Itemize
+Singular value decomposition, properties, and relationship with eigenvalue
+ problems
+\end_layout
+
+\begin_layout Itemize
+Orthogonal projection matrices, orthogonal matrices
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algorithms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Matrix multiplication
+\end_layout
+
+\begin_layout Itemize
+Triangular systems
+\end_layout
+
+\begin_layout Itemize
+Gaussian elimination with/without pivoting
+\end_layout
+
+\begin_layout Itemize
+Cholesky factorization and 
+\begin_inset Formula $LDL^{T}$
+\end_inset
+
+ factorization
+\end_layout
+
+\begin_layout Itemize
+Understand when they work, how they work, why they work, and how well they
+ work
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Gram-Schmidt Orthogonalization (NLA§7)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Motivation
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Question
+\series default
+: Given a linear system 
+\begin_inset Formula $\vec{A}\vec{x}\approx\vec{b}$
+\end_inset
+
+ where 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ (
+\begin_inset Formula $m\geq n$
+\end_inset
+
+) has full rank, how to solve the linear system?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Enumerate
+One approach is to solve normal equation 
+\begin_inset Formula $\vec{A}^{T}\vec{A}\vec{x}=\vec{A}^{T}\vec{b}$
+\end_inset
+
+ directly using Cholesky factorization.
+ It is unstable, but is very efficient if 
+\begin_inset Formula $m\gg n$
+\end_inset
+
+ (
+\begin_inset Formula $mn^{2}+\frac{1}{3}n^{3}$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+Another possible solution is to use SVD:
+\begin_inset Formula 
+\[
+\vec{A}=\vec{U}\Sigma\vec{V}^{T},\ \mbox{ so }\vec{x}=\vec{V}\vec{\Sigma}^{-1}\vec{U}^{T}\vec{b}.
+\]
+
+\end_inset
+
+It is stable, but is inefficient.
+\end_layout
+
+\begin_layout Standard
+A more robust approach is to use QR factorization, which decomposes 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ into product of two simple matrices 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{R}$
+\end_inset
+
+, where columns of 
+\begin_inset Formula $\vec{Q}$
+\end_inset
+
+ are orthonormal and 
+\begin_inset Formula $\vec{R}$
+\end_inset
+
+ is upper triangular.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Two Different Versions of QR
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+There are two versions of QR
+\end_layout
+
+\begin_layout Itemize
+Full QR factorization: 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ (
+\begin_inset Formula $m\ge n$
+\end_inset
+
+) 
+\begin_inset Formula 
+\[
+\vec{A}=\vec{Q}\vec{R}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{Q}\in\mathbb{R}^{m\times m}$
+\end_inset
+
+ is orthogonal and 
+\begin_inset Formula $\vec{R}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ is upper triangular
+\end_layout
+
+\begin_layout Itemize
+Reduced (or thin) QR factorization: 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ (
+\begin_inset Formula $m\ge n$
+\end_inset
+
+) 
+\begin_inset Formula 
+\[
+\vec{A}=\widehat{\vec{Q}}\widehat{\vec{R}}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{Q}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ contains orthonormal vectors and 
+\begin_inset Formula $\vec{R}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is upper triangular
+\end_layout
+
+\begin_layout Itemize
+What space do 
+\begin_inset Formula $\{\vec{q}_{1},\vec{q}_{2},\cdots,\vec{q}_{j}\}$
+\end_inset
+
+, 
+\begin_inset Formula $j\leq n$
+\end_inset
+
+ span?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: For full rank 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, first 
+\begin_inset Formula $j$
+\end_inset
+
+ column vectors of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, i.e., 
+\begin_inset Formula $\langle\vec{q}_{1},\vec{q}_{2},\dots,\vec{q}_{j}\rangle=\langle\vec{a}_{1},\vec{a}_{2},\dots,\vec{a}_{j}\rangle.$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Gram-Schmidt Orthogonalization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+A method to construct QR factorization is to orthogonalize the column vectors
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Itemize
+Basic idea: 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Take first column 
+\begin_inset Formula $\vec{a}_{1}$
+\end_inset
+
+ and normalize it to obtain vector 
+\begin_inset Formula $\vec{q}_{1}$
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Itemize
+Take second column 
+\begin_inset Formula $\vec{a}_{2}$
+\end_inset
+
+, subtract its orthogonal projection to 
+\begin_inset Formula $\vec{q}_{1}$
+\end_inset
+
+, and normalize to obtain 
+\begin_inset Formula $\vec{q}_{2}$
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Itemize
+...
+\end_layout
+
+\begin_layout Itemize
+Take 
+\begin_inset Formula $j$
+\end_inset
+
+th column of 
+\begin_inset Formula $\vec{a}_{j}$
+\end_inset
+
+, subtract its orthogonal projection to 
+\begin_inset Formula $\vec{q}_{1},\dots,\vec{q}_{j-1}$
+\end_inset
+
+, and normalize to obtain 
+\begin_inset Formula $\vec{q}_{j}$
+\end_inset
+
+;
+\begin_inset Formula 
+\[
+\vec{v}_{j}=\vec{a}_{j}-\sum_{i=1}^{j-1}\vec{q}_{i}^{T}\vec{a}_{j}\vec{q}_{i},\mbox{ }\vec{q}_{j}=\vec{v}_{j}/\Vert\vec{v}_{j}\Vert.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+This idea is called 
+\emph on
+Gram-Schmidt orthogonalization
+\emph default
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Gram-Schmidt Projections
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Orthogonal vectors produced by Gram-Schmidt can be written in terms of projector
+s
+\begin_inset Formula 
+\[
+\vec{q}_{j}=\frac{\vec{P}_{j}\vec{a}_{j}}{\Vert\vec{P}_{j}\vec{a}_{j}\Vert}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\[
+\vec{P}_{j}=\vec{I}-\hat{\vec{Q}}_{j-1}\hat{\vec{Q}}_{j-1}^{T}\mbox{ with }\hat{\vec{Q}}_{j-1}=\left[\begin{array}{cccc}
+\vec{q}_{1} & \vec{q}_{2} & \cdots & \vec{q}_{j-1}\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{P}_{j}$
+\end_inset
+
+ projects orthogonally onto space orthogonal to 
+\begin_inset Formula $\langle\vec{q}_{1},\vec{q}_{2},\dots,\vec{q}_{j-1}\rangle$
+\end_inset
+
+ and rank of 
+\begin_inset Formula $\vec{P}_{j}$
+\end_inset
+
+ is 
+\begin_inset Formula $m-(j-1)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Existence of QR
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+Every 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ (
+\begin_inset Formula $m\geq n$
+\end_inset
+
+) has full QR factorization, hence also a reduced QR factorization.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Key idea of proof
+\series default
+: If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has full rank, Gram-Schmidt algorithm provides a proof itself for having
+ reduced QR.
+ 
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ does not have full rank, at some step 
+\begin_inset Formula $\vec{v}_{j}=\vec{0}$
+\end_inset
+
+.
+ We can set 
+\begin_inset Formula $\vec{q}_{j}$
+\end_inset
+
+ to be a vector orthogonal to 
+\begin_inset Formula $\vec{q}_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $i<j$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To construct full QR from reduced QR, just continue Gram-Schmidt an additional
+ 
+\begin_inset Formula $m-n$
+\end_inset
+
+ steps.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Uniqueness of QR
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+Every 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ (
+\begin_inset Formula $m\geq n$
+\end_inset
+
+) of full rank has a unique reduced QR factorization 
+\begin_inset Formula $\vec{A}=\widehat{\vec{Q}}\widehat{\vec{R}}$
+\end_inset
+
+ with 
+\begin_inset Formula $r_{jj}>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Key idea of proof
+\series default
+: Proof is provided by Gram-Schmidt iteration itself.
+ If the signs of 
+\begin_inset Formula $r_{jj}$
+\end_inset
+
+ are determined, then 
+\begin_inset Formula $r_{ij}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{q}_{j}$
+\end_inset
+
+ are determined.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Question
+\series default
+: Why do we require 
+\begin_inset Formula $r_{jj}>0$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Question
+\series default
+: Is full QR factorization unique?
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Question
+\series default
+: What if 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ does not have full rank?
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Modified Gram-Schmidt Orthogonalization (NLA§8)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algorithm of Gram-Schmidt Orthogonalization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "50text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Classical Gram-Schmidt method
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}_{j}=\vec{a}_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+ for
+\series default
+ 
+\begin_inset Formula $i=1:j-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $r_{ij}=\vec{q}_{i}^{T}\vec{a}_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}_{j}=\vec{v}_{j}-r_{ij}\vec{q}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $r_{jj}=\Vert\vec{v}_{j}\Vert_{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{q}_{j}=\vec{v}_{j}/r_{jj}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+GS require 
+\begin_inset Formula $\sim2mn^{2}$
+\end_inset
+
+ flops to compute QR factorization of 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ matrix
+\end_layout
+
+\begin_layout Itemize
+Classical Gram-Schmidt (CGS) is 
+\series bold
+unstable
+\series default
+, which means that its solution is sensitive to perturbation
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Alternative View of Gram-Schmidt Projection
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Orthogonal vectors produced by Gram-Schmidt can be written in terms of projector
+s
+\begin_inset Formula 
+\[
+\vec{q}_{j}=\frac{\vec{P}_{j}\vec{a}_{j}}{\Vert\vec{P}_{j}\vec{a}_{j}\Vert},\mbox{ where }\vec{P}_{j}=\vec{I}-\hat{\vec{Q}}_{j-1}\hat{\vec{Q}}_{j-1}^{T}\mbox{, }\hat{\vec{Q}}_{j-1}=\left[\vec{q}_{1}\vert\vec{q}_{2}\vert\cdots\vert\vec{q}_{j-1}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We may view 
+\begin_inset Formula $\vec{P}_{j}$
+\end_inset
+
+ as product of a sequence of projections
+\begin_inset Formula 
+\[
+\vec{P}_{j}=\vec{P}_{\bot q_{j-1}}\vec{P}_{\bot q_{j-2}}\dots\vec{P}_{\bot q_{1}}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{P}_{\bot q}=\vec{I}-\vec{q}\vec{q}^{T}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Instead of computing 
+\begin_inset Formula $\vec{v}_{j}=\vec{P}_{j}\vec{a}_{i}$
+\end_inset
+
+, one could compute 
+\begin_inset Formula $\vec{v}_{j}=\vec{P}_{\bot q_{j-1}}\vec{P}_{\bot q_{j-2}}\dots\vec{P}_{\bot q_{1}}\vec{a}_{j}$
+\end_inset
+
+ instead, resulting in modified Gram-Schmidt algorithm
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Modified Gram-Schmidt Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Classical Gram-Schmidt method
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}_{j}=\vec{a}_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+ for
+\series default
+ 
+\begin_inset Formula $i=1:j-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $r_{ij}=\vec{q}_{i}^{T}\vec{a}_{j}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}_{j}=\vec{v}_{j}-r_{ij}\vec{q}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $r_{jj}=\Vert\vec{v}_{j}\Vert_{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{q}_{j}=\vec{v}_{j}/r_{jj}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hfill
+\end_layout
+
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Modified Gram-Schmidt method
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}_{j}=\vec{a}_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $r_{ii}=\Vert\vec{v}_{i}\Vert_{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{q}_{i}=\vec{v}_{i}/r_{ii}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+ for
+\series default
+ 
+\begin_inset Formula $j=i+1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $r_{ij}=\vec{q}_{i}^{T}\vec{v}_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{v}_{j}=\vec{v}_{j}-r_{ij}\vec{q}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Key difference between CGS and MGS is how 
+\begin_inset Formula $r_{ij}$
+\end_inset
+
+ is computed
+\end_layout
+
+\begin_layout Itemize
+CGS above is column-oriented (in the sense that 
+\begin_inset Formula $\vec{R}$
+\end_inset
+
+ is computed column by column) and MGS above is row-oriented, but this is
+ NOT the main difference between CGS and MGS.
+ There are also column-oriented MGS and row-oriented CGS.
+\end_layout
+
+\begin_layout Itemize
+MGS is numerically 
+\begin_inset Quotes eld
+\end_inset
+
+more stable
+\begin_inset Quotes erd
+\end_inset
+
+ than CGS, but neither is stable
+\end_layout
+
+\begin_layout Itemize
+In MGS, 
+\begin_inset Formula $\vec{v}_{j}$
+\end_inset
+
+ can overwrite 
+\begin_inset Formula $\vec{a}_{j}$
+\end_inset
+
+, and 
+\begin_inset Formula $\vec{q}_{j}$
+\end_inset
+
+ can overwrite 
+\begin_inset Formula $\vec{v}_{j}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example: CGS vs.
+ MGS
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Consider matrix 
+\begin_inset Formula 
+\[
+\vec{A}=\left[\begin{array}{ccc}
+1 & 1 & 1\\
+\varepsilon & 0 & 0\\
+0 & \varepsilon & 0\\
+0 & 0 & \varepsilon
+\end{array}\right]
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ is small such that 
+\begin_inset Formula $1+\varepsilon^{2}=1$
+\end_inset
+
+ with round-off error
+\end_layout
+
+\begin_layout Itemize
+For both CGS and MGS
+\begin_inset Formula 
+\[
+\vec{v}_{1}\leftarrow(1,\varepsilon,0,0)^{T},\ r_{11}=\sqrt{1+\varepsilon^{2}}\approx1,\ q_{1}=\vec{v}_{1}/r_{11}=(1,\varepsilon,0,0)^{T},
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{v}_{2}\leftarrow(1,0,\varepsilon,0)^{T},r_{12}=\vec{q}_{1}^{T}\vec{a}_{2}(\mbox{or }=\vec{q}_{1}^{T}\vec{v}_{2})=1
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{v}_{2}\leftarrow\vec{v}_{2}-r_{12}\vec{q}_{1}=(0,-\varepsilon,\varepsilon,0)^{T},
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+r_{22}=\sqrt{2}\varepsilon,\ \vec{q}_{2}=(0,-1,1,0)/\sqrt{2},
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{v}_{3}\leftarrow(1,0,0,\varepsilon)^{T},r_{13}=\vec{q}_{1}^{T}\vec{a}_{3}(\mbox{or }=\vec{q}_{1}^{T}\vec{v}_{3})=1
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{v}_{3}\leftarrow\vec{v}_{3}-r_{13}\vec{q}_{1}=(0,-\varepsilon,0,\varepsilon)^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example: CGS vs.
+ MGS Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For CGS: 
+\begin_inset Formula 
+\[
+r_{23}=\vec{q}_{2}^{T}\vec{a}_{3}=0,\ \vec{v}_{3}\leftarrow\vec{v}_{3}-r_{23}\vec{q}_{2}=(0,-\varepsilon,0,\varepsilon)^{T}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+r_{33}=\sqrt{2}\varepsilon,\vec{q}_{3}=\vec{v}_{3}/r_{33}=(0,-1,0,1)^{T}/\sqrt{2}
+\]
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Note that 
+\begin_inset Formula $\vec{q}_{2}^{T}\vec{q}_{3}=(0,-1,1,0)(0,-1,0,1)^{T}/2=1/2$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+For MGS: 
+\begin_inset Formula 
+\[
+r_{23}=\vec{q}_{2}^{T}\vec{v}_{3}=\varepsilon/\sqrt{2},\ \vec{v}_{3}\leftarrow\vec{v}_{3}-r_{23}\vec{q}_{2}=(0,-\varepsilon/2,-\varepsilon/2,\varepsilon)^{T}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+r_{33}=\sqrt{6}\varepsilon/2,\vec{q}_{3}=\vec{v}_{3}/r_{33}=(0,-1,-1,2)^{T}/\sqrt{6}
+\]
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Note that 
+\begin_inset Formula $\vec{q}_{2}^{T}\vec{q}_{3}=(0,-1,1,0)(0,-1,-1,2)^{T}/\sqrt{12}=0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_body
+\end_document

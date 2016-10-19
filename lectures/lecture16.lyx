@@ -1,0 +1,3503 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+%\def\vec#1{\mbox{\boldmath $#1$}}
+\def\vec#1{#1}
+\usepackage{algorithmic}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 16: QR Algorithm without Shifts (NLA§28);
+\begin_inset Newline newline
+\end_inset
+
+QR Algorithm with Shifts (NLA§29)
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+SUNY Stony Brook
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+QR Algorithm without Shifts
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+QR Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Most basic version of QR algorithm is remarkably simple:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status collapsed
+
+\begin_layout Plain Layout
+Algorithm: 
+\begin_inset Quotes eld
+\end_inset
+
+Pure
+\begin_inset Quotes erd
+\end_inset
+
+ QR Algorithm
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(0)}=\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Q}^{(k)}\vec{R}^{(k)}=\vec{A}^{(k-1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(k)}=\vec{R}^{(k)}\vec{Q}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+With some suitable assumptions, 
+\begin_inset Formula $\vec{A}^{(k)}$
+\end_inset
+
+ converge to Schur form of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ (diagonal if 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is symmetric)
+\end_layout
+
+\begin_layout Itemize
+Similarity transformation of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\vec{A}^{(k)}=\vec{R}^{(k)}\vec{Q}^{(k)}=\left(\vec{Q}^{(k)}\right)^{T}\vec{A}^{(k-1)}\vec{Q}^{(k)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+But why it works?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Unnormalized Simultaneous Iteration
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+To understand QR algorithm, first consider simple algorithm
+\end_layout
+
+\begin_layout Itemize
+Simultaneous iteration is power iteration applied to several vectors
+\end_layout
+
+\begin_layout Itemize
+Start with linearly independent 
+\begin_inset Formula $\vec{v}_{1}^{(0)},\cdots,\vec{v}_{n}^{(0)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We know from power iteration that 
+\begin_inset Formula $\vec{A}^{k}\vec{v}_{1}^{(0)}$
+\end_inset
+
+ converge to 
+\begin_inset Formula $\vec{q}_{1}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+With some assumptions, the space 
+\begin_inset Formula $\left\langle \vec{A}^{k}\vec{v}_{1}^{(0)},\dots,\vec{A}^{k}\vec{v}_{n}^{(0)}\right\rangle $
+\end_inset
+
+ should converge to 
+\begin_inset Formula $\left\langle \vec{q}_{1},\cdots,\vec{q}_{n}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Notation: Define initial matrix 
+\begin_inset Formula $\vec{V}^{(0)}$
+\end_inset
+
+ and matrix 
+\begin_inset Formula $\vec{V}^{(k)}$
+\end_inset
+
+ at step 
+\begin_inset Formula $k$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\vec{V}^{(0)}=\left[\vec{v}_{1}^{(0)}|\cdots\vert\vec{v}_{n}^{(0)}\right],\ \vec{V}^{(k)}=\vec{A}^{k}\vec{V}^{(0)}=\left[\vec{v}_{1}^{(k)}|\cdots\vert\vec{v}_{n}^{(k)}\right]\ 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Unnormalized Simultaneous Iteration
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Define orthogonal basis for column space of 
+\begin_inset Formula $\vec{V}^{(k)}$
+\end_inset
+
+ by reduced QR factorization 
+\begin_inset Formula $\hat{\vec{Q}}^{(k)}\hat{\vec{R}}^{(k)}=\vec{V}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We assume that 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+leading 
+\begin_inset Formula $k+1$
+\end_inset
+
+ eigenvalues are distinct, and
+\end_layout
+
+\begin_layout Enumerate
+all leading principal submatrices of 
+\begin_inset Formula $\hat{\vec{Q}}^{T}\vec{V}^{(0)}$
+\end_inset
+
+ are nonsingular where 
+\begin_inset Formula $\hat{\vec{Q}}=\left[\vec{q}_{1}|\cdots\vert\vec{q}_{n}\right]$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+We then have columns of 
+\begin_inset Formula $\hat{\vec{Q}}^{(k)}$
+\end_inset
+
+ converge to eigenvectors of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+: 
+\begin_inset Formula 
+\[
+\Vert\vec{q}_{j}^{(k)}-(\pm\vec{q}_{j})\Vert=O(c^{k}),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $c=\max_{1\leq k\leq n}|\lambda_{k+1}|/|\lambda_{k}|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Proof idea: Show that subspace of any leading 
+\begin_inset Formula $j$
+\end_inset
+
+ columns of 
+\begin_inset Formula $\vec{V}^{(k)}=\vec{A}^{k}\vec{V}^{(0)}$
+\end_inset
+
+ converges to subspace of first 
+\begin_inset Formula $j$
+\end_inset
+
+ eigenvectors of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, so does the subspace of any leading 
+\begin_inset Formula $j$
+\end_inset
+
+ columns of 
+\begin_inset Formula $\hat{\vec{Q}}^{(k)}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Proof on blackboard
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simultaneous Iteration
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Matrices 
+\begin_inset Formula $\vec{V}^{(k)}=\vec{A}^{k}\vec{V}^{(0)}$
+\end_inset
+
+ are highly ill-conditioned
+\end_layout
+
+\begin_layout Itemize
+Orthonormalize at each step rather than at the end
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: Simultaneous Iteration
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Pick 
+\begin_inset Formula $\hat{\vec{Q}}^{(0)}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Z}=\vec{A}\hat{\vec{Q}}^{(k-1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\hat{\vec{Q}}^{(k)}\hat{\vec{R}}^{(k)}=\vec{Z}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Column spaces of 
+\begin_inset Formula $\hat{\vec{Q}}^{(k)}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{Z}^{(k)}$
+\end_inset
+
+ are both equal to column space of 
+\begin_inset Formula $\vec{A}^{k}\hat{\vec{Q}}^{(0)}$
+\end_inset
+
+, therefore same convergence as before
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simultaneous Iteration 
+\begin_inset Formula $\Longleftrightarrow$
+\end_inset
+
+ QR Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: Simultaneous Iteration
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ Pick 
+\begin_inset Formula $\hat{\vec{Q}}^{(0)}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Z}=\vec{A}\hat{\vec{Q}}^{(k-1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\hat{\vec{Q}}^{(k)}\hat{\vec{R}}^{(k)}=\vec{Z}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hfill
+\end_layout
+
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: 
+\begin_inset Quotes eld
+\end_inset
+
+Pure
+\begin_inset Quotes erd
+\end_inset
+
+ QR Algorithm
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(0)}=\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Q}^{(k)}\vec{R}^{(k)}=\vec{A}^{(k-1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(k)}=\vec{R}^{(k)}\vec{Q}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+QR algorithm is equivalent to simultaneous iteration with 
+\begin_inset Formula $\hat{\vec{Q}}^{(0)}=\vec{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Replace 
+\begin_inset Formula $\hat{\vec{R}}^{(k)}$
+\end_inset
+
+ by 
+\begin_inset Formula $\vec{R}^{(k)}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\vec{Q}}^{(k)}$
+\end_inset
+
+ by 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+, and introduce new statement 
+\begin_inset Formula $\vec{A}^{(k)}=\left(\underline{\vec{Q}}^{(k)}\right)^{T}\vec{A}\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+ in simultaneous iteration
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Simultaneous iteration
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\underline{\vec{Q}}^{(0)}=\vec{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Z}=\vec{A}\underline{\vec{Q}}^{(k-1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}\vec{R}^{(k)}=\vec{Z}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(k)}=\left(\underline{\vec{Q}}^{(k)}\right)^{T}\vec{A}\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hfill
+\end_layout
+
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+QR algorithm
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(0)}=\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Q}^{(k)}\vec{R}^{(k)}=\vec{A}^{(k-1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(k)}=\vec{R}^{(k)}\vec{Q}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}=\vec{Q}^{(1)}\vec{Q}^{(2)}\cdots\vec{Q}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simultaneous Iteration 
+\begin_inset Formula $\Longleftrightarrow$
+\end_inset
+
+QR Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}=\vec{Q}^{(1)}\vec{Q}^{(2)}\cdots\vec{Q}^{(k)}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\underline{\vec{R}}^{(k)}=\vec{R}^{(k)}\vec{R}^{(k-1)}\cdots\vec{R}^{(1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Both schemes generate QR factorization 
+\begin_inset Formula $\vec{A}^{k}=\underline{\vec{Q}}^{(k)}\underline{\vec{R}}^{(k)}$
+\end_inset
+
+ and projection 
+\begin_inset Formula $\vec{A}^{(k)}=\left(\underline{\vec{Q}}^{(k)}\right)^{T}\vec{A}\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Proof by induction.
+ For 
+\begin_inset Formula $k=0$
+\end_inset
+
+ it is trivial for both algorithms.
+\end_layout
+
+\begin_layout Standard
+For 
+\begin_inset Formula $k\geq1$
+\end_inset
+
+ with simultaneous iteration, 
+\begin_inset Formula $\vec{A}^{(k)}$
+\end_inset
+
+ is given by definition, and 
+\begin_inset Formula 
+\[
+\vec{A}^{k}=\vec{A}\underline{\vec{Q}}^{(k-1)}\underline{\vec{R}}^{(k-1)}=\underline{\vec{Q}}^{(k)}\vec{R}^{(k)}\underline{\vec{R}}^{(k-1)}=\underline{\vec{Q}}^{(k)}\underline{\vec{R}}^{(k)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For 
+\begin_inset Formula $k\geq1$
+\end_inset
+
+ with QR algorithm, 
+\begin_inset Formula 
+\[
+\vec{A}^{k}=\vec{A}\underline{\vec{Q}}^{(k-1)}\underline{\vec{R}}^{(k-1)}=\underline{\vec{Q}}^{(k-1)}\vec{A}^{(k-1)}\underline{\vec{R}}^{(k-1)}=\underline{\vec{Q}}^{(k)}\underline{\vec{R}}^{(k)}
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\[
+\vec{A}^{(k)}=\left(\vec{Q}^{(k)}\right)^{T}\vec{A}^{(k-1)}\vec{Q}^{(k)}=\left(\underline{\vec{Q}}^{(k)}\right)^{T}\vec{A}\underline{\vec{Q}}^{(k)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Convergence of QR Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Since 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}=\hat{\vec{Q}}^{(k)}$
+\end_inset
+
+ in simultaneous iteration, column vectors of 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+ converge linearly to eigenvectors if 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ has distinct eigenvalues
+\end_layout
+
+\begin_layout Itemize
+From 
+\begin_inset Formula $\vec{A}^{(k)}=\left(\underline{\vec{Q}}^{(k)}\right)^{T}\vec{A}\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+, diagonal entries of 
+\begin_inset Formula $\vec{A}^{(k)}$
+\end_inset
+
+ are Rayleigh quotients of column vectors of 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+, so they converge linearly to eigenvalues of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Off-diagonal entries of 
+\begin_inset Formula $\vec{A}^{(k)}$
+\end_inset
+
+ converge to zeros, as they are generalized Rayleigh quotients involving
+ approximations of distinct eigenvectors
+\end_layout
+
+\begin_layout Itemize
+Overall, 
+\begin_inset Formula $\vec{A}=\underline{\vec{Q}}^{(k)}\vec{A}^{(k)}\left(\underline{\vec{Q}}^{(k)}\right)^{T}$
+\end_inset
+
+.
+ For a symmetric matrix, it converges to eigenvalue decomposition of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Convergence rate is only linear: columns of 
+\begin_inset Formula $\hat{\vec{Q}}^{(k)}$
+\end_inset
+
+ converge to eigenvectors of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ 
+\begin_inset Formula $\Vert\vec{q}_{j}^{(k)}-(\pm\vec{q}_{j})\Vert=O(c^{k})$
+\end_inset
+
+, where 
+\begin_inset Formula $c=\max_{1\leq k\leq n}|\lambda_{k+1}|/|\lambda_{k}|$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+QR Algorithm with Shifts
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simultaneous Inverse Iteration 
+\begin_inset Formula $\Longleftrightarrow$
+\end_inset
+
+QR Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Similar to inverse iteration, QR algorithm can be sped-up by introducing
+ shifts at each step
+\end_layout
+
+\begin_layout Itemize
+Assume 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is real and symmetric.
+ QR algorithm is equivalent to 
+\emph on
+simultaneous inverse
+\emph default
+ 
+\emph on
+iteration
+\emph default
+, applied to 
+\begin_inset Quotes eld
+\end_inset
+
+flipped
+\begin_inset Quotes erd
+\end_inset
+
+ identity matrix 
+\begin_inset Formula $\vec{P}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{P}=\left[\begin{array}{cccc}
+ &  &  & 1\\
+ &  & 1\\
+ & \vdots\\
+1
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Simultaneous inverse iteration
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\hat{\vec{Q}}^{(0)}=\vec{P}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Z}=\vec{A}^{-1}\hat{\vec{Q}}^{(k-1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\hat{\vec{Q}}^{(k)}\hat{\vec{R}}^{(k)}=\vec{Z}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hfill
+\end_layout
+
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+Pure
+\begin_inset Quotes erd
+\end_inset
+
+ QR Algorithm
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(0)}=\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Q}^{(k)}\vec{R}^{(k)}=\vec{A}^{(k-1)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(k)}=\vec{R}^{(k)}\vec{Q}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simultaneous Inverse Iteration 
+\begin_inset Formula $\Longleftrightarrow$
+\end_inset
+
+QR Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Let 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}=\vec{Q}^{(1)}\vec{Q}^{(2)}\cdots\vec{Q}^{(k)}$
+\end_inset
+
+ and 
+\begin_inset Formula $\underline{\vec{R}}^{(k)}=\vec{R}^{(k)}\vec{R}^{(k-1)}\cdots\vec{R}^{(1)}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $\vec{A}^{k}=\underline{\vec{Q}}^{(k)}\underline{\vec{R}}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Inverting 
+\begin_inset Formula $\vec{A}^{k}$
+\end_inset
+
+, we have 
+\begin_inset Formula $\vec{A}^{-k}=\left(\underline{\vec{R}}^{(k)}\right)^{-1}\left(\underline{\vec{Q}}^{(k)}\right)^{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Because 
+\begin_inset Formula $\vec{A}^{-k}$
+\end_inset
+
+ is symmetric, 
+\begin_inset Formula $\vec{A}^{-k}=\underline{\vec{Q}}^{(k)}\left(\underline{\vec{R}}^{(k)}\right)^{-T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Use 
+\begin_inset Quotes eld
+\end_inset
+
+flipped
+\begin_inset Quotes erd
+\end_inset
+
+ permutation matrix 
+\begin_inset Formula $\vec{P}$
+\end_inset
+
+ and write that last expression as 
+\begin_inset Formula 
+\[
+\vec{A}^{-k}\vec{P}=\left[\underline{\vec{Q}}^{(k)}\vec{P}\right]\left[\vec{P}\left(\underline{\vec{R}}^{(k)}\right)^{-T}\vec{P}\right],
+\]
+
+\end_inset
+
+which is QR factorization of 
+\begin_inset Formula $\vec{A}^{-k}\vec{P}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Therefore, simultaneous inverse iteration applied to 
+\begin_inset Formula $\hat{\vec{Q}}^{(0)}=\vec{P}$
+\end_inset
+
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+equivalent
+\begin_inset Quotes erd
+\end_inset
+
+ to QR algorithm, in that it produces
+\begin_inset Formula 
+\[
+\hat{\vec{Q}}^{(k)}=\underline{\vec{Q}}^{(k)}\vec{P}\mbox{ and }\hat{\vec{R}}^{(k)}\hat{\vec{R}}^{(k-1)}\cdots\hat{\vec{R}}^{(1)}=\vec{P}\left(\underline{\vec{R}}^{(k)}\right)^{-T}\vec{P}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: How to obtain 
+\begin_inset Formula $\vec{A}^{(k)}$
+\end_inset
+
+ in simultaneous inverse iteration?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+Answer: 
+\begin_inset Formula $\vec{A}^{(k)}=\left(\underline{\vec{Q}}^{(k)}\right)^{T}\vec{A}\underline{\vec{Q}}^{(k)}=\vec{P}\left(\hat{\vec{Q}}^{(k)}\right)^{T}\vec{A}\hat{\vec{Q}}^{(k)}\vec{P}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+QR Algorithm with Shifts
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Similar to inverse iteration, we can introduce shifts 
+\begin_inset Formula $\mu^{(k)}$
+\end_inset
+
+ to accelerate convergence
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: QR Algorithm with Shifts
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(0)}=\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ Pick a shift 
+\begin_inset Formula $\mu^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Q}^{(k)}\vec{R}^{(k)}=\vec{A}^{(k-1)}-\mu^{(k)}\vec{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(k)}=\vec{R}^{(k)}\vec{Q}^{(k)}+\mu^{(k)}\vec{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Properties of QR Algorithm with Shift
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+From 
+\begin_inset Formula $\vec{Q}^{(k)}\vec{R}^{(k)}=\vec{A}^{(k-1)}-\mu^{(k)}\vec{I}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{A}^{(k)}=\vec{R}^{(k)}\vec{Q}^{(k)}+\mu^{(k)}\vec{I}$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\vec{A}^{(k)}=\left(\vec{Q}^{(k)}\right)^{T}\vec{A}^{(k-1)}\vec{Q}^{(k)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Then by induction, 
+\begin_inset Formula $\vec{A}^{(k)}=\left(\underline{\vec{Q}}^{(k)}\right)^{T}\vec{A}\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+However, instead of 
+\begin_inset Formula $\vec{A}^{k}=\underline{\vec{Q}}^{(k)}\underline{\vec{R}}^{(k)}$
+\end_inset
+
+, we now have
+\begin_inset Formula 
+\[
+\left(\vec{A}-\mu^{(k)}\vec{I}\right)\left(\vec{A}-\mu^{(k-1)}\vec{I}\right)\cdots\left(\vec{A}-\mu^{(1)}\vec{I}\right)=\underline{\vec{Q}}^{(k)}\underline{\vec{R}}^{(k)},
+\]
+
+\end_inset
+
+which can be shown by induction
+\end_layout
+
+\begin_layout Itemize
+In other words, 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+ is orthogonalization of 
+\begin_inset Formula $\prod_{j=k}^{1}(\vec{A}-\mu^{(k)}\vec{I})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\mu^{(k)}$
+\end_inset
+
+ are good estimates of eigenvalues, then last column of 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+ converges to corresponding eigenvector
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Choosing 
+\begin_inset Formula $\mu^{(k)}$
+\end_inset
+
+: Rayleigh Quotient Shift
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Natural choice of 
+\begin_inset Formula $\mu^{(k)}$
+\end_inset
+
+ is Rayleigh quotient for last column of 
+\begin_inset Formula $\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\mu^{(k)}=r(\vec{q}_{m}^{(k)})=\left(\vec{q}_{m}^{(k)}\right)^{T}\vec{A}\vec{q}_{m}^{(k)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+As in Rayleigh quotient iteration, last column 
+\begin_inset Formula $\vec{q}_{m}^{(k)}$
+\end_inset
+
+ converges cubically
+\end_layout
+
+\begin_layout Itemize
+This Rayleigh quotient appears as 
+\begin_inset Formula $(m,m)$
+\end_inset
+
+ entry of 
+\begin_inset Formula $\vec{A}^{(k)}$
+\end_inset
+
+ since 
+\begin_inset Formula $\vec{A}^{(k)}=\left(\underline{\vec{Q}}^{(k)}\right)^{T}\vec{A}\underline{\vec{Q}}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Rayleigh quotient shift corresponds to setting 
+\begin_inset Formula $\mu^{(k)}=A_{mm}^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Choosing 
+\begin_inset Formula $\mu^{(k)}$
+\end_inset
+
+: Wilkinson Shift
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+QR algorithm with Rayleigh quotient shift might fail sometimes, e.g., 
+\begin_inset Formula $\vec{A}=\left[\begin{array}{cc}
+0 & 1\\
+1 & 0
+\end{array}\right]$
+\end_inset
+
+, for which 
+\begin_inset Formula $\vec{A}^{(k)}=\left[\begin{array}{cc}
+0 & 1\\
+1 & 0
+\end{array}\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is always 
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Wilkinson breaks symmetry by considering lower-rightmost 
+\begin_inset Formula $2\times2$
+\end_inset
+
+ submatrix of 
+\begin_inset Formula $\vec{A}^{(k)}$
+\end_inset
+
+: 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\vec{B}=\left[\begin{array}{cc}
+a_{n-1} & b_{n-1}\\
+b_{n-1} & a_{m}
+\end{array}\right]$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Itemize
+Choose eigenvalue of 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ closer to 
+\begin_inset Formula $a_{n}$
+\end_inset
+
+, with arbitrary tie-breaking:
+\begin_inset Formula 
+\[
+\mu=a_{n}-\mbox{sign}(\delta)b_{n-1}^{2}/\left(|\delta|+\sqrt{\delta^{2}+b_{n-1}^{2}}\right)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\delta=(a_{n-1}-a_{n})/2$
+\end_inset
+
+; if 
+\begin_inset Formula $\delta=0$
+\end_inset
+
+, set 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\mbox{sign}(\delta)$
+\end_inset
+
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+to 1 (or -1)
+\end_layout
+
+\begin_layout Itemize
+QR algorithm always converges with this shift; quadratically in worst case,
+ and cubically in general
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+Practical
+\begin_inset Quotes erd
+\end_inset
+
+ QR Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Practical QR algorithm involves two additional components:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+tridiagonalization of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ at the beginning.
+ The tridiagonal structure is preserved by 
+\begin_inset Formula $\vec{A}^{(k)}$
+\end_inset
+
+ (Exercise 28.2)
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+deflation 
+\emph default
+of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ into submatrices when 
+\begin_inset Formula $\vec{A}^{(k)}$
+\end_inset
+
+ is separable
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: 
+\begin_inset Quotes eld
+\end_inset
+
+Practical
+\begin_inset Quotes erd
+\end_inset
+
+ QR Algorithm
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\left(\vec{Q}^{(0)}\right)^{T}$
+\end_inset
+
+
+\begin_inset Formula $\vec{A}^{(0)}\vec{Q}^{(0)}=\vec{A}$
+\end_inset
+
+ {tridiagnolization of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1,2,\dots$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ Pick a shift 
+\begin_inset Formula $\mu^{(k)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{Q}^{(k)}\vec{R}^{(k)}=\vec{A}^{(k-1)}-\mu^{(k)}\vec{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{A}^{(k)}=\vec{R}^{(k)}\vec{Q}^{(k)}+\mu^{(k)}\vec{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ If any off-diagonal element 
+\begin_inset Formula $a_{j,j+1}^{(k)}$
+\end_inset
+
+ is sufficiently close to zero
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ set 
+\begin_inset Formula $a_{j,j+1}=a_{j+1,j}=0$
+\end_inset
+
+ to obtain 
+\begin_inset Formula $\left[\begin{array}{cc}
+\vec{A}_{1}\\
+ & \vec{A}_{2}
+\end{array}\right]=\vec{A}^{(k)}$
+\end_inset
+
+ and apply QR algorithm to 
+\begin_inset Formula $\vec{A}_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{A}_{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Stability and Accuracy
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+QR algorithm is backward stable
+\begin_inset Formula 
+\[
+\tilde{\vec{Q}}\tilde{\vec{\Lambda}}\tilde{\vec{Q}}=\vec{A}+\delta\vec{A},\ \ \ \frac{\Vert\delta\vec{A}\Vert}{\Vert\vec{A}\Vert}=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\tilde{\vec{\Lambda}}$
+\end_inset
+
+ is computed 
+\begin_inset Formula $\vec{\Lambda}$
+\end_inset
+
+ and 
+\begin_inset Formula $\tilde{\vec{Q}}$
+\end_inset
+
+ is exactly orthogonal matrix
+\end_layout
+
+\begin_layout Itemize
+Its combination with Hessenberg reduction is also backward stable
+\end_layout
+
+\begin_layout Itemize
+Furthermore, eigenvalues are always well conditioned for 
+\series bold
+normal
+\series default
+ matrices: it can be show that 
+\begin_inset Formula $|\tilde{\lambda}_{j}-\lambda_{j}|\leq\Vert\delta\vec{A}\Vert_{2}$
+\end_inset
+
+, and therefore, 
+\begin_inset Formula 
+\[
+\frac{|\tilde{\lambda}_{j}-\lambda_{j}|}{\Vert\vec{A}\Vert}=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\tilde{\lambda}_{j}$
+\end_inset
+
+ are the computed eigenvalues
+\end_layout
+
+\begin_layout Itemize
+However, sensitivity of eigenvectors depends on distances between adjacent
+ eigenvalues, so error in eigenvectors may be arbitrarily large
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

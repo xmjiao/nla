@@ -1978,11 +1978,7 @@ Suppose
 \end_inset
 
  are 
-\begin_inset Formula $n$
-\end_inset
-
--by-
-\begin_inset Formula $n$
+\begin_inset Formula $n\times n$
 \end_inset
 
  orthogonal matrices.

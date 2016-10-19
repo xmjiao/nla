@@ -1,0 +1,1075 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+%\def\vec#1{\mbox{\boldmath $#1$}}
+\def\vec#1{#1}
+\usepackage{algorithmic}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 17: Other Eigenvalue Algorithms;
+\begin_inset Newline newline
+\end_inset
+
+Generalized Eigenvalue Problems
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+SUNY Stony Brook
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Other Eigenvalue Algorithms (NLA§30)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Three Alternative Algorithms
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Jacobi algorithm: earliest known method
+\end_layout
+
+\begin_layout Itemize
+Bisection method: standard way for finding few eigenvalues
+\end_layout
+
+\begin_layout Itemize
+Divide-and-conquer: faster than QR and amenable to parallelization
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+The Jacobi Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Diagonalize 
+\begin_inset Formula $2\times2$
+\end_inset
+
+ real symmetric matrix by 
+\emph on
+Jacobi rotation
+\begin_inset Formula 
+\[
+\vec{J}^{T}\left[\begin{array}{cc}
+a & d\\
+d & b
+\end{array}\right]\vec{J}=\left[\begin{array}{cc}
+\neq0 & 0\\
+0 & \neq0
+\end{array}\right]
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{J}=\left[\begin{array}{cc}
+\cos\theta & \sin\theta\\
+-\sin\theta & \cos\theta
+\end{array}\right]$
+\end_inset
+
+, 
+\emph default
+and 
+\emph on
+
+\begin_inset Formula $\tan(2\theta)=2d/(b-a)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+What are its similarity and differences with Givens rotation?
+\end_layout
+
+\begin_layout Itemize
+Iteratively apply transformation to two rows and two corresponding columns
+ of 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Need not tridiagonalize first, but loop over all pairs of rows and columns
+ by choosing greedily or cyclically
+\end_layout
+
+\begin_layout Itemize
+Magnitude of nonzeros shrink steadily, converging quadratic 
+\end_layout
+
+\begin_layout Itemize
+In each iteration, 
+\begin_inset Formula $O(n^{2})$
+\end_inset
+
+ Jacobi rotation, 
+\begin_inset Formula $O(n)$
+\end_inset
+
+ operations per rotation, leading to 
+\begin_inset Formula $O(n^{3}\log(|\log\epsilon_{\mbox{machine}})|))$
+\end_inset
+
+ flops total
+\end_layout
+
+\begin_layout Itemize
+Jacobi method is easy to parallelize (QR algorithm does not scale well),
+ delivers better accuracy than QR algorithm, but far slower than QR algorithm
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Method of Bisection
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Idea: Search the real line for roots of 
+\begin_inset Formula $p(x)=\mbox{det}(\vec{A}-x\vec{I})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Finding roots from coefficients is highly unstable, but computing 
+\begin_inset Formula $p(x)$
+\end_inset
+
+ from given 
+\begin_inset Formula $x$
+\end_inset
+
+ is stable (e.g., can be computed using Gaussian elimination with partial
+ pivoting)
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $\vec{A}^{(i)}$
+\end_inset
+
+ denote principal square submatrix of dimension 
+\begin_inset Formula $i$
+\end_inset
+
+ for irreducible matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ (note: different from notation in QR algorithm)
+\end_layout
+
+\begin_layout Itemize
+Key property: eigenvalues of 
+\begin_inset Formula $A^{(1)},\dots,A^{(n)}$
+\end_inset
+
+ strictly interlace
+\begin_inset Formula 
+\[
+\lambda_{j}^{(k+1)}<\lambda_{j}^{(k)}<\lambda_{j+1}^{(k+1)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename figures/bisection.png
+	width 60text%
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Method of Bisection
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Interlacing property allows us to determine number of negative eigenvalues
+ of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, which is equal to number of sign changes in 
+\emph on
+Sturm
+\emph default
+ sequence
+\begin_inset Formula 
+\[
+1,\mbox{det}(\vec{A}^{(1)}),\mbox{det}(\vec{A}^{(2)}),\dots,\mbox{det}(\vec{A}^{(n)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Shift 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ to get number of eigenvalues in 
+\begin_inset Formula $(-\infty,b)$
+\end_inset
+
+ and 
+\begin_inset Formula $(-\infty,a)$
+\end_inset
+
+, and in turn 
+\begin_inset Formula $[a,b)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Three-term recurrence for determinants for tridiagonal matrices
+\begin_inset Formula 
+\[
+\mbox{det}(\vec{A}^{(k)})=a_{k,k}\mbox{det}(\vec{A}^{(k-1)})-a_{k,k-1}^{2}\mbox{det}(\vec{A}^{(k-2)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+With shift 
+\begin_inset Formula $x\vec{I}$
+\end_inset
+
+ and 
+\begin_inset Formula $p^{(k)}(x)=\mbox{det}(\vec{A}^{(k)}-x\vec{I})$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+p^{(k)}(x)=(a_{k,k}-x)p^{(k-1)}(x)-a_{k,k-1}^{2}p^{(k-2)}(x)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Bisection algorithm can the locate eigenvalues in arbitrarily small intervals
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $O(n\vert\log(\epsilon_{\mbox{machine}})\vert)$
+\end_inset
+
+ flops per eigenvalue, always high relative accuracy
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Notes on Bisection
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+It is standard algorithm if one needs a few eigenvalues
+\end_layout
+
+\begin_layout Itemize
+Key step of bisection is to determine the inertia (i.e., the numbers of positive,
+ negative, and zero eigenvalues) of 
+\begin_inset Formula $\vec{A}-\mu\vec{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Sylvester's Law of Inertia
+\emph default
+: inertia is invariant under 
+\emph on
+congruence transformation
+\emph default
+ 
+\begin_inset Formula $\vec{S}\vec{A}\vec{S}^{T}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{S}$
+\end_inset
+
+ is nonsingular (proved in 1852)
+\end_layout
+
+\begin_layout Itemize
+Therefore, 
+\begin_inset Formula $LDL^{T}$
+\end_inset
+
+ may be used to determine inertia
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Divide-and-Conquer Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Split symmetric algorithm 
+\begin_inset Formula $\vec{T}$
+\end_inset
+
+ into submatrices
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename figures/divnconq.png
+	width 60text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Sum of 
+\begin_inset Formula $2\times2$
+\end_inset
+
+ block-diagonal matrix and rank-one correction
+\end_layout
+
+\begin_layout Itemize
+Split 
+\begin_inset Formula $\vec{T}$
+\end_inset
+
+ in equal sizes and compute eigenvalues of 
+\begin_inset Formula $\hat{\vec{T}}_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\vec{T}}_{2}$
+\end_inset
+
+ recursively
+\end_layout
+
+\begin_layout Itemize
+Solve nonlinear problem to get eigenvalues of 
+\begin_inset Formula $\vec{T}$
+\end_inset
+
+ from those of 
+\begin_inset Formula $\hat{\vec{T}}_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\vec{T}}_{2}$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Divide-and-Conquer Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose diagonalization 
+\begin_inset Formula $\hat{\vec{T}}_{1}=\vec{Q}_{1}\vec{D}_{1}\vec{Q}_{1}^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\vec{T}}_{2}=\vec{Q}_{2}\vec{D}_{2}\vec{Q}_{2}^{T}$
+\end_inset
+
+ have been computed.
+ We then have 
+\begin_inset Formula 
+\[
+\vec{T}=\left[\begin{array}{cc}
+\vec{Q}_{1}\\
+ & \vec{Q}_{2}
+\end{array}\right]\left(\left[\begin{array}{cc}
+\vec{D}_{1}\\
+ & \vec{D}_{2}
+\end{array}\right]+\beta\vec{z}\vec{z}^{T}\right)\left[\begin{array}{cc}
+\vec{Q}_{1}^{T}\\
+ & \vec{Q}_{2}^{T}
+\end{array}\right]
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $\vec{z}^{T}=(\vec{q}_{1}^{T},\vec{q}_{2}^{T})$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{q}_{1}^{T}$
+\end_inset
+
+ is last row of 
+\begin_inset Formula $\vec{Q}_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{q}_{2}^{T}$
+\end_inset
+
+ is first row of 
+\begin_inset Formula $\vec{Q}_{2}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+This is similarity transformation: Find eigenvalues of diagonal matrix plus
+ rank-one correction
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Divide-and-Conquer Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Eigenvalues of 
+\begin_inset Formula $\vec{D}+\vec{w}\vec{w}^{T}$
+\end_inset
+
+ are the roots of rational function
+\begin_inset Formula 
+\[
+f(\lambda)=1+\sum_{j=1}^{m}\frac{w_{j}^{2}}{d_{j}-\lambda}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename figures/divnconq2.png
+	width 60text%
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Divide-and-Conquer Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Solve 
+\emph on
+secular equation
+\emph default
+ 
+\begin_inset Formula $f(\lambda)=0$
+\end_inset
+
+ with nonlinear solver
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $O(n)$
+\end_inset
+
+ flops per root, 
+\begin_inset Formula $O(n^{2})$
+\end_inset
+
+ flops for all roots
+\end_layout
+
+\begin_layout Itemize
+Total cost for divide-and-conquer algorithm is 
+\begin_inset Formula 
+\[
+O\left(\sum_{k=1}^{\log n}2^{k-1}\left(\frac{n}{2^{k-1}}\right)^{2}\right)=O(n^{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For computing eigenvalues only, most of operations are spent in tridiagonal
+ reduction, and constant in 
+\begin_inset Quotes eld
+\end_inset
+
+Phase 2
+\begin_inset Quotes erd
+\end_inset
+
+ is not important
+\end_layout
+
+\begin_layout Itemize
+However, for computing eigenvectors, divide-and conquer reduces phase 2
+ to 
+\begin_inset Formula $4n^{3}/3$
+\end_inset
+
+ flops compared to 
+\begin_inset Formula $6n^{3}$
+\end_inset
+
+ for QR
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Generalized Eigenvalue Problems
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Generalized Eigenvalue Problem
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Generalized eigenvalue problem has the form 
+\begin_inset Formula 
+\[
+\vec{A}\vec{x}=\lambda\vec{B}\vec{x},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ are 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ matrices
+\end_layout
+
+\begin_layout Itemize
+For example, in structural vibration problems, 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ represents the 
+\emph on
+stiffness matrix
+\emph default
+, 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ the 
+\emph on
+mass matrix
+\emph default
+, and eigenvalues and eigenvectors determine natural frequencies and modes
+ of vibration of structures
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ or 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ is nonsingular, then it can be converted into standard eigenvalue problem
+ 
+\begin_inset Formula $(\vec{B}^{-1}\vec{A})\vec{x}=\lambda\vec{x}\ \mbox{ or }(\vec{A}^{-1}\vec{B})\vec{x}=(1/\lambda)\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ are both symmetric, preceding transformation loses symmetry and in turn
+ may lose orthogonality of generalized eigenvectors.
+ If 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ is positive definite, alternative transformation is 
+\begin_inset Formula 
+\[
+(\vec{L}^{-1}\vec{A}\vec{L}^{-T})\vec{y}=\lambda\vec{y},\mbox{ where }\vec{B}=\vec{L}\vec{L}^{T}\mbox{ and }\vec{y}=\vec{L}^{T}\vec{x}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ are both singular or indefinite, then use 
+\emph on
+QZ algorithm
+\emph default
+ to reduce 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ into triangular matrices simultaneously by orthogonal transformation (see
+ Golub and van Loan for detail)
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
