@@ -1,0 +1,2504 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+%\def\vec#1{\mbox{\boldmath $#1$}}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 1: Course Overview;
+\begin_inset Newline newline
+\end_inset
+
+Matrix Multiplication
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Course Overview
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Course Description
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+What is numerical linear algebra?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Solving linear algebra problems using efficient algorithms on computers
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Topics: Direct and iterative methods for solving simultaneous linear equations,
+ least squares problems, computation of eigenvalues and eigenvectors, and
+ singular value decomposition
+\end_layout
+
+\begin_layout Itemize
+Required textbooks
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+[NLA]
+\series default
+ L.
+ N.
+ Trefethen and D.
+ Bau III, 
+\begin_inset CommandInset href
+LatexCommand href
+name "Numerical Linear Algebra"
+target "https://www.amazon.com/Numerical-Linear-Algebra-Lloyd-Trefethen/dp/0898713617"
+
+\end_inset
+
+, SIAM, 1997.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+[MC]
+\series default
+ G.
+ H.
+ Golub and C.
+ F.
+ Van Loan, 
+\begin_inset CommandInset href
+LatexCommand href
+name "Matrix Computations"
+target "https://www.amazon.com/dp/1421407949"
+
+\end_inset
+
+, 4th Edition, Johns Hopkins University Press, 2012.
+ ISBN 978-1421407944.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Additional supplementary material will be provided as needed
+\end_layout
+
+\begin_layout Itemize
+Course webpage: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.ams.sunysb.edu/~jiao/teaching/ams526
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Prerequisite
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+This 
+\series bold
+MUST NOT
+\series default
+ be your first course in linear algebra, or you 
+\series bold
+will
+\series default
+ get lost
+\end_layout
+
+\begin_layout Itemize
+Prerequisite/Co-requisite:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+AMS 510 (linear algebra portion) or equivalent undergraduate-level linear
+ algebra course.
+ Familiarity with following concepts is assumed: Vector spaces, Gaussian
+ elimination, Gram-Schmidt orthogonalization, and eigenvalues/eigenvectors
+\end_layout
+
+\begin_layout Itemize
+AMS 595 (co-requisite for students without programming experience)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To review fundamental concepts of linear algebra, see textbook such as
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Gilbert Strang, 
+\emph on
+Linear Algebra and Its Applications
+\emph default
+, 4th Edition, Brooks Cole, 2006.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Why Learn Numerical Linear Algebra?
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Foundation of scientific computations and data sciences
+\end_layout
+
+\begin_layout Itemize
+Many problems ultimately reduce to linear algebra concepts or algorithms,
+ either analytical or computational
+\end_layout
+
+\begin_layout Itemize
+Examples: Finite-element analysis, data fitting, PageRank (Google)
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename figures/pagerank.png
+	width 65col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Focus: Fundamental concepts, efficiency and stability of algorithms, and
+ programming
+\end_layout
+
+\begin_layout Itemize
+New focus: relevance to computational and data sciences
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Course Outline
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\series bold
+Fundamentals
+\series default
+ (matrix notation and basic operations; vector spaces; algorithmic consideration
+s; norms and condition numbers; decomposition of matrices) 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Linear systems
+\series default
+ (triangular systems; Gaussian elimination; accuracy and stability; Cholesky
+ factorization; sparse linear systems) 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+QR factorization and least squares
+\series default
+ (Gram-Schmidt orthogonalization; QR factorization with Householder reflection;
+ updating QR factorization with Givens rotation; stability; least squares
+ problems; rank-revealing QR; SVD and low-rank approximations) 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Eigenvalue problems
+\series default
+ (eigenvalues and invariant spaces; classical eigenvalue methods; QR algorithms;
+ two-stage methods; Arnoldi and Lanczos iterations) 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Iterative Methods for linear systems
+\series default
+ (basic iterative methods; conjugate gradient methods; minimal residual
+ style methods; bi-Lanczos iterations; preconditioners) 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Special topics
+\series default
+ (multigrid methods; compressed sensing; under-determined systems, etc.,
+ if time permits)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Course Policy
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Assignments (written or programming)
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Assignments are due in class one to two weeks after assigned
+\end_layout
+
+\begin_layout Itemize
+You can discuss course materials and homework problems with others, but
+ you must write your answers completely independently
+\end_layout
+
+\begin_layout Itemize
+Do NOT copy solutions from any source.
+ Do NOT share your solutions with others
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Exams and tests
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+All exams are closed-book
+\end_layout
+
+\begin_layout Itemize
+However, one-page cheat sheet is allowed
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Grading
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Assignments: 30%
+\end_layout
+
+\begin_layout Itemize
+Two midterm exams: 40%
+\end_layout
+
+\begin_layout Itemize
+Final exam: 30%
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section
+Matrix Notation and Basic Operations (MC §1.1)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Matrices and Vectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Denote vector space of all 
+\begin_inset Formula $m$
+\end_inset
+
+-by-
+\begin_inset Formula $n$
+\end_inset
+
+ real matrices by 
+\begin_inset Formula $\mathbb{R}^{m\times n}$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+A\in\mathbb{R}^{m\times n}\Leftrightarrow A=\left(a_{ij}\right)=\left[\begin{array}{cccc}
+a_{11} & a_{12} & \dots & a_{1n}\\
+a_{21} & a_{22} & \dots & a_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{m1} & a_{m2} & \dots & a_{mn}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Denote vector space of all real 
+\begin_inset Formula $n$
+\end_inset
+
+-vectors by 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+, or 
+\begin_inset Formula $\mathbb{R}^{n\times1}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+x\in\mathbb{R}^{n}\Leftrightarrow x=\left[\begin{array}{c}
+x_{1}\\
+x_{2}\\
+\vdots\\
+x_{n}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Transposition (
+\begin_inset Formula $\mathbb{R}^{m\times n}\rightarrow\mathbb{R}^{n\times m}$
+\end_inset
+
+): 
+\begin_inset Formula $C=A^{T}\Rightarrow c_{ij}=a_{ji}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Row vectors are transpose of column vectors and are in 
+\begin_inset Formula $\mathbb{R}^{1\times n}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Matrix Operations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Addition
+\emph default
+ and 
+\emph on
+subtraction
+\emph default
+ (
+\begin_inset Formula $\mathbb{R}^{m\times n}\times\mathbb{R}^{m\times n}\rightarrow\mathbb{R}^{m\times n}$
+\end_inset
+
+): 
+\begin_inset Formula $C=A\pm B\Rightarrow c_{ij}=a_{ij}\pm b_{ij}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Scalar-matrix multiplication
+\emph default
+ or 
+\emph on
+scaling
+\emph default
+ (
+\begin_inset Formula $\mathbb{R}\times\mathbb{R}^{m\times n}\rightarrow\mathbb{R}^{m\times n}$
+\end_inset
+
+): 
+\begin_inset Formula $C=\alpha A\Rightarrow c_{ij}=\alpha a_{ij}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Matrix-matrix multiplication/product
+\emph default
+ (
+\begin_inset Formula $\mathbb{R}^{m\times p}\times\mathbb{R}^{p\times n}\rightarrow\mathbb{R}^{m\times n}$
+\end_inset
+
+): 
+\begin_inset Formula $C=A\,B\Rightarrow c_{ij}=\sum_{k=1}^{p}a_{ik}b_{kj}$
+\end_inset
+
+ (denoted by 
+\begin_inset Formula $A*B$
+\end_inset
+
+ in MATLAB)
+\end_layout
+
+\begin_layout Itemize
+Each operation also applies to vectors.
+ In particular,
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Inner product
+\emph default
+ is row vector times column vector, i.e., 
+\begin_inset Formula $c=x^{T}y$
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+(it is called 
+\emph on
+dot product
+\emph default
+ in vector calculus and denoted as 
+\begin_inset Formula $x\cdot y$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Outer product
+\emph default
+ is column vector times row vector, i.e., 
+\begin_inset Formula $C=xy^{T}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+(it is a special case of Kronecker product and denoted as 
+\begin_inset Formula $x\otimes y$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Element-wise multiplication
+\emph default
+ and 
+\emph on
+division
+\emph default
+ (
+\begin_inset Formula $\mathbb{R}^{m\times n}\times\mathbb{R}^{m\times n}\rightarrow\mathbb{R}^{m\times n}$
+\end_inset
+
+)
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $C=A.*B\Rightarrow c_{ij}=a_{ij}b_{ij}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $C=A./B\Rightarrow c_{ij}=a_{ij}/b_{ij}$
+\end_inset
+
+, where 
+\begin_inset Formula $b_{ij}\neq0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Matrix
+\emph default
+ 
+\emph on
+inversion
+\emph default
+ (
+\begin_inset Formula $A^{-1}$
+\end_inset
+
+) and 
+\emph on
+division
+\emph default
+ (
+\begin_inset Formula $A/B$
+\end_inset
+
+ and 
+\begin_inset Formula $A\backslash B$
+\end_inset
+
+) to be defined later
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Notation of Matrices and Vectors
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Matrix notation
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Capital letters (e.g., 
+\begin_inset Formula $A$
+\end_inset
+
+, 
+\begin_inset Formula $B$
+\end_inset
+
+, 
+\begin_inset Formula $\Delta$
+\end_inset
+
+, etc.) for matrices
+\end_layout
+
+\begin_layout Itemize
+Corresponding lower case with subscript 
+\begin_inset Formula $ij$
+\end_inset
+
+ (e.g., 
+\begin_inset Formula $a_{ij}$
+\end_inset
+
+, 
+\begin_inset Formula $b_{ij}$
+\end_inset
+
+, 
+\begin_inset Formula $\delta_{ij}$
+\end_inset
+
+) for 
+\begin_inset Formula $(i,j)$
+\end_inset
+
+ entry; sometimes with notation 
+\begin_inset Formula $[A]_{ij}$
+\end_inset
+
+ or 
+\begin_inset Formula $A(i,j)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Vector notation
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Lowercase letters (e.g., 
+\begin_inset Formula $x$
+\end_inset
+
+, 
+\begin_inset Formula $y$
+\end_inset
+
+, etc.) for vectors
+\end_layout
+
+\begin_layout Itemize
+Corresponding lower case with subscript 
+\begin_inset Formula $i$
+\end_inset
+
+ for 
+\begin_inset Formula $i$
+\end_inset
+
+th entry (e.g., 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Lower-case letters for scalars (e.g., 
+\begin_inset Formula $c$
+\end_inset
+
+, 
+\begin_inset Formula $s$
+\end_inset
+
+, 
+\begin_inset Formula $\alpha$
+\end_inset
+
+, 
+\begin_inset Formula $\beta$
+\end_inset
+
+, etc.)
+\end_layout
+
+\begin_layout Itemize
+Some books suggest using boldface lowercase (e.g., 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+) for vectors, regular lowercase (e.g.
+ 
+\begin_inset Formula $c$
+\end_inset
+
+) for scalars, and boldface uppercase for matrices 
+\end_layout
+
+\begin_layout Itemize
+A matrix is a collection of column vectors or row vectors 
+\begin_inset Formula 
+\[
+\vec{A}\in\mathbb{R}^{m\times n}\Leftrightarrow\vec{A}=\left[\vec{c}_{1}\vert\vec{c}_{2}\vert\dots\vert\vec{c}_{n}\right],\hspace{1em}\vec{c}_{k}\in\mathbb{R}^{m}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{A}\in\mathbb{R}^{m\times n}\Leftrightarrow\vec{A}=\left[\begin{array}{c}
+\vec{r}_{1}^{T}\\
+\vdots\\
+\vec{r}_{m}^{T}
+\end{array}\right],\hspace{1em}\vec{r}_{k}\in\mathbb{R}^{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Complex Matrices
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Occasionally, complex matrices are involved
+\end_layout
+
+\begin_layout Itemize
+Vector space of 
+\begin_inset Formula $m$
+\end_inset
+
+-by-
+\begin_inset Formula $n$
+\end_inset
+
+ complex matrices is designated by 
+\begin_inset Formula $\mathbb{C}^{m\times n}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Scaling, addition, multiplication of complex matrices correspond exactly
+ to real case
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $A=B+iC\in\mathbb{C}^{m\times n}$
+\end_inset
+
+, then 
+\begin_inset Formula $\mbox{Re}(A)=B$
+\end_inset
+
+, 
+\begin_inset Formula $\mbox{Im}(A)=C$
+\end_inset
+
+, and 
+\emph on
+conjugate
+\emph default
+ of 
+\begin_inset Formula $A$
+\end_inset
+
+ is 
+\begin_inset Formula $\overline{A}=(\overline{a}_{ij})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Conjugate transpose
+\emph default
+ is defined as 
+\begin_inset Formula $A^{H}=B^{T}-iC^{T}$
+\end_inset
+
+, or 
+\begin_inset Formula 
+\[
+G=A^{H}\Rightarrow g_{ij}=\overline{a}_{ji}
+\]
+
+\end_inset
+
+(also called 
+\emph on
+adjoint,
+\emph default
+ and denoted by 
+\begin_inset Formula $A^{*}$
+\end_inset
+
+; 
+\begin_inset Formula $(\vec{A}\vec{B})^{*}=\vec{B}^{*}\vec{A}^{*}$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Vector space of complex 
+\begin_inset Formula $n$
+\end_inset
+
+-vectors is designated by 
+\begin_inset Formula $\mathbb{C}^{n}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Inner product of complex 
+\begin_inset Formula $n$
+\end_inset
+
+-vectors 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+ is 
+\begin_inset Formula $s=x^{H}y$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Outer product of complex 
+\begin_inset Formula $n$
+\end_inset
+
+-vectors 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+ is 
+\begin_inset Formula $S=xy^{H}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+We will primarily focus on real matrices
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Matrix-Vector Product
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Matrix-vector product 
+\begin_inset Formula $b=Ax$
+\end_inset
+
+ is special case of matrix-matrix product 
+\begin_inset Formula 
+\[
+b_{i}=\sum_{j=1}^{n}a_{ij}x_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, 
+\begin_inset Formula $Ax$
+\end_inset
+
+ is a mapping 
+\begin_inset Formula $x\longmapsto Ax$
+\end_inset
+
+ from 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+ to 
+\begin_inset Formula $\mathbb{R}^{m}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This map is 
+\emph on
+linear
+\emph default
+, which means that for any 
+\begin_inset Formula $x,y\in\mathbb{R}^{n}$
+\end_inset
+
+ and any 
+\begin_inset Formula $\alpha\in\mathbb{R}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{align*}
+A(x+y) & =Ax+Ay\\
+A(\alpha x) & =\alpha Ax
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Linear Combination
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Let 
+\begin_inset Formula $a_{j}$
+\end_inset
+
+ denote 
+\begin_inset Formula $j$
+\end_inset
+
+th column of matrix 
+\begin_inset Formula $A$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Alternative notation is colon notation: 
+\begin_inset Formula $A(:,j)$
+\end_inset
+
+ or 
+\begin_inset Formula $a_{:,j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Use 
+\begin_inset Formula $A(i,:)$
+\end_inset
+
+ or 
+\begin_inset Formula $a_{i,:}$
+\end_inset
+
+ to denote 
+\begin_inset Formula $i$
+\end_inset
+
+th row of 
+\begin_inset Formula $A$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $b$
+\end_inset
+
+ is a 
+\emph on
+linear combination
+\emph default
+ of column vectors of 
+\begin_inset Formula $A$
+\end_inset
+
+, i.e.,
+\begin_inset Formula 
+\[
+b=Ax=\sum_{j=1}^{n}x_{j}a_{j}=x_{1}\left[\begin{array}{c}
+a_{11}\\
+a_{21}\\
+\vdots\\
+a_{m1}
+\end{array}\right]+x_{2}\left[\begin{array}{c}
+a_{12}\\
+a_{22}\\
+\vdots\\
+a_{m2}
+\end{array}\right]+\cdots+x_{n}\left[\begin{array}{c}
+a_{1m}\\
+a_{2n}\\
+\vdots\\
+a_{mn}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In summary, two different views of matrix-vector products:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Scalar operations: 
+\begin_inset Formula $b_{i}=\sum_{j=1}^{n}a_{ij}x_{j}$
+\end_inset
+
+: 
+\begin_inset Formula $A$
+\end_inset
+
+ acts on 
+\begin_inset Formula $x$
+\end_inset
+
+ to produce 
+\begin_inset Formula $b$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Vector operations: 
+\begin_inset Formula $b=\sum_{j=1}^{n}x_{j}a_{j}$
+\end_inset
+
+: 
+\begin_inset Formula $x$
+\end_inset
+
+ acts on 
+\begin_inset Formula $A$
+\end_inset
+
+ to produce 
+\begin_inset Formula $b$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Matrix-Matrix Multiplication
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Computes 
+\begin_inset Formula $C=AB$
+\end_inset
+
+, where 
+\begin_inset Formula $A\in\mathbb{R}^{m\times r}$
+\end_inset
+
+, 
+\begin_inset Formula $B\in\mathbb{R}^{r\times n}$
+\end_inset
+
+, and 
+\begin_inset Formula $C\in\mathbb{R}^{m\times n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Element-wise, each entry of 
+\begin_inset Formula $C$
+\end_inset
+
+ is
+\begin_inset Formula 
+\[
+c_{ij}=\sum_{k=1}^{r}a_{ik}b_{kj}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Column-wise, each column of 
+\begin_inset Formula $C$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+c_{j}=Ab_{j}=\sum_{k=1}^{r}b_{kj}a_{k};
+\]
+
+\end_inset
+
+in other words, 
+\begin_inset Formula $j$
+\end_inset
+
+th column of 
+\begin_inset Formula $C$
+\end_inset
+
+ is 
+\begin_inset Formula $A$
+\end_inset
+
+ times 
+\begin_inset Formula $j$
+\end_inset
+
+th column of 
+\begin_inset Formula $B$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Range, Null Space and Rank (NLA §1)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Terminology of Vector Space
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Vector space
+\emph default
+ is closed under addition and scalar multiplication, with zero vector as
+ a member
+\end_layout
+
+\begin_layout Itemize
+Vector space 
+\emph on
+spanned
+\emph default
+ by a set of vectors 
+\begin_inset Formula $\{a_{j}\}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\mbox{span}\{a_{1},\dots,a_{n}\}=\left\{ \sum_{j=1}^{n}\beta_{j}a_{j}\mid\beta_{j}\in\mathbb{R}\right\} 
+\]
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Space spanned by 
+\begin_inset Formula $n$
+\end_inset
+
+-vectors is a 
+\emph on
+subspace
+\emph default
+ of 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\{a_{1},\dots,a_{n}\}$
+\end_inset
+
+ is 
+\emph on
+linearly independent
+\emph default
+, then the 
+\begin_inset Formula $a_{j}$
+\end_inset
+
+ are the 
+\emph on
+basis
+\emph default
+ of 
+\begin_inset Formula $S=\mbox{span}\{a_{1},\dots,a_{n}\}$
+\end_inset
+
+, 
+\emph on
+dimension
+\emph default
+ of 
+\begin_inset Formula $S$
+\end_inset
+
+ is 
+\begin_inset Formula $\mbox{\dim}(S)=n$
+\end_inset
+
+, and each 
+\begin_inset Formula $b\in S$
+\end_inset
+
+ is unique linear combination of the 
+\begin_inset Formula $a_{j}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{2}$
+\end_inset
+
+ are two subspaces, then 
+\begin_inset Formula $S_{1}\cap S_{2}$
+\end_inset
+
+ is a subspace, so is 
+\begin_inset Formula $S_{1}+S_{2}=\left\{ b_{1}+b_{2}\mid b_{1}\in S_{1},b_{2}\in S_{2}\right\} $
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Note: 
+\begin_inset Formula $S_{1}+S_{2}$
+\end_inset
+
+ is different from 
+\begin_inset Formula $S_{1}\cup S_{2}$
+\end_inset
+
+; latter may not be a subspace
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Two subspaces 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{2}$
+\end_inset
+
+ of 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+ are 
+\emph on
+complementary subspaces
+\emph default
+ of each other if 
+\begin_inset Formula $S_{1}+S_{2}=\mathbb{R}^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{1}\cap S_{2}=\{0\}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+In other words, 
+\begin_inset Formula $\mbox{dim}(S_{1})+\mbox{dim}(S_{2})=n$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{1}\cap S_{2}=\{0\}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Range and Null Space
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Definition
+The 
+\emph on
+range
+\emph default
+ of a matrix 
+\begin_inset Formula $A$
+\end_inset
+
+, written as 
+\begin_inset Formula $\mbox{range}(A)$
+\end_inset
+
+ or 
+\begin_inset Formula $\mbox{ran}(A)$
+\end_inset
+
+, is the set of vectors that can be expressed as 
+\begin_inset Formula $Ax$
+\end_inset
+
+ for some 
+\begin_inset Formula $x$
+\end_inset
+
+ 
+\begin_inset Formula $\{y\in\mathbb{R}^{m}\vert y=Ax\mbox{ for some }x\in\mathbb{R}^{n}\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Theorem
+\begin_inset Formula $\mbox{range}(A)$
+\end_inset
+
+ is the space spanned by the columns of 
+\begin_inset Formula $A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Therefore, 
+\emph on
+range
+\emph default
+ of 
+\begin_inset Formula $A$
+\end_inset
+
+ is also called the 
+\emph on
+column space
+\emph default
+ of 
+\begin_inset Formula $A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Definition
+The 
+\emph on
+null space
+\emph default
+ of 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, written as 
+\begin_inset Formula $\mbox{null}(A)$
+\end_inset
+
+, is the set of vectors 
+\begin_inset Formula $x$
+\end_inset
+
+ that satisfy 
+\begin_inset Formula $Ax=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Entries of 
+\begin_inset Formula $x\in\mbox{null}(A)$
+\end_inset
+
+ give coefficient of 
+\begin_inset Formula $\sum x_{i}a_{i}=\vec{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note: The null space of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is in general 
+\series bold
+not
+\series default
+ a complementary subspace
+\emph on
+ 
+\emph default
+of 
+\begin_inset Formula $\mbox{range}(A)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Relationship Between Null and Range Space
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For real matrices 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mbox{null}(A)$
+\end_inset
+
+ and 
+\begin_inset Formula $\mbox{range}(A^{T})$
+\end_inset
+
+ are complementary subspaces
+\end_layout
+
+\begin_layout Itemize
+For symmetric matrices (
+\begin_inset Formula $A=A^{T}$
+\end_inset
+
+), 
+\begin_inset Formula $\mbox{null}(A)$
+\end_inset
+
+ and 
+\begin_inset Formula $\mbox{range}(A)$
+\end_inset
+
+ are complementary subspaces
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+For complex matrices 
+\begin_inset Formula $A\in\mathbb{C}^{m\times n}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\mbox{null}(\vec{A})$
+\end_inset
+
+ and 
+\begin_inset Formula $\mbox{range}(\vec{A}^{H})$
+\end_inset
+
+ are complementary subspaces
+\end_layout
+
+\begin_layout Itemize
+For 
+\emph on
+Hermitian 
+\emph default
+matrices (
+\begin_inset Formula $A=A^{H}$
+\end_inset
+
+), 
+\begin_inset Formula $\mbox{null}(A)$
+\end_inset
+
+ and 
+\begin_inset Formula $\mbox{range}(A)$
+\end_inset
+
+ are complementary subspaces
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Rank
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Definition
+The 
+\emph on
+column rank
+\emph default
+ of a matrix is the dimension of its column space.
+ The 
+\emph on
+row rank
+\emph default
+ is the dimension of the space spanned by its rows.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Question
+\series default
+: Can the column rank and the row rank be different? 
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Answer
+\series default
+: No.
+ We will give a proof in later lectures.
+\end_layout
+
+\begin_layout Itemize
+We therefore simply say the 
+\emph on
+rank
+\emph default
+ of a matrix.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Question
+\series default
+: Given 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+, what is 
+\begin_inset Formula $\mbox{dim}(\mbox{null}(\vec{A}))+\mbox{rank}(\vec{A})$
+\end_inset
+
+ equal to? 
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Answer
+\series default
+: 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+A real matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is rank-1 if it can be written as 
+\begin_inset Formula $\vec{A}=\vec{u}\vec{v}^{T}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{u}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{v}$
+\end_inset
+
+ are nonzero vectors 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Full Rank
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Definition
+A matrix has 
+\emph on
+full rank
+\emph default
+ if it has the maximal possible rank, i.e., 
+\begin_inset Formula $\min\{m,n\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Otherwise, it is called 
+\emph on
+rank deficient
+\emph default
+.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Theorem
+A matrix 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ with 
+\begin_inset Formula $m\ge n$
+\end_inset
+
+ has full rank if and only if it maps no two distinct vectors to the same
+ vector.
+\end_layout
+
+\begin_layout Standard
+In other word, the linear mapping defined by 
+\begin_inset Formula $\vec{A}\vec{x}$
+\end_inset
+
+ for 
+\begin_inset Formula $x\in\vec{R}^{n}$
+\end_inset
+
+ is one-to-one.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Proof
+(
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+) Column vectors of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ forms a basis of 
+\begin_inset Formula $\mbox{range}(\vec{A})$
+\end_inset
+
+, so every 
+\begin_inset Formula $\vec{b}\in\mbox{range}(\vec{A})$
+\end_inset
+
+ has a unique linear expansion in terms of the columns of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(
+\begin_inset Formula $\Leftarrow$
+\end_inset
+
+) If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ does not have full rank, then its column vectors are linear dependent,
+ so its vectors do not have a unique linear combination.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Full Rank vs.
+ Non-singularity
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $A\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ and 
+\begin_inset Formula $AX=I$
+\end_inset
+
+, then 
+\begin_inset Formula $X$
+\end_inset
+
+ is the 
+\emph on
+inverse 
+\emph default
+of 
+\begin_inset Formula $A$
+\end_inset
+
+, denoted by 
+\begin_inset Formula $A^{-1}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $(AB)^{-1}=B^{-1}A^{-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $(A^{-1})^{T}=(A^{T})^{-1}=A^{-T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $(A+UV^{T})^{-1}=A^{-1}-A^{-1}U(I+V^{T}A^{-1}U)^{-1}V^{T}A^{-1}$
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+for 
+\begin_inset Formula $U,V\in\mathbb{R}^{n\times k}$
+\end_inset
+
+ (Sherman-Morrison-Woodbury formula)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $A^{-1}$
+\end_inset
+
+ exists, 
+\begin_inset Formula $A$
+\end_inset
+
+ is 
+\emph on
+nonsingular.
+ 
+\begin_inset Formula $A$
+\end_inset
+
+
+\emph default
+ is square and has full rank.
+\end_layout
+
+\begin_layout Itemize
+In 
+\begin_inset Formula $A$
+\end_inset
+
+ is nonsingular, linear system 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+ results in 
+\begin_inset Formula $x=A^{-1}b$
+\end_inset
+
+, and it is the inverse problem of matrix-vector multiplication
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $A\in\mathbb{R}^{m\times n}$
+\end_inset
+
+ where 
+\begin_inset Formula $n\neq m$
+\end_inset
+
+ and 
+\begin_inset Formula $A$
+\end_inset
+
+ has full rank, what is the inverse problem of matrix-vector multiplication?
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $A$
+\end_inset
+
+ is rank deficient, what is the inverse problem of matrix-vector multiplication?
+\end_layout
+
+\begin_layout Itemize
+We will need progressively more advanced linear algebra concepts to answer
+ these questions in later part of this semester.
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

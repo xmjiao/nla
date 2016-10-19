@@ -1,0 +1,1502 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 8: Accuracy and Stability of
+\begin_inset Newline newline
+\end_inset
+
+Gaussian Elimination
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Condition Number of Gaussian Elimination (NLA§22)
+\end_layout
+
+\begin_layout Subsection
+Perturbing Right Hand Side
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Condition Number of Linear System
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+Let 
+\begin_inset Formula $A$
+\end_inset
+
+ be nonsingular, and let 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{x}=x+\delta x$
+\end_inset
+
+ be the solutions of 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+ and 
+\begin_inset Formula $A\hat{x}=b+\delta b$
+\end_inset
+
+, respectively.
+ Then 
+\begin_inset Formula 
+\[
+\frac{\Vert\delta x\Vert}{\Vert x\Vert}\leq\kappa(A)\frac{\Vert\delta b\Vert}{\Vert b\Vert},
+\]
+
+\end_inset
+
+and there exists 
+\begin_inset Formula $b$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta b$
+\end_inset
+
+ for which the equality holds.
+\end_layout
+
+\begin_layout Itemize
+Question: For what 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta b$
+\end_inset
+
+ is the equality achieved?
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+Answer: When 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+ is in direction of 
+\emph on
+minimum
+\emph default
+ magnification of 
+\begin_inset Formula $A^{-1}$
+\end_inset
+
+, and 
+\begin_inset Formula $\delta b$
+\end_inset
+
+ is in direction of 
+\emph on
+maximum
+\emph default
+ magnification of 
+\begin_inset Formula $A^{-1}$
+\end_inset
+
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+In 2-norm, when 
+\begin_inset Formula $\vec{b}$
+\end_inset
+
+ is in direction of 
+\emph on
+maximum
+\emph default
+ magnification of 
+\begin_inset Formula $A^{T}$
+\end_inset
+
+, and 
+\begin_inset Formula $\delta b$
+\end_inset
+
+ is in direction of 
+\emph on
+minimum
+\emph default
+ magnification of 
+\begin_inset Formula $A^{T}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+We say a matrix is 
+\emph on
+nearly singular
+\emph default
+ if its condition number is very large.
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Ill Conditioning Caused by Poor Scaling
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Some matrices are ill conditioned simply because they are out of scale.
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ be any nonsingular matrix, and let 
+\begin_inset Formula $\vec{a}_{k}$
+\end_inset
+
+, 
+\begin_inset Formula $1\le k\le n$
+\end_inset
+
+ denote the 
+\begin_inset Formula $k$
+\end_inset
+
+th column of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+.
+ Then for any 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+ with 
+\begin_inset Formula $1\le i,j,\le n$
+\end_inset
+
+, 
+\begin_inset Formula $\kappa_{p}(\vec{A})\ge\Vert\vec{a}_{i}\Vert_{p}/\Vert\vec{a}_{j}\Vert_{p}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+This theorem indicates that poor scaling inevitably leads to ill conditioning
+\end_layout
+
+\begin_layout Itemize
+A 
+\emph on
+necessary
+\emph default
+ condition for a matrix to be well conditioned is that all of its rows and
+ columns are of roughly the same magnitude.
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Perturbing Coefficient Matrix
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Non-singularity of Perturbed Matrix
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+If 
+\begin_inset Formula $A$
+\end_inset
+
+ is nonsingular and 
+\begin_inset Formula 
+\[
+\Vert\delta A\Vert/\Vert A\Vert<1/\kappa(A),
+\]
+
+\end_inset
+
+then 
+\begin_inset Formula $A+\delta A$
+\end_inset
+
+ is nonsingular.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $\Vert\delta A\Vert/\Vert A\Vert<1/\kappa(A)$
+\end_inset
+
+ is equivalent to 
+\begin_inset Formula $\Vert\delta A\Vert\Vert A^{-1}\Vert<1$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $A+\delta A$
+\end_inset
+
+ is singular, then 
+\begin_inset Formula $\exists y\neq0$
+\end_inset
+
+ such that 
+\begin_inset Formula $(A+\delta A)y=0$
+\end_inset
+
+, and 
+\begin_inset Formula $y=-A^{-1}\delta Ay$
+\end_inset
+
+.
+ Therefore, 
+\begin_inset Formula $\Vert y\Vert\leq\Vert A^{-1}\Vert\Vert\delta A\Vert\Vert y\Vert$
+\end_inset
+
+, or 
+\begin_inset Formula $\Vert A^{-1}\Vert\Vert\delta A\Vert\ge1$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $A+\delta A$
+\end_inset
+
+ is the singular matrix closest to 
+\begin_inset Formula $A$
+\end_inset
+
+, in the sense that 
+\begin_inset Formula $\Vert\delta A\Vert_{2}$
+\end_inset
+
+ is as small as possible, then 
+\begin_inset Formula $\Vert\delta A\Vert_{2}/\Vert A\Vert_{2}=1/\kappa_{2}(A)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Linear System with Perturbed Matrix
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{A}\hat{x}=b$
+\end_inset
+
+ where 
+\begin_inset Formula $\hat{A}=A+\delta A$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\delta x=\hat{x}-x$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{x}=x+\delta x$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+We would like to bound 
+\begin_inset Formula $\Vert\delta x\Vert/\Vert x\Vert$
+\end_inset
+
+, but first we bound 
+\begin_inset Formula $\Vert\delta x\Vert/\Vert\hat{x}\Vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+If 
+\begin_inset Formula $A$
+\end_inset
+
+ is nonsingular, and let 
+\begin_inset Formula $b\neq0$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+\frac{\Vert\delta x\Vert}{\Vert\hat{x}\Vert}\leq\kappa(A)\frac{\Vert\delta A\Vert}{\Vert A\Vert}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+Rewrite 
+\begin_inset Formula $(A+\delta A)\hat{x}=b$
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+as 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $Ax+A\delta x+\delta A\hat{x}=b$
+\end_inset
+
+, where 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+.
+ Therefore, 
+\begin_inset Formula 
+\[
+\Vert\delta x\Vert\leq\Vert A^{-1}\Vert\Vert\delta A\Vert\Vert\hat{x}\Vert.
+\]
+
+\end_inset
+
+Therefore, 
+\begin_inset Formula 
+\[
+\frac{\Vert\delta x\Vert}{\Vert\hat{x}\Vert}\leq\Vert A^{-1}\Vert\Vert\delta A\Vert=\kappa(A)\frac{\Vert\delta A\Vert}{\Vert A\Vert}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Linear System with Perturbed Matrix Continued
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $Ax=b$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{A}\hat{x}=b$
+\end_inset
+
+ where 
+\begin_inset Formula $\hat{A}=A+\delta A$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\delta x=\hat{x}-x$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{x}=x+\delta x$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Theorem
+If 
+\begin_inset Formula $A$
+\end_inset
+
+ is nonsingular and 
+\begin_inset Formula $\Vert\delta A\Vert/\Vert A\Vert<1/\kappa(A)$
+\end_inset
+
+, and let 
+\begin_inset Formula $b\neq0$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+\frac{\Vert\delta x\Vert}{\Vert x\Vert}\leq\frac{\kappa(A)\Vert\delta A\Vert/\Vert A\Vert}{1-\kappa(A)\Vert\delta A\Vert/\Vert A\Vert}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $\Vert\delta x\Vert\leq\Vert A^{-1}\Vert\Vert\delta A\Vert\Vert\hat{x}\Vert\leq\Vert A^{-1}\Vert\Vert\delta A\Vert(\Vert x\Vert+\Vert\delta x\Vert)$
+\end_inset
+
+.
+ Therefore, 
+\begin_inset Formula 
+\[
+\left(1-\Vert A^{-1}\Vert\Vert\delta A\Vert\right)\Vert\delta x\Vert\leq\Vert A^{-1}\Vert\Vert\delta A\Vert\Vert x\Vert,
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\Vert A^{-1}\Vert\Vert\delta A\Vert=\kappa(A)\Vert\delta A\Vert/\Vert A\Vert$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We typically expect 
+\begin_inset Formula $\kappa(A)\Vert\delta A\Vert\ll\Vert A\Vert$
+\end_inset
+
+, so the denominator is close to 
+\begin_inset Formula $1$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Perturbing Both Sides
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Perturbed RHS and Matrix
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+ and 
+\begin_inset Formula $(A+\delta A)(x+\delta x)=(b+\delta b)$
+\end_inset
+
+, where 
+\begin_inset Formula $\hat{A}=A+\delta A$
+\end_inset
+
+, 
+\begin_inset Formula $\hat{b}=b+\delta b$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{x}=x+\delta x$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $A$
+\end_inset
+
+ be nonsingular, and suppose 
+\begin_inset Formula $\hat{x}\neq0$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{b}\neq0$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\[
+\frac{\Vert\delta x\Vert}{\Vert\hat{x}\Vert}\leq\kappa(A)\left(\frac{\Vert\delta A\Vert}{\Vert A\Vert}+\frac{\Vert\delta b\Vert}{\Vert\hat{b}\Vert}+\frac{\Vert\delta A\Vert}{\Vert A\Vert}\frac{\Vert\delta b\Vert}{\Vert\hat{b}\Vert}\right)\approx\kappa(A)\left(\frac{\Vert\delta A\Vert}{\Vert A\Vert}+\frac{\Vert\delta b\Vert}{\Vert\hat{b}\Vert}\right).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+If 
+\begin_inset Formula $A$
+\end_inset
+
+ is nonsingular and 
+\begin_inset Formula $\Vert\delta A\Vert/\Vert A\Vert<1/\kappa(A)$
+\end_inset
+
+, and let 
+\begin_inset Formula $b\neq0$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\[
+\frac{\Vert\delta x\Vert}{\Vert x\Vert}\lesssim\frac{\kappa(A)(\Vert\delta A\Vert/\Vert A\Vert+\Vert\delta b\Vert/\Vert b\Vert)}{1-\kappa(A)\Vert\delta A\Vert/\Vert A\Vert}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Roughly speaking, 
+\begin_inset Formula $\kappa(A)$
+\end_inset
+
+ determines loss of digits of accuracy in 
+\begin_inset Formula $x$
+\end_inset
+
+ in addition to loss of digits of accuracy in perturbations in 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Section
+Backward Stability of LU Factorization (NLA§22)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Stability of LU without Pivoting
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For 
+\begin_inset Formula $\vec{A}=\vec{L}\vec{U}$
+\end_inset
+
+ computed without pivoting
+\begin_inset Formula 
+\[
+\tilde{\vec{L}}\tilde{\vec{U}}=\vec{A}+\delta\vec{A},\hspace{1cm}\frac{\Vert\delta\vec{A}\Vert}{\Vert\vec{L}\Vert\Vert\vec{U}\Vert}=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This is close to backward stability, except that we have 
+\begin_inset Formula $\Vert\vec{L}\Vert\Vert\vec{U}\Vert$
+\end_inset
+
+ instead of 
+\begin_inset Formula $\Vert\vec{A}\Vert$
+\end_inset
+
+ in the denominator
+\end_layout
+
+\begin_layout Itemize
+Instability of Gaussian elimination can happen only if one or both of the
+ factors 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+ is large relative to size of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Unfortunately, 
+\begin_inset Formula $\Vert\vec{L}\Vert$
+\end_inset
+
+ and 
+\begin_inset Formula $\Vert\vec{U}\Vert$
+\end_inset
+
+ can be arbitrarily large (even for well-conditioned 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+), e.g., 
+\begin_inset Formula 
+\[
+\vec{A}=\left[\begin{array}{cc}
+10^{-20} & 1\\
+1 & 1
+\end{array}\right]=\left[\begin{array}{cc}
+1 & 0\\
+10^{20} & 1
+\end{array}\right]\left[\begin{array}{cc}
+10^{-20} & 1\\
+0 & 1-10^{20}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Therefore, the algorithm is 
+\emph on
+unstable
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Stability of LU with Partial Pivoting
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+With pivoting, all entries of 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ are in 
+\begin_inset Formula $[-1,1]$
+\end_inset
+
+, so 
+\begin_inset Formula $\Vert L\Vert=O(1)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+To measure growth in 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+, we introduce the growth factor 
+\begin_inset Formula $\rho=\frac{\max_{i,j}\vert u_{ij}\vert}{\max_{i,j}\vert a_{ij}\vert}$
+\end_inset
+
+, and hence 
+\begin_inset Formula $\Vert\vec{U}\Vert=O(\rho\Vert\vec{A}\Vert)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We then have 
+\begin_inset Formula $\vec{P}\vec{A}=\vec{L}\vec{U}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\tilde{\vec{L}}\tilde{\vec{U}}=\tilde{\vec{P}}\vec{A}+\delta\vec{A},\hspace{1cm}\frac{\Vert\delta\vec{A}\Vert}{\Vert\vec{A}\Vert}=O(\rho\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vert\ell_{ij}\vert<1$
+\end_inset
+
+ for each 
+\begin_inset Formula $i>j$
+\end_inset
+
+ (i.e., there is no tie for the pivoting), then 
+\begin_inset Formula $\tilde{\vec{P}}=\vec{P}$
+\end_inset
+
+ for sufficiently small 
+\begin_inset Formula $\epsilon_{\mbox{machine}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\rho=O(1)$
+\end_inset
+
+, then the algorithm is backward stable
+\end_layout
+
+\begin_layout Itemize
+In fact, 
+\begin_inset Formula $\rho\leq2^{n-1}$
+\end_inset
+
+, so by definition 
+\begin_inset Formula $\rho$
+\end_inset
+
+ is a constant but can be very large
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+The Growth Factor
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\rho$
+\end_inset
+
+ can indeed be as large as 
+\begin_inset Formula $2^{n-1}$
+\end_inset
+
+.
+ Consider matrix
+\size footnotesize
+
+\begin_inset Formula 
+\[
+\left[\begin{array}{ccccc}
+1 &  &  &  & 1\\
+-1 & 1 &  &  & 1\\
+-1 & -1 & 1 &  & 1\\
+-1 & -1 & -1 & 1 & 1\\
+-1 & -1 & -1 & -1 & 1
+\end{array}\right]=\left[\begin{array}{ccccc}
+1 &  &  &  & 0\\
+-1 & 1 &  &  & 0\\
+-1 & -1 & 1 &  & 0\\
+-1 & -1 & -1 & 1 & 0\\
+-1 & -1 & -1 & -1 & 1
+\end{array}\right]\left[\begin{array}{ccccc}
+1 &  &  &  & 1\\
+ & 1 &  &  & 2\\
+ &  & 1 &  & 4\\
+ &  &  & 1 & 8\\
+ &  &  &  & 16
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\size default
+where growth factor 
+\begin_inset Formula $\rho=16=2^{n-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\rho=2^{n-1}$
+\end_inset
+
+ is as large as 
+\begin_inset Formula $\rho$
+\end_inset
+
+ can get.
+ It can be catastrophic in practice
+\end_layout
+
+\begin_layout Itemize
+Theoretically, Gaussian elimination with partial pivoting is backward stable
+ according to formal definition
+\end_layout
+
+\begin_layout Itemize
+However, in the worst case, Gaussian elimination with partial pivoting may
+ be unstable for practical values of 
+\begin_inset Formula $n$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+The Growth Factor in Practice
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\series bold
+Good news
+\series default
+: Large 
+\begin_inset Formula $\rho$
+\end_inset
+
+ occurs only for very skewed matrices.
+ Experimentally, one rarely see very large 
+\begin_inset Formula $\rho$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Probability of large 
+\begin_inset Formula $\rho$
+\end_inset
+
+ decreases exponentially in 
+\begin_inset Formula $\rho$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+If you pick a billion matrices at random, you will almost certainly not
+ find one for which Gaussian elimination is unstable
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In practice, 
+\begin_inset Formula $\rho$
+\end_inset
+
+ is no larger than 
+\begin_inset Formula $O(\sqrt{n})$
+\end_inset
+
+.
+ However, this behavior is not fully understood yet
+\end_layout
+
+\begin_layout Itemize
+In conclusion,
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Gaussian elimination with partial pivoting is backward stable
+\end_layout
+
+\begin_layout Itemize
+In theory, its error may grow exponentially in 
+\begin_inset Formula $n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In practice, it is stable for matrices of practical interests
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Section
+Putting It All Together
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Accuracy of Linear Solver
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Solving 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+ using LU factorization with partial pivoting is also backward stable
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $PA=LU$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $Ly=Pb$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $Ux=y$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Each step is backward stable (we omit detailed proof)
+\end_layout
+
+\begin_layout Itemize
+Overall growth factor of error is bounded by product of growth factors of
+ individual steps
+\end_layout
+
+\end_deeper
+\begin_layout Separator
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+A Posteriori Error Analysis Using Residual
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $\hat{x}$
+\end_inset
+
+ is a computed solution of 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+, and residual 
+\begin_inset Formula $\hat{r}=b-A\hat{x}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $A$
+\end_inset
+
+ be nonsingular and 
+\begin_inset Formula $\vec{b}\neq0$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $\frac{\Vert\delta x\Vert}{\Vert x\Vert}\leq O(\kappa(A))\frac{\Vert\hat{r}\Vert}{\Vert b\Vert}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If the residual is tiny and 
+\begin_inset Formula $A$
+\end_inset
+
+ is well conditioned, then 
+\begin_inset Formula $\hat{x}$
+\end_inset
+
+ is an accurate approximation to 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+For 
+\emph on
+a posteriori
+\emph default
+ error bound, one needs to estimate 
+\begin_inset Formula $\Vert\hat{r}\Vert$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa(A)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Typically one estimates 
+\begin_inset Formula $\kappa_{1}(A)=\Vert A\Vert_{1}\Vert A^{-1}\Vert_{1}$
+\end_inset
+
+ without computing 
+\begin_inset Formula $A^{-1}$
+\end_inset
+
+, but allow LU factorization of 
+\begin_inset Formula $A$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For any vector 
+\begin_inset Formula $w\in\mathbb{R}^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $\Vert w\Vert_{1}=1$
+\end_inset
+
+, we have lower bound 
+\begin_inset Formula $\kappa_{1}(A)\ge\Vert A\Vert_{1}\Vert A^{-1}w\Vert_{1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $w$
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+has a significant component in direction near maximum magnification by 
+\begin_inset Formula $A^{-1}$
+\end_inset
+
+, then 
+\begin_inset Formula $\kappa_{1}(A)\approx\Vert A\Vert_{1}\Vert A^{-1}w\Vert_{1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Good estimators conduct systematic searches for 
+\begin_inset Formula $w$
+\end_inset
+
+ that approximately maximizes 
+\begin_inset Formula $\Vert A^{-1}w\Vert_{1}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_body
+\end_document

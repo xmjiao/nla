@@ -1,0 +1,1465 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 9: Positive-Definite Systems; 
+\begin_inset Newline newline
+\end_inset
+
+Cholesky Factorization
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Positive-Definite Systems (MC§4.2)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Symmetric Positive-Definite Matrices
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Symmetric matrix 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is 
+\emph on
+symmetric positive definite
+\emph default
+ (SPD) if 
+\begin_inset Formula $\vec{x}^{T}\vec{A}\vec{x}>0$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}\backslash\{\vec{0}\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Hermitian matrix 
+\begin_inset Formula $\vec{A}\in\mathbb{C}^{n\times n}$
+\end_inset
+
+ is 
+\emph on
+Hermitian positive definite
+\emph default
+ (HPD) if 
+\begin_inset Formula $\vec{x}^{*}\vec{A}\vec{x}>0$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{x}\in\mathbb{C}^{n}\backslash\{\vec{0}\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+SPD matrices have positive real eigenvalues and orthogonal eigenvectors
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note: A positive-definite matrix does not need to be symmetric or Hermitian!
+ A real matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is positive definite iff 
+\begin_inset Formula $\vec{A}+\vec{A}^{T}$
+\end_inset
+
+ is SPD
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{x}^{T}\vec{A}\vec{x}\geq0$
+\end_inset
+
+ for 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{n}\backslash\{\vec{0}\}$
+\end_inset
+
+, then 
+\begin_inset Formula $A$
+\end_inset
+
+ is said to be 
+\emph on
+positive semidefinite
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Properties of Symmetric Positive-Definite Matrices
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+SPD matrix often arises as Hessian matrix of some convex functional
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+E.g., least squares problems; partial differential equations
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $A$
+\end_inset
+
+ is SPD, then 
+\begin_inset Formula $A$
+\end_inset
+
+ is nonsingular
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $X$
+\end_inset
+
+ be any 
+\begin_inset Formula $n\times m$
+\end_inset
+
+ matrix with full rank and 
+\begin_inset Formula $n\geq m$
+\end_inset
+
+.
+ Then
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $X^{T}X$
+\end_inset
+
+ is symmetric positive definite, and 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $XX^{T}$
+\end_inset
+
+ is symmetric positive semidefinite
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ SPD and 
+\begin_inset Formula $\vec{X}\in\mathbb{R}^{n\times m}$
+\end_inset
+
+ has full rank and 
+\begin_inset Formula $n\geq m$
+\end_inset
+
+, then 
+\begin_inset Formula $\vec{X}^{T}\vec{A}\vec{X}$
+\end_inset
+
+ is SPD
+\end_layout
+
+\begin_layout Itemize
+Any principal submatrix (picking some rows and corresponding columns) of
+ 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is SPD and 
+\begin_inset Formula $a_{ii}>0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Cholesky Factorization (NLA§23)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Cholesky Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $A$
+\end_inset
+
+ is symmetric positive definite, then there is factorization of 
+\begin_inset Formula $A$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+A=R^{T}R
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $R$
+\end_inset
+
+ is upper triangular, and all its diagonal entries are positive
+\end_layout
+
+\begin_layout Itemize
+Key idea: take advantage and preserve symmetry and positive-definiteness
+ during factorization
+\end_layout
+
+\begin_layout Itemize
+Eliminate below diagonal and to the right of diagonal
+\begin_inset Formula 
+\begin{align*}
+\vec{A} & =\left[\begin{array}{cc}
+a_{11} & \vec{b}^{T}\\
+\vec{b} & \vec{K}
+\end{array}\right]=\left[\begin{array}{cc}
+r_{11} & \vec{0}\\
+\vec{b}/r_{11} & \vec{I}
+\end{array}\right]\left[\begin{array}{cc}
+r_{11} & \vec{b}^{T}/r_{11}\\
+\vec{0} & \vec{K}-\vec{b}\vec{b}^{T}/a_{11}
+\end{array}\right]\\
+ & =\left[\begin{array}{cc}
+r_{11} & \vec{0}\\
+\vec{b}/r_{11} & \vec{I}
+\end{array}\right]\left[\begin{array}{cc}
+1 & 0\\
+\vec{0} & \vec{K}-\vec{b}\vec{b}^{T}/a_{11}
+\end{array}\right]\left[\begin{array}{cc}
+r_{11} & \vec{b}^{T}/r_{11}\\
+\vec{0} & \vec{I}
+\end{array}\right]=\vec{R}_{1}^{T}\vec{A}_{1}\vec{R}_{1}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $r_{11}=\sqrt{a_{11}}$
+\end_inset
+
+, where 
+\begin_inset Formula $a_{11}>0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{K}-\vec{b}\vec{b}^{T}/a_{11}$
+\end_inset
+
+ is principal submatrix of SPD 
+\begin_inset Formula $\vec{A}_{1}=\vec{R}_{1}^{-T}\vec{A}\vec{R}_{1}^{-1}$
+\end_inset
+
+ and therefore is SPD, with positive diagonal entries
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Cholesky Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Apply recursively to obtain 
+\begin_inset Formula 
+\[
+\vec{A}=\left(\vec{R}_{1}^{T}\vec{R}_{2}^{T}\cdots\vec{R}_{n}^{T}\right)\left(\vec{R}_{n}\cdots\vec{R}_{2}\vec{R}_{1}\right)=\vec{R}^{T}\vec{R},\hspace{1cm}r_{jj}>0
+\]
+
+\end_inset
+
+which is known as 
+\emph on
+Cholesky factorization
+\end_layout
+
+\begin_layout Itemize
+How to obtain 
+\begin_inset Formula $R$
+\end_inset
+
+ from 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\vec{R}_{n}$
+\end_inset
+
+, 
+\begin_inset Formula $\dots$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{R}_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{R}_{1}$
+\end_inset
+
+? Recursively:
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula 
+\begin{align*}
+\vec{A} & =\left[\begin{array}{cc}
+r_{11} & \vec{0}\\
+\vec{s} & \vec{I}
+\end{array}\right]\left[\begin{array}{cc}
+1 & \vec{0}\\
+\vec{0} & \vec{A}_{1}
+\end{array}\right]\left[\begin{array}{cc}
+r_{11} & \vec{s}^{T}\\
+\vec{0} & \vec{I}
+\end{array}\right]\\
+ & =\left[\begin{array}{cc}
+r_{11} & \vec{0}\\
+\vec{s} & \vec{I}
+\end{array}\right]\left[\begin{array}{cc}
+1 & \vec{0}\\
+\vec{0} & \tilde{R}^{T}
+\end{array}\right]\left[\begin{array}{cc}
+1 & \vec{0}\\
+\vec{0} & \tilde{R}
+\end{array}\right]\left[\begin{array}{cc}
+r_{11} & \vec{s}^{T}\\
+\vec{0} & \vec{I}
+\end{array}\right]\\
+ & =\left[\begin{array}{cc}
+r_{11} & \vec{0}\\
+\vec{s} & \tilde{R}^{T}
+\end{array}\right]\left[\begin{array}{cc}
+r_{11} & \vec{s}^{T}\\
+\vec{0} & \tilde{R}
+\end{array}\right]=R^{T}R
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{R}$
+\end_inset
+
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+union
+\begin_inset Quotes erd
+\end_inset
+
+ of 
+\begin_inset Formula $k$
+\end_inset
+
+th rows of 
+\begin_inset Formula $\vec{R}_{k}$
+\end_inset
+
+ (
+\begin_inset Formula $\vec{R}^{T}$
+\end_inset
+
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+union
+\begin_inset Quotes erd
+\end_inset
+
+ of columns of 
+\begin_inset Formula $\vec{R}_{k}^{T}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Matrix 
+\begin_inset Formula $\vec{A}_{1}$
+\end_inset
+
+ is called the 
+\emph on
+Schur complement
+\emph default
+ of 
+\begin_inset Formula $a_{11}$
+\end_inset
+
+ in A
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Existence and Uniqueness
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Every SPD matrix has a unique Cholesky factorization
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+It exists because algorithm for Cholesky factorization always works for
+ SPD matrices
+\end_layout
+
+\begin_layout Itemize
+Unique because once 
+\begin_inset Formula $\alpha=\sqrt{a_{11}}$
+\end_inset
+
+ is determined at each step, entire column 
+\begin_inset Formula $\vec{w}/\alpha$
+\end_inset
+
+ is determined
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Question: How to check whether a symmetric matrix is positive definite?
+ 
+\end_layout
+
+\begin_layout Itemize
+Answer: Run Cholesky factorization and it succeeds iff the matrix is positive
+ definite.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algorithm of Cholesky Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Factorize SPD matrix 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ into 
+\begin_inset Formula $\vec{A}=\vec{R}^{T}\vec{R}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Algorithm: Cholesky factorization
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{R}=\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=k+1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{r}_{j,j:n}\leftarrow\vec{r}_{j,j:n}-(r_{kj}/r_{kk})\vec{r}_{k,j:n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\vec{r}_{k,k:n}\leftarrow\vec{r}_{k,k:n}/\sqrt{r_{kk}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note: 
+\begin_inset Formula $\vec{r}_{j,j:n}$
+\end_inset
+
+ denotes subvector of 
+\begin_inset Formula $j$
+\end_inset
+
+th row with columns 
+\begin_inset Formula $j,j+1,\dots,n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Operation count 
+\begin_inset Formula 
+\[
+\sum_{k=1}^{n}\sum_{j=k+1}^{n}2(n-j)\approx2\sum_{k=1}^{n}\sum_{j=1}^{k}j\approx\sum_{k=1}^{n}k^{2}\approx\frac{n^{3}}{3}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In practice, 
+\begin_inset Formula $R$
+\end_inset
+
+ overwrites 
+\begin_inset Formula $A$
+\end_inset
+
+, and only upper-triangular part is stored.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Notes on Cholesky Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Stability of Cholesky factorization
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Cholesky factorization is backward stable
+\end_layout
+
+\begin_layout Itemize
+This is because 
+\begin_inset Formula $\Vert R\Vert_{2}^{2}=\Vert A\Vert_{2}$
+\end_inset
+
+, so entries in 
+\begin_inset Formula $R$
+\end_inset
+
+ are well bounded
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Cholesky factorization 
+\begin_inset Formula $A=R^{*}R$
+\end_inset
+
+ exists for HPD matrices, where 
+\begin_inset Formula $R$
+\end_inset
+
+ is upper-triangular and its diagonal entries are positive real values
+\end_layout
+
+\begin_layout Itemize
+Implementations
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Different versions of Cholesky factorization can all use block-matrix operators
+ to achieve better performance, and actual performance depends on sizes
+ of blocks
+\end_layout
+
+\begin_layout Itemize
+Different versions may have different amount of parallelism
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula $LDL^{T}$
+\end_inset
+
+ Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+What happens if 
+\begin_inset Formula $A$
+\end_inset
+
+ is symmetric but not positive definite?
+\end_layout
+
+\begin_layout Itemize
+Cholesky factorization is sometimes given by 
+\begin_inset Formula $\vec{A}=\vec{L}\vec{D}\vec{L}^{T}$
+\end_inset
+
+ where 
+\begin_inset Formula $\vec{D}$
+\end_inset
+
+ is diagonal matrix and 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ is unit lower triangular matrix
+\end_layout
+
+\begin_layout Itemize
+This avoids computing square roots
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Itemize
+Analogously, LU factorization can also be written as 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+LD
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+U, where 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+ is unit upper triangular
+\end_layout
+
+\begin_layout Itemize
+Question: How is 
+\begin_inset Formula $\vec{R}$
+\end_inset
+
+ in 
+\begin_inset Formula $\vec{A}=\vec{R}^{T}\vec{R}$
+\end_inset
+
+ related to the 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+ factors of 
+\begin_inset Formula $\vec{A}=\vec{L}\vec{U}$
+\end_inset
+
+ ?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\vec{U}=\vec{D}\vec{L}^{T}=\sqrt{\vec{D}}\vec{R}$
+\end_inset
+
+, where 
+\begin_inset Formula $\sqrt{\vec{D}}\equiv\mbox{diag}(\sqrt{d_{11}},\sqrt{d_{22}},\cdots,\sqrt{d_{mm}})$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Symmetric indefinite systems can be factorized with 
+\begin_inset Formula $\vec{P}\vec{A}\vec{P}^{T}=\vec{L}\vec{D}\vec{L}^{T}$
+\end_inset
+
+, where
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $P$
+\end_inset
+
+ is a permutation matrix
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{D}$
+\end_inset
+
+ is diagonal (if 
+\begin_inset Formula $A$
+\end_inset
+
+ is complex, 
+\begin_inset Formula $D$
+\end_inset
+
+ is block diagonal with 
+\begin_inset Formula $1\times1$
+\end_inset
+
+ and 
+\begin_inset Formula $2\times2$
+\end_inset
+
+ blocks)
+\end_layout
+
+\begin_layout Itemize
+its cost is similar to Cholesky factorization
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Banded Positive Definite Systems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+A matrix 
+\begin_inset Formula $A$
+\end_inset
+
+ is 
+\emph on
+banded
+\emph default
+ if there is a narrow band around the main diagonal such that all of the
+ entries of 
+\begin_inset Formula $A$
+\end_inset
+
+ outside of the band are zero
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $A$
+\end_inset
+
+ is 
+\begin_inset Formula $n\times n$
+\end_inset
+
+, and there is an 
+\begin_inset Formula $s\ll n$
+\end_inset
+
+ such that 
+\begin_inset Formula $a_{ij}=0$
+\end_inset
+
+ whenever 
+\begin_inset Formula $\vert i-j\vert>s$
+\end_inset
+
+, then we say 
+\begin_inset Formula $A$
+\end_inset
+
+ is banded with bandwidth 
+\begin_inset Formula $2s+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For symmetric matrices, only half of band is stored.
+ We say that 
+\begin_inset Formula $A$
+\end_inset
+
+ has semi-bandwidth 
+\begin_inset Formula $s$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $A$
+\end_inset
+
+ be a banded, symmetric positive definite matrix with semi-bandwidth 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Then its Cholesky factor 
+\begin_inset Formula $R$
+\end_inset
+
+ also has semi-bandwidth 
+\begin_inset Formula $s$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+This is easy to prove using bordered form of Cholesky factorization
+\end_layout
+
+\begin_layout Itemize
+Total flop count of Cholesky factorization is only 
+\begin_inset Formula $\sim ns^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+However, 
+\begin_inset Formula $A^{-1}$
+\end_inset
+
+ of a banded matrix may be dense, so it is not economical to compute 
+\begin_inset Formula $A^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

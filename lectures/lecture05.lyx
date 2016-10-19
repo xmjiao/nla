@@ -1,0 +1,1602 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+%\def\vec#1{\mbox{\boldmath $#1$}}
+\def\vec#1{#1}
+\usepackage{algorithmic}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 5: Conditioning and Condition Number;
+\begin_inset Newline newline
+\end_inset
+
+Floating Point Arithmetic
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+SUNY Stony Brook
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conditioning and Condition Numbers (NLA§12)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Overview of Error Analysis
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Error analysis is important subject of numerical analysis
+\end_layout
+
+\begin_layout Itemize
+Given a problem 
+\begin_inset Formula $\vec{f}$
+\end_inset
+
+ and an algorithm 
+\begin_inset Formula $\tilde{\vec{f}}$
+\end_inset
+
+ with an input 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+, the 
+\emph on
+absolute error
+\emph default
+ is 
+\begin_inset Formula $\Vert\tilde{\vec{f}}(\vec{x})-\vec{f}(\vec{x})\Vert$
+\end_inset
+
+ and relative error is 
+\begin_inset Formula $\Vert\tilde{\vec{f}}(\vec{x})-\vec{f}(\vec{x})\Vert/\Vert\vec{f}(\vec{x})\Vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+What are possible sources of errors?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Round-off error (input, computation) – main concern of NLA
+\end_layout
+
+\begin_layout Itemize
+truncation (approximation) error – main concern for AMS 527
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+We would like the solution to be 
+\emph on
+accurate
+\emph default
+, i.e., with small errors
+\end_layout
+
+\begin_layout Itemize
+Error depends on property (
+\emph on
+conditioning
+\emph default
+) of the problem, property (
+\emph on
+stability
+\emph default
+) of the algorithm
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example Using SVD Analysis
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Suppose 
+\begin_inset Formula $A\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is nonsingular, and let 
+\begin_inset Formula $A=U\Sigma V^{T}$
+\end_inset
+
+ be its SVD
+\end_layout
+
+\begin_layout Itemize
+Then 
+\begin_inset Formula 
+\[
+Ax=U\Sigma V^{T}x=\sum_{i=1}^{n}\sigma_{i}v_{i}^{T}xu_{i}
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\[
+x=A^{-1}b=\left(U\Sigma V^{T}\right)^{-1}b=\sum_{i=1}^{n}\frac{u_{i}^{T}b}{\sigma_{i}}v_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Whether matrix multiplication and linear system are sensitive to small changes
+ in 
+\begin_inset Formula $A$
+\end_inset
+
+ or 
+\begin_inset Formula $b$
+\end_inset
+
+ depends on distribution of singular values; nearly zero 
+\begin_inset Formula $\sigma_{n}$
+\end_inset
+
+ can amplify errors in 
+\begin_inset Formula $\vec{v}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+How do we formalize this analysis?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Absolute Condition Number
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Condition number is a measure of 
+\emph on
+sensitivity
+\emph default
+ of a problem
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Absolute condition number
+\emph default
+ of a problem 
+\begin_inset Formula $\vec{f}$
+\end_inset
+
+ at 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\hat{\kappa}=\lim_{\varepsilon\rightarrow0}\sup_{\Vert\delta\vec{x}\Vert\leq\varepsilon}\frac{\Vert\delta\vec{f}\Vert}{\Vert\delta\vec{x}\Vert}
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $\delta\vec{f}=\vec{f}(\vec{x}+\delta\vec{x})-\vec{f}(\vec{x})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Less formally, 
+\begin_inset Formula $\hat{\kappa}=\sup_{\delta\vec{x}}\frac{\Vert\delta\vec{f}\Vert}{\Vert\delta\vec{x}\Vert}$
+\end_inset
+
+ for infinitesimally small 
+\begin_inset Formula $\delta\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{f}$
+\end_inset
+
+ is differentiable, then 
+\begin_inset Formula 
+\[
+\hat{\kappa}=\Vert\vec{J}(\vec{x})\Vert
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{J}$
+\end_inset
+
+ is the Jacobian of 
+\begin_inset Formula $\vec{f}$
+\end_inset
+
+ at 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+, with 
+\begin_inset Formula $J_{ij}=\partial f_{i}/\partial x_{j}$
+\end_inset
+
+, and matrix norm is induced by vector norms on 
+\begin_inset Formula $\partial\vec{f}$
+\end_inset
+
+ and 
+\begin_inset Formula $\partial\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: What is absolute condition number of 
+\begin_inset Formula $f(x)=\alpha x$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Itemize
+Question: Is absolute condition number scale invariant?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Relative Condition Number
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Relative condition number
+\emph default
+ of 
+\begin_inset Formula $\vec{f}$
+\end_inset
+
+ at 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\kappa=\lim_{\varepsilon\rightarrow0}\sup_{\Vert\delta\vec{x}\Vert\leq\varepsilon}\frac{\Vert\delta\vec{f}\Vert/\Vert\vec{f}(\vec{x})\Vert}{\Vert\delta\vec{x}\Vert/\Vert\vec{x}\Vert}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Less formally, 
+\begin_inset Formula $\kappa=\sup_{\delta\vec{x}}\frac{\Vert\delta\vec{f}\Vert/\Vert\delta\vec{x}\Vert}{\Vert\vec{f}(\vec{x})\Vert/\Vert\vec{x}\Vert}$
+\end_inset
+
+ for infinitesimally small 
+\begin_inset Formula $\delta\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note: we can use different types of norms to get different condition numbers
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{f}$
+\end_inset
+
+ is differentiable, then 
+\begin_inset Formula 
+\[
+\kappa=\frac{\Vert\vec{J}(\vec{x})\Vert}{\Vert\vec{f}(\vec{x})\Vert/\Vert\vec{x}\Vert}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: What is relative condition number of 
+\begin_inset Formula $f(x)=\alpha x$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Itemize
+Question: Is relative condition number scale invariant?
+\end_layout
+
+\begin_layout Itemize
+In numerical analysis, we in general use relative condition number
+\end_layout
+
+\begin_layout Itemize
+A problem is 
+\emph on
+well-conditioned
+\emph default
+ if 
+\begin_inset Formula $\kappa$
+\end_inset
+
+ is small and is 
+\emph on
+ill-conditioned
+\emph default
+ if 
+\begin_inset Formula $\kappa$
+\end_inset
+
+ is large
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Examples
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Example: Function 
+\begin_inset Formula $f(x)=\sqrt{x}$
+\end_inset
+
+ 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Absolute condition number of 
+\begin_inset Formula $f$
+\end_inset
+
+ at 
+\begin_inset Formula $x$
+\end_inset
+
+ is  
+\begin_inset Formula $\hat{\kappa}=\Vert\vec{J}\Vert=1/(2\sqrt{x})$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Note: We are talking about the condition number of the problem for a given
+ 
+\begin_inset Formula $x$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Relative condition number 
+\begin_inset Formula $\kappa=\frac{\Vert\vec{J}\Vert}{\Vert\vec{f}(\vec{x})\Vert/\Vert\vec{x}\Vert}=\frac{1/(2\sqrt{x})}{\sqrt{x}/x}=1/2$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Example: Function 
+\begin_inset Formula $f(\vec{x})=x_{1}-x_{2}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{x}=(x_{1},x_{2})^{T}$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Absolute condition number of 
+\begin_inset Formula $f$
+\end_inset
+
+ at 
+\begin_inset Formula $x$
+\end_inset
+
+ in 
+\begin_inset Formula $\infty$
+\end_inset
+
+-norm is 
+\begin_inset Formula $\hat{\kappa}=\Vert\vec{J}\Vert_{\infty}=\Vert(1,-1)\Vert_{\infty}=2$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Relative condition number 
+\begin_inset Formula $\kappa=\frac{\Vert\vec{J}\Vert_{\infty}}{\Vert\vec{f}(\vec{x})\Vert_{\infty}/\Vert\vec{x}\Vert_{\infty}}=\frac{2}{\vert x_{1}-x_{2}\vert/\max\{\vert x_{1}\vert,\vert x_{2}\vert\}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\kappa$
+\end_inset
+
+ is arbitrarily large (
+\begin_inset Formula $f$
+\end_inset
+
+ is ill-conditioned) if 
+\begin_inset Formula $x_{1}\approx x_{2}$
+\end_inset
+
+ (hazard of cancellation error)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Note: From now on, we will talk about only relative condition number
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Condition Number of Matrix
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Consider 
+\begin_inset Formula $\vec{f}(\vec{x})=\vec{A}\vec{x}$
+\end_inset
+
+, with 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{m\times n}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\kappa=\frac{\Vert\vec{J}\Vert}{\Vert\vec{f}(\vec{x})\Vert/\Vert\vec{x}\Vert}=\frac{\Vert\vec{A}\Vert\Vert\vec{x}\Vert}{\Vert\vec{A}\vec{x}\Vert}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is square and nonsingular, since 
+\begin_inset Formula $\Vert\vec{x}\Vert/\Vert\vec{A}\vec{x}\Vert\leq\Vert\vec{A}^{-1}\Vert$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\kappa\le\Vert\vec{A}\Vert\Vert\vec{A}^{-1}\Vert
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note that for 
+\begin_inset Formula $f(\vec{b})=\vec{A}^{-1}\vec{b}$
+\end_inset
+
+, its condition number 
+\begin_inset Formula $\kappa\le\Vert\vec{A}\Vert\Vert\vec{A}^{-1}\Vert$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We define 
+\emph on
+condition number of matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\emph default
+ as 
+\begin_inset Formula 
+\[
+\kappa(\vec{A})=\Vert\vec{A}\Vert\Vert\vec{A}^{-1}\Vert
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+It is the upper bound of the condition number of 
+\begin_inset Formula $\vec{f}(\vec{x})=\vec{A}\vec{x}$
+\end_inset
+
+ for any 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For any induced matrix norm, 
+\begin_inset Formula $\kappa(\vec{I})=1$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa(\vec{A})\ge1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Note about the distinction between the condition number of a 
+\emph on
+problem
+\emph default
+ (the map 
+\begin_inset Formula $\vec{f}(\vec{x})$
+\end_inset
+
+) and the condition number of a 
+\emph on
+problem instance (
+\emph default
+the evaluation of 
+\begin_inset Formula $\vec{f}(\vec{x})$
+\end_inset
+
+ for specific 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Geometric Interpretation of Condition Number
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Another way to interpret at 
+\begin_inset Formula $\kappa(\vec{A})$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+\kappa(\vec{A})=\sup_{\delta\vec{x},\vec{x}}\frac{\Vert\delta\vec{f}\Vert/\Vert\delta\vec{x}\Vert}{\Vert\vec{f}(\vec{x})\Vert/\Vert\vec{x}\Vert}=\frac{\sup_{\delta\vec{x}}\Vert\vec{A}\delta\vec{x}\Vert/\Vert\delta\vec{x}\Vert}{\inf_{\vec{x}}\Vert\vec{A}\vec{x}\Vert/\Vert\vec{x}\Vert}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: For what 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta x$
+\end_inset
+
+ is the equality achieved?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Answer: When 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ is in direction of minimum magnification, and 
+\begin_inset Formula $\delta x$
+\end_inset
+
+ is in direction of maximum magnification
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Define 
+\emph on
+maximum magnification
+\emph default
+ of 
+\begin_inset Formula $A$
+\end_inset
+
+ as
+\begin_inset Formula 
+\[
+\mbox{maxmag}(A)=\max_{\Vert\vec{x}\Vert=1}\Vert A\vec{x}\Vert
+\]
+
+\end_inset
+
+and 
+\emph on
+minimum magnification
+\emph default
+ of 
+\begin_inset Formula $A$
+\end_inset
+
+ as
+\begin_inset Formula 
+\[
+\mbox{minmag}(A)=\min_{\Vert\vec{x}\Vert=1}\Vert A\vec{x}\Vert
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Then condition number of matrix is 
+\begin_inset Formula $\kappa(A)=\mbox{maxmag}(A)/\mbox{minmag}(A)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For 
+\begin_inset Formula $2$
+\end_inset
+
+-norm, 
+\begin_inset Formula $\kappa(\vec{A})=\sigma_{1}/\sigma_{n}$
+\end_inset
+
+, ratio of largest and smallest singular values
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example of Ill-Conditioned Matrix
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Example
+Let 
+\begin_inset Formula $A=\left[\begin{array}{cc}
+1000 & 999\\
+999 & 998
+\end{array}\right]$
+\end_inset
+
+.
+ It is easy to verify that 
+\begin_inset Formula $A^{-1}=\left[\begin{array}{cc}
+-998 & 999\\
+999 & -1000
+\end{array}\right].$
+\end_inset
+
+ So 
+\begin_inset Formula 
+\[
+\kappa_{\infty}(A)=\kappa_{1}(A)=1999^{2}=3.996\times10^{6}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example of Ill-Conditioned Matrix
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Example
+A famous example is Hilbert matrix, defined by 
+\begin_inset Formula $h_{ij}=1/(i+j-1)$
+\end_inset
+
+, 
+\begin_inset Formula $1\le i,j\le n$
+\end_inset
+
+.
+ The matrix is ill-conditioned for even quite small 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+For 
+\begin_inset Formula $n\leq4$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+H_{4}=\left[\begin{array}{cccc}
+1 & 1/2 & 1/3 & 1/4\\
+1/2 & 1/3 & 1/4 & 1/5\\
+1/3 & 1/4 & 1/5 & 1/6\\
+1/4 & 1/5 & 1/6 & 1/7
+\end{array}\right],
+\]
+
+\end_inset
+
+with condition number 
+\begin_inset Formula $\kappa_{2}(H_{4})\approx1.6\times10^{4}$
+\end_inset
+
+, and 
+\begin_inset Formula $\kappa_{2}(H_{8})\approx1.5\times10^{10}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Floating Point Arithmetic (NLA§13)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Floating Point Representations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Computers use finite number of bits to represent real numbers
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Numbers cannot be arbitrarily large or small (associated risks of 
+\emph on
+overflow
+\emph default
+ and 
+\emph on
+underflow
+\emph default
+)
+\end_layout
+
+\begin_layout Itemize
+There must be gaps between representable numbers (potential round-off errors)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Commonly used computer-representations are floating point representations,
+ which resemble scientific notation
+\begin_inset Formula 
+\[
+\pm(d_{0}+d_{1}\beta^{-1}+\cdots+d_{p-1}\beta^{-p+1})\beta^{e},\ 0\leq d_{i}<\beta
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\beta$
+\end_inset
+
+ is base, 
+\begin_inset Formula $p$
+\end_inset
+
+ is digits of precision, and 
+\begin_inset Formula $e$
+\end_inset
+
+ is exponent between 
+\begin_inset Formula $e_{min}$
+\end_inset
+
+ and 
+\begin_inset Formula $e_{max}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Normalize if 
+\begin_inset Formula $d_{0}\neq0$
+\end_inset
+
+ (except for 
+\begin_inset Formula $0$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Gaps between adjacent numbers scale with size of numbers
+\end_layout
+
+\begin_layout Itemize
+Relative resolution given by 
+\emph on
+machine epsilon
+\emph default
+ 
+\begin_inset Formula $\epsilon_{\mbox{machine}}=0.5\beta^{1-p}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For all 
+\begin_inset Formula $x$
+\end_inset
+
+, there exists a floating point 
+\begin_inset Formula $x'$
+\end_inset
+
+ such that 
+\begin_inset Formula $\vert x-x'\vert\leq\epsilon_{\mbox{machine}}\vert x\vert$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+IEEE Floating Point Representations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Single precision: 32 bits
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+1 sign bit (S), 8 exponent bits (E), 23 significant bits (M), 
+\begin_inset Formula $(-1)^{S}\times1.M\times2^{E-127}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\epsilon_{\mbox{machine}}$
+\end_inset
+
+ is 
+\begin_inset Formula $2^{-24}\approx6\times10^{-8}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Double precision: 64 bits
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+1 sign bit (S), 11 exponent bits (E), 52 significant bits (M), 
+\begin_inset Formula $(-1)^{S}\times1.M\times2^{E-1023}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\epsilon_{\mbox{machine}}$
+\end_inset
+
+ is 
+\begin_inset Formula $2^{-53}\approx1.11\times10^{-16}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Special quantities
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $+\infty$
+\end_inset
+
+ and 
+\begin_inset Formula $-\infty$
+\end_inset
+
+ when operation overflows; e.g., 
+\begin_inset Formula $x/0$
+\end_inset
+
+ for nonzero 
+\begin_inset Formula $x$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+NaN (Not a Number) is returned when an operation has no well-defined result;
+ e.g., 0/0, 
+\begin_inset Formula $\sqrt{-1}$
+\end_inset
+
+, 
+\begin_inset Formula $\arcsin(2)$
+\end_inset
+
+, NaN
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Floating Point Arithmetic
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Define 
+\begin_inset Formula $\mbox{fl}(x)$
+\end_inset
+
+ as closest floating point approximation to 
+\begin_inset Formula $x$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+By definition of 
+\begin_inset Formula $\epsilon_{\mbox{machine}}$
+\end_inset
+
+, we have:
+\end_layout
+
+\begin_layout Standard
+\align center
+For all 
+\begin_inset Formula $x\in\mathbb{R}$
+\end_inset
+
+, there exists 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ with 
+\begin_inset Formula $|\epsilon|\leq\epsilon_{\mbox{machine}}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+such that 
+\begin_inset Formula $\mbox{fl}(x)=x(1+\epsilon)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Given operation 
+\begin_inset Formula $+$
+\end_inset
+
+, 
+\begin_inset Formula $-$
+\end_inset
+
+, 
+\begin_inset Formula $\times$
+\end_inset
+
+, and 
+\begin_inset Formula $/$
+\end_inset
+
+ (denoted by 
+\begin_inset Formula $*$
+\end_inset
+
+), floating point numbers 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+, and corresponding floating point arithmetic (denoted by 
+\begin_inset Formula $\circledast$
+\end_inset
+
+), we require that 
+\begin_inset Formula $x\circledast y=\mbox{fl}(x*y)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This is guaranteed by IEEE floating point arithmetic
+\end_layout
+
+\begin_layout Itemize
+Fundamental axiom of floating point arithmetic:
+\end_layout
+
+\begin_layout Standard
+\align center
+For all 
+\begin_inset Formula $x,y\in\mathbb{F}$
+\end_inset
+
+, there exists 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ with 
+\begin_inset Formula $|\epsilon|\leq\epsilon_{\mbox{machine}}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+such that 
+\begin_inset Formula $x\circledast y=(x*y)(1+\epsilon)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+These properties will be the basis of error analysis with rounding errors
+\end_layout
+
+\begin_layout Itemize
+Note that floating point arithmetic is 
+\series bold
+not associative
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

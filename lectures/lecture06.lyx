@@ -1,0 +1,2240 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 6: Accuracy and Stability; 
+\begin_inset Newline newline
+\end_inset
+
+Triangular Systems;
+\begin_inset Newline newline
+\end_inset
+
+Backward Stability of Back Substitution
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Accuracy and Stability (NLA§14-15)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Accuracy
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Roughly speaking, accuracy means that 
+\begin_inset Quotes eld
+\end_inset
+
+error
+\begin_inset Quotes erd
+\end_inset
+
+ is small in an 
+\emph on
+asymptotic
+\emph default
+ sense, say 
+\begin_inset Formula $O(\epsilon_{\mbox{machine}})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Notation 
+\begin_inset Formula $\varphi(t)=O(\psi(t))$
+\end_inset
+
+ means 
+\begin_inset Formula $\exists C$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $\vert\varphi(t)\vert\leq C\vert\psi(t)\vert$
+\end_inset
+
+ as 
+\begin_inset Formula $t$
+\end_inset
+
+ approaches 
+\begin_inset Formula $0$
+\end_inset
+
+ (or 
+\begin_inset Formula $\infty$
+\end_inset
+
+)
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Example: 
+\begin_inset Formula $\sin^{2}t=O(t^{2})$
+\end_inset
+
+ as 
+\begin_inset Formula $t\rightarrow0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $\varphi$
+\end_inset
+
+ depends on 
+\begin_inset Formula $s$
+\end_inset
+
+ and 
+\begin_inset Formula $t$
+\end_inset
+
+, then 
+\begin_inset Formula $\varphi(s,t)=O(\psi(t))$
+\end_inset
+
+ means 
+\begin_inset Formula $\exists C$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $\vert\varphi(s,t)\vert\leq C\vert\psi(t)\vert$
+\end_inset
+
+ for any 
+\begin_inset Formula $s$
+\end_inset
+
+ as 
+\begin_inset Formula $t$
+\end_inset
+
+ approaches 
+\begin_inset Formula $0$
+\end_inset
+
+ (or 
+\begin_inset Formula $\infty$
+\end_inset
+
+)
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Example: 
+\begin_inset Formula $\sin^{2}t\ \sin^{2}s=O(t^{2})$
+\end_inset
+
+ as 
+\begin_inset Formula $t\rightarrow0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+When we say 
+\begin_inset Formula $O(\epsilon_{\mbox{machine}})$
+\end_inset
+
+, we are thinking of a series of idealized machines for which 
+\begin_inset Formula $\epsilon_{\mbox{machine}}\rightarrow0$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+More on Accuracy
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+An algorithm 
+\begin_inset Formula $\tilde{\vec{f}}$
+\end_inset
+
+ is 
+\emph on
+accurate
+\emph default
+ if 
+\series bold
+relative
+\series default
+ error is in the order of machine precision, i.e., 
+\begin_inset Formula 
+\[
+\Vert\tilde{\vec{f}}(\vec{x})-\vec{f}(\vec{x})\Vert/\Vert\vec{f}(\vec{x})\Vert=O(\epsilon_{\mbox{machine}}),
+\]
+
+\end_inset
+
+i.e., 
+\begin_inset Formula $\leq C_{1}\epsilon_{\mbox{machine}}$
+\end_inset
+
+ as 
+\begin_inset Formula $\epsilon_{\mbox{machine}}\rightarrow0$
+\end_inset
+
+, where constant 
+\begin_inset Formula $C_{1}$
+\end_inset
+
+ may depend on the condition number and the algorithm itself
+\end_layout
+
+\begin_layout Itemize
+In most cases, we expect 
+\begin_inset Formula 
+\[
+\Vert\tilde{\vec{f}}(\vec{x})-\vec{f}(\vec{x})\Vert/\Vert\vec{f}(\vec{x})\Vert=O(\kappa\epsilon_{\mbox{machine}}),
+\]
+
+\end_inset
+
+i.e., 
+\begin_inset Formula $\leq C\kappa\epsilon_{\mbox{machine}}$
+\end_inset
+
+ as 
+\begin_inset Formula $\epsilon_{\mbox{machine}}\rightarrow0$
+\end_inset
+
+, where constant 
+\begin_inset Formula $C$
+\end_inset
+
+ should be independent of 
+\begin_inset Formula $\kappa$
+\end_inset
+
+ and value of 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ (although it may depends on the dimension of 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+How do we determine whether an algorithm is accurate or not?
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+It turns out to be an extremely subtle question
+\end_layout
+
+\begin_layout Itemize
+A forward error analysis (operation by operation) is often too difficult
+ and impractical, and cannot capture dependence on condition number
+\end_layout
+
+\begin_layout Itemize
+An effective solution is 
+\emph on
+backward error analysis
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Stability
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+We say an algorithm is 
+\emph on
+stable
+\emph default
+ if it gives 
+\begin_inset Quotes eld
+\end_inset
+
+nearly the right answer to nearly the right question
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+More formally, an algorithm 
+\begin_inset Formula $\tilde{\vec{f}}$
+\end_inset
+
+ for problem 
+\begin_inset Formula $\vec{f}$
+\end_inset
+
+ is 
+\emph on
+stable
+\emph default
+ if (for all 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+)
+\begin_inset Formula 
+\[
+\Vert\tilde{\vec{f}}(\vec{x})-\vec{f}(\tilde{\vec{x}})\Vert/\Vert\vec{f}(\tilde{\vec{x}})\Vert=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+ for some 
+\begin_inset Formula $\tilde{\vec{x}}$
+\end_inset
+
+ with 
+\begin_inset Formula $\Vert\tilde{\vec{x}}-\vec{x}\Vert/\Vert\vec{x}\Vert=O(\epsilon_{\mbox{machine}})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+We say an algorithm is 
+\emph on
+backward stable
+\emph default
+ if it gives 
+\begin_inset Quotes eld
+\end_inset
+
+exactly the right answer to nearly the right question
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+More formally, an algorithm 
+\begin_inset Formula $\tilde{\vec{f}}$
+\end_inset
+
+ for problem 
+\begin_inset Formula $\vec{f}$
+\end_inset
+
+ is 
+\emph on
+backward stable
+\emph default
+ if (for all 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+)
+\begin_inset Formula 
+\[
+\tilde{\vec{f}}(\vec{x})=\vec{f}(\tilde{\vec{x}})
+\]
+
+\end_inset
+
+for some 
+\begin_inset Formula $\tilde{\vec{x}}$
+\end_inset
+
+ with 
+\begin_inset Formula $\Vert\tilde{\vec{x}}-\vec{x}\Vert/\Vert\vec{x}\Vert=O(\epsilon_{\mbox{machine}})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Is stability or backward stability stronger? 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Backward stability is stronger.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Does (backward ) stability depend on condition number of 
+\begin_inset Formula $\vec{f}(\vec{x})$
+\end_inset
+
+? 
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+No.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Stability of Floating Point Arithmetic
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Backward stability of floating point operations is implied by these two
+ floating point axioms:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $\forall x\in\mathbb{R}$
+\end_inset
+
+, 
+\begin_inset Formula $\exists\epsilon$
+\end_inset
+
+, 
+\begin_inset Formula $|\epsilon|\leq\epsilon_{\mbox{machine}}$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $\mbox{fl}(x)=x(1+\epsilon)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+For floating-point numbers 
+\begin_inset Formula $x,y$
+\end_inset
+
+, 
+\begin_inset Formula $\exists\epsilon$
+\end_inset
+
+, 
+\begin_inset Formula $|\epsilon|\leq\epsilon_{\mbox{machine}}$
+\end_inset
+
+ s.t.
+ 
+\begin_inset Formula $x\circledast y=(x*y)(1+\epsilon)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Example: Subtraction 
+\begin_inset Formula $f(x_{1},x_{2})=x_{1}-x_{2}$
+\end_inset
+
+ with floating-point operation
+\begin_inset Formula 
+\[
+\tilde{f}(x_{1},x_{2})=\mbox{fl}(x_{1})\ominus\mbox{fl}(x_{2})
+\]
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Axiom 1 implies 
+\begin_inset Formula $\mbox{fl}(x_{1})=x_{1}(1+\epsilon_{1})$
+\end_inset
+
+, 
+\begin_inset Formula $\mbox{fl}(x_{2})=x_{2}(1+\epsilon_{2})$
+\end_inset
+
+, for some 
+\begin_inset Formula $\vert\epsilon_{1}\vert,\vert\epsilon_{2}\vert\leq\epsilon_{\mbox{machine}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Axiom 2 implies 
+\begin_inset Formula $\mbox{fl}(x_{1})\ominus\mbox{fl}(x_{2})=(\mbox{fl}(x_{1})-\mbox{fl}(x_{2}))(1+\epsilon_{3})$
+\end_inset
+
+ for some 
+\begin_inset Formula $\vert\epsilon_{3}\vert\leq\epsilon_{\mbox{machine}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Therefore, 
+\begin_inset Formula 
+\begin{align*}
+\mbox{fl}(x_{1})\ominus\mbox{fl}(x_{2}) & =(x_{1}(1+\epsilon_{1})-x_{2}(1+\epsilon_{2}))(1+\epsilon_{3})\\
+ & =x_{1}(1+\epsilon_{1})(1+\epsilon_{3})-x_{2}(1+\epsilon_{2})(1+\epsilon_{3})\\
+ & =x_{1}(1+\epsilon_{4})-x_{2}(1+\epsilon_{5})
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\vert\epsilon_{4}\vert,\vert\epsilon_{5}\vert\leq2\epsilon_{\mbox{machine}}+O(\epsilon_{\mbox{machine}}^{2})$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Stability of Floating Point Arithmetic Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Example: Inner product 
+\begin_inset Formula $f(\vec{x},\vec{y})=\vec{x}^{T}\vec{y}$
+\end_inset
+
+ using floating-point operations 
+\begin_inset Formula $\otimes$
+\end_inset
+
+ and 
+\begin_inset Formula $\oplus$
+\end_inset
+
+ is backward stable
+\end_layout
+
+\begin_layout Itemize
+Example: Outer product 
+\begin_inset Formula $f(\vec{x},\vec{y})=\vec{x}\vec{y}^{T}$
+\end_inset
+
+ using 
+\begin_inset Formula $\otimes$
+\end_inset
+
+ and 
+\begin_inset Formula $\oplus$
+\end_inset
+
+ is not backward stable
+\end_layout
+
+\begin_layout Itemize
+Example: 
+\begin_inset Formula $f(x)=x+1$
+\end_inset
+
+ computed as 
+\begin_inset Formula $\tilde{f}(x)=\mbox{fl}(x)\oplus1$
+\end_inset
+
+ is not backward stable
+\end_layout
+
+\begin_layout Itemize
+Example: 
+\begin_inset Formula $f(x,y)=x+y$
+\end_inset
+
+ computed as 
+\begin_inset Formula $\tilde{f}(x,y)=\mbox{fl}(x)\oplus\mbox{fl}(y)$
+\end_inset
+
+ is backward stable
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Accuracy of Backward Stable Algorithm
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+If a backward stable algorithm 
+\begin_inset Formula $\tilde{\vec{f}}$
+\end_inset
+
+ is used to solve a problem 
+\begin_inset Formula $f$
+\end_inset
+
+ with condition number 
+\begin_inset Formula $\kappa$
+\end_inset
+
+ using floating-point numbers satisfying the two axioms, then
+\begin_inset Formula 
+\[
+\Vert\tilde{\vec{f}}(\vec{x})-\vec{f}(\vec{x})\Vert/\Vert\vec{f}(\vec{x})\Vert=O(\kappa(\vec{x})\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+Proof: Backward stability means 
+\begin_inset Formula $\tilde{\vec{f}}(\vec{x})=\vec{f}(\tilde{\vec{x}})$
+\end_inset
+
+ for 
+\begin_inset Formula $\tilde{\vec{x}}$
+\end_inset
+
+ such that 
+\begin_inset Formula $\Vert\tilde{\vec{x}}-\vec{x}\Vert/\Vert\vec{x}\Vert=O(\epsilon_{\mbox{machine}})$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Definition of condition number gives 
+\begin_inset Formula 
+\[
+\Vert\vec{f}(\tilde{\vec{x}})-\vec{f}(\vec{x})\Vert/\Vert\vec{f}(\vec{x})\Vert\leq(\kappa(x)+o(1))\Vert\tilde{\vec{x}}-\vec{x}\Vert/\Vert\vec{x}\Vert
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $o(1)\rightarrow0$
+\end_inset
+
+ as 
+\begin_inset Formula $\epsilon_{\mbox{machine}}\rightarrow0$
+\end_inset
+
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+Combining the two gives desired result.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Triangular Systems (MC§3.1)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Triangular Systems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+A matrix 
+\begin_inset Formula $G=(g_{ij})$
+\end_inset
+
+ is 
+\emph on
+lower triangular
+\emph default
+ if 
+\begin_inset Formula $g_{ij}=0$
+\end_inset
+
+ whenever 
+\begin_inset Formula $i<j$
+\end_inset
+
+.
+\begin_inset Formula 
+\[
+G=\left[\begin{array}{ccccc}
+g_{11} & 0 & 0 & \cdots & 0\\
+g_{21} & g_{22} & 0 & \cdots & 0\\
+g_{31} & g_{32} & g_{33} & \ddots & \vdots\\
+\vdots & \vdots & \vdots & \ddots & 0\\
+g_{n1} & g_{n2} & g_{n3} & \cdots & g_{nn}
+\end{array}\right].
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Similarly, an 
+\emph on
+upper triangular matrix
+\emph default
+ is one for which 
+\begin_inset Formula $g_{ij}=0$
+\end_inset
+
+ whenever 
+\begin_inset Formula $i>j$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+A 
+\emph on
+triangular matrix
+\emph default
+ is one that is either upper or lower triangular.
+\end_layout
+
+\begin_layout Itemize
+A triangular matrix 
+\begin_inset Formula $G\in R^{n\times n}$
+\end_inset
+
+ is nonsingular if and only if 
+\begin_inset Formula $g_{ii}\neq0$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,...,n$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Lower-Triangular Systems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Consider system
+\begin_inset Formula 
+\[
+Gy=b,
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $G$
+\end_inset
+
+ is nonsingular, lower-triangular matrix.
+ 
+\end_layout
+
+\begin_layout Itemize
+We can solve the system by
+\begin_inset Formula 
+\begin{align*}
+y_{1} & =b_{1}/g_{11}\\
+y_{2} & =\left(b_{2}-g_{21}y_{1}\right)/g_{22}\\
+ & \vdots\\
+y_{i} & =\left(b_{i}-g_{i1}y_{1}-g_{i2}y_{2}-\cdots-g_{i,i-1}y_{i-1}\right)/g_{ii}\\
+ & =\left.\left(b_{i}-\sum_{j=1}^{i-1}g_{ij}y_{j}\right)\right/g_{ii}.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Forward Substitution
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\align center
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "70col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Pseudo-code forward substitution (
+\begin_inset Formula $y$
+\end_inset
+
+ overwrites 
+\begin_inset Formula $b$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:i-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $b_{i}\leftarrow b_{i}-g_{ij}b_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $b_{i}\leftarrow b_{i}/g_{ii}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This algorithm is 
+\emph on
+row-oriented
+\emph default
+, as it access 
+\begin_inset Formula $G$
+\end_inset
+
+ by rows.
+ 
+\end_layout
+
+\begin_layout Itemize
+It may raise an exception if 
+\begin_inset Formula $g_{ii}=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The number of operations is 
+\begin_inset Formula $\sum_{i=1}^{n}\sum_{j=1}^{i-1}2=2\sum_{i=1}^{n}(i-1)=n(n-1)\approx n^{2}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Column-Oriented Forward Substitution
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+We can reorder loops and obtain a column-oriented algorithm
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 1
+use_makebox 0
+width "70col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Pseudo-code forward substitution (
+\begin_inset Formula $y$
+\end_inset
+
+ overwrites 
+\begin_inset Formula $b$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $b_{j}\leftarrow b_{j}/g_{jj}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $i=j+1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $b_{i}\leftarrow b_{i}-g_{ij}b_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The number of operations is again 
+\begin_inset Formula $\approx n^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In practice, column-oriented algorithm is faster if 
+\begin_inset Formula $G$
+\end_inset
+
+ is stored in a column-oriented fashion
+\end_layout
+
+\begin_layout Itemize
+Like matrix-matrix multiplication, performance can be improved using block-matri
+x operators
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Exploiting Leading Zeros
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+If 
+\begin_inset Formula $b_{1}=b_{2}=\cdots=b_{k-1}=0$
+\end_inset
+
+, how to change algorithm to reduce operations?
+\end_layout
+
+\begin_layout Itemize
+In row-oriented algorithm: let 
+\begin_inset Formula $i=k,\dots,n$
+\end_inset
+
+ and 
+\begin_inset Formula $j=k,\dots,i-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In column-oriented algorithm: let 
+\begin_inset Formula $j=k,\dots,n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This saves flops, especially if 
+\begin_inset Formula $k$
+\end_inset
+
+ is large
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Example: compute inverse of a lower-triangular matrix
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Upper-Triangular Systems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Consider the system
+\begin_inset Formula 
+\[
+Uy=b,
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $U\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is nonsingular and upper triangular
+\end_layout
+
+\begin_layout Itemize
+We solve the system from bottom to top
+\begin_inset Formula 
+\begin{align*}
+y_{n} & =b_{n}/g_{nn}\\
+y_{n-1} & =\left(b_{n-1}-g_{n-1,n}y_{n}\right)/g_{n-1,n-1}\\
+ & \vdots\\
+y_{i} & =\left(b_{i}-g_{in}y_{n}-g_{i,n-1}y_{n-1}-\cdots-g_{i,i+1}y_{i+1}\right)/g_{ii}\\
+ & =\left.\left(b_{i}-\sum_{j=i+1}^{n}g_{ij}y_{j}\right)\right/g_{ii}.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This is back substitution, and it has the same cost as forward substitution
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Backward Stability of Back Substitution (NLA§17)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Backward Stability of Back Substitution
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Solve 
+\begin_inset Formula $\vec{R}\vec{x}=\vec{b}$
+\end_inset
+
+ using back substitution
+\begin_inset Formula 
+\[
+\left[\begin{array}{ccc}
+r_{11} & \cdots & r_{1n}\\
+ & \ddots & \vdots\\
+ &  & r_{nn}
+\end{array}\right]\left[\begin{array}{c}
+x_{1}\\
+\vdots\\
+x_{n}
+\end{array}\right]=\left[\begin{array}{c}
+b_{1}\\
+\vdots\\
+b_{n}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+for 
+\begin_inset Formula $j=n$
+\end_inset
+
+ downto 
+\begin_inset Formula $1$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+x_{j}=(b_{j}-\sum_{k=j+1}^{n}x_{k}r_{jk})/r_{jj}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Back substitute is backward stable
+\begin_inset Formula 
+\[
+(\vec{R}+\delta\vec{R})\tilde{\vec{x}}=\vec{b},\ \ \ \Vert\delta\vec{R}\Vert/\Vert\vec{R}\Vert=O(\epsilon_{\mbox{machine}})
+\]
+
+\end_inset
+
+Furthermore, each component of 
+\begin_inset Formula $\delta\vec{R}$
+\end_inset
+
+ satisfies 
+\begin_inset Formula 
+\[
+\frac{\vert\delta r_{ij}\vert}{|r_{ij}|}\leq n\epsilon_{\mbox{machine}}+O(\epsilon_{\mbox{machine}}^{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We will show in full detail for 
+\begin_inset Formula $n=1,2,3$
+\end_inset
+
+ as well as general 
+\begin_inset Formula $n$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Proof of Backward Stability (
+\begin_inset Formula $n=1$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For 
+\begin_inset Formula $n=1$
+\end_inset
+
+, the algorithm is simply one floating point division.
+ Using floating-point axiom, we get
+\begin_inset Formula 
+\[
+\tilde{x}_{1}=b_{1}\oslash r_{11}=\frac{b_{1}}{r_{11}}(1+\epsilon_{1})=\frac{b_{1}}{r_{11}(1+\epsilon_{1}')}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vert\epsilon_{1}\vert\leq\epsilon_{\mbox{machine}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vert\epsilon_{1}'\vert\leq\epsilon_{\mbox{machine}}+O(\epsilon_{\mbox{machine}}^{2})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Therefore, we solved a perturbed problem exactly:
+\begin_inset Formula 
+\[
+(r_{11}+\delta r_{11})\tilde{x}_{1}=b_{1}\ \ \mbox{with}\ \ \frac{\vert\delta r_{11}\vert}{\vert r_{11}\vert}\leq\epsilon_{\mbox{machine}}+O(\epsilon_{\mbox{machine}}^{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Proof of Backward Stability (
+\begin_inset Formula $n=2$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For 
+\begin_inset Formula $n=2$
+\end_inset
+
+, we first solve for 
+\begin_inset Formula $\tilde{x}_{2}$
+\end_inset
+
+ as before.
+ Then, we compute 
+\begin_inset Formula $\tilde{x}_{1}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+\tilde{x}_{1} & =(b_{1}\ominus(\tilde{x}_{2}\otimes r_{12}))\oslash r_{11}=\frac{(b_{1}-\tilde{x}_{2}r_{12}(1+\epsilon_{2}))(1+\epsilon_{3})}{r_{11}}(1+\epsilon_{4})\\
+ & =\frac{b_{1}-\tilde{x}_{2}r_{12}(1+\epsilon_{2})}{r_{11}(1+\epsilon_{3}')(1+\epsilon_{4}')}=\frac{b_{1}-\tilde{x}_{2}r_{12}(1+\epsilon_{2})}{r_{11}(1+2\epsilon_{5})}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\vert\epsilon_{2}\vert,\vert\epsilon_{3}\vert,\vert\epsilon_{4}\vert\leq\epsilon_{\mbox{machine}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vert\epsilon_{3}'\vert,\vert\epsilon_{4}'\vert,\vert\epsilon_{5}\vert\leq\epsilon_{\mbox{machine}}+O(\epsilon_{\mbox{machine}}^{2})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Again, this is an exact solution to 
+\begin_inset Formula $(\vec{R}+\delta\vec{R})\tilde{\vec{x}}=\vec{b}$
+\end_inset
+
+ with
+\begin_inset Formula 
+\[
+\left[\begin{array}{cc}
+\frac{\vert\delta r_{11}\vert}{\vert r_{11}\vert} & \frac{\vert\delta r_{12}\vert}{\vert r_{12}\vert}\\
+ & \frac{\vert\delta r_{22}\vert}{\vert r_{22}\vert}
+\end{array}\right]=\left[\begin{array}{cc}
+2\vert\epsilon_{5}\vert & \vert\epsilon_{2}\vert\\
+ & \vert\epsilon_{1}\vert
+\end{array}\right]\leq\left[\begin{array}{cc}
+2 & 1\\
+ & 1
+\end{array}\right]\epsilon_{\mbox{machine}}+O(\epsilon_{\mbox{machine}}^{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Proof for B-S of B-S (
+\begin_inset Formula $n=3$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For 
+\begin_inset Formula $n=3$
+\end_inset
+
+, we solve for 
+\begin_inset Formula $\tilde{x}_{3}$
+\end_inset
+
+ and 
+\begin_inset Formula $\tilde{x}_{2}$
+\end_inset
+
+ as before.
+ Then, we compute 
+\begin_inset Formula $\tilde{x}_{1}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+\tilde{x}_{1} & =[b_{1}\ominus(\tilde{x}_{2}\otimes r_{12})\ominus(\tilde{x}_{3}\otimes r_{13})]\oslash r_{11}\\
+ & =\frac{[(b_{1}-\tilde{x}_{2}r_{12}(1+\epsilon_{4}))(1+\epsilon_{6})-\tilde{x}_{3}r_{13}(1+\epsilon_{5})](1+\epsilon_{7})}{r_{11}(1+\epsilon_{8}')}\\
+ & =\frac{b_{1}-\tilde{x}_{2}r_{12}(1+\epsilon_{4})-\tilde{x}_{3}r_{13}(1+\epsilon_{5})(1+\epsilon_{6}')}{r_{11}(1+\epsilon_{6}')(1+\epsilon'_{7})(1+\epsilon_{8}')}
+\end{align*}
+
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+That
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ is, 
+\begin_inset Formula $(\vec{R}+\Delta\vec{R})\tilde{\vec{x}}=\vec{b}$
+\end_inset
+
+) with
+\begin_inset Formula 
+\[
+\left[\begin{array}{ccc}
+\frac{|\delta r_{11}|}{|r_{11}|} & \frac{|\delta r_{12}|}{|r_{12}|} & \frac{|\delta r_{13}|}{|r_{13}|}\\
+ & \frac{|\delta r_{22}|}{|r_{22}|} & \frac{|\delta r_{23}|}{|r_{23}|}\\
+ &  & \frac{|\delta r_{33}|}{|r_{33}|}
+\end{array}\right]\leq\left[\begin{array}{ccc}
+3 & 1 & 2\\
+ & 2 & 1\\
+ &  & 1
+\end{array}\right]\epsilon_{\mbox{machine}}+O(\epsilon_{\mbox{machine}}^{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Proof for B-S of B-S (general 
+\begin_inset Formula $n$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Similar analysis for general 
+\begin_inset Formula $n$
+\end_inset
+
+ gives pattern 
+\begin_inset Formula 
+\[
+\frac{\vert\delta R\vert}{\vert\vec{R}\vert}\leq\vec{W}\epsilon+O(\epsilon_{\mbox{machine}}^{2})
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{W}$
+\end_inset
+
+ is (for 
+\begin_inset Formula $n=5$
+\end_inset
+
+)
+\begin_inset Formula 
+\[
+\underbrace{\left[\begin{array}{ccccc}
+0 & 1 & 1 & 1 & 1\\
+ & 0 & 1 & 1 & 1\\
+ &  & 0 & 1 & 1\\
+ &  &  & 0 & 1\\
+ &  &  &  & 0
+\end{array}\right]}_{\otimes}+\underbrace{\left[\begin{array}{ccccc}
+1\\
+ & 1\\
+ &  & 1\\
+ &  &  & 1\\
+ &  &  &  & 1
+\end{array}\right]}_{\oslash}+\underbrace{\left[\begin{array}{ccccc}
+4 & 0 & 1 & 2 & 3\\
+ & 3 & 0 & 1 & 2\\
+ &  & 2 & 0 & 1\\
+ &  &  & 1 & 0\\
+ &  &  &  & 0
+\end{array}\right]}_{\ominus}
+\]
+
+\end_inset
+
+or 
+\begin_inset Formula 
+\[
+\left[\begin{array}{ccccc}
+5 & 1 & 2 & 3 & 4\\
+ & 4 & 1 & 2 & 3\\
+ &  & 3 & 1 & 2\\
+ &  &  & 2 & 1\\
+ &  &  &  & 1
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

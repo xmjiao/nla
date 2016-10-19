@@ -1,0 +1,3290 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Boadilla}
+  
+\setbeamertemplate{footline}
+{\leavevmode
+\hbox{\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}
+\usebeamerfont{author in head/ foot}
+\insertshortauthor
+\end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,center]{title  in head/foot}
+\usebeamerfont{title in head/foot}
+Numerical Analysis I \end{beamercolorbox}\begin{beamercolorbox}[wd=.333333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}
+\usebeamerfont{date in head/foot}
+\hspace*{2em} 
+\insertframenumber{} / \inserttotalframenumber\hspace*{2em}
+\end{beamercolorbox}}
+\vskip0pt
+}
+\setbeamertemplate{navigation symbols}{} 
+
+\usepackage{algorithmic}
+\def\vec#1{#1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AMS526: Numerical Analysis I
+\begin_inset Newline newline
+\end_inset
+
+(Numerical Linear Algebra for
+\begin_inset Newline newline
+\end_inset
+
+Computational and Data Sciences)
+\end_layout
+
+\begin_layout Subtitle
+Lecture 7: LU Factorization;
+\begin_inset Newline newline
+\end_inset
+
+Gaussian Elimination with Pivoting
+\end_layout
+
+\begin_layout Author
+Xiangmin Jiao
+\end_layout
+
+\begin_layout Institute
+Stony Brook University
+\end_layout
+
+\begin_layout Date
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Outline}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Gaussian Elimination(MC§3.2, NLA§20)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Review of Gaussian Elimination
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Given linear system 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+, where 
+\begin_inset Formula $A\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ is nonsingular, Gaussian elimination transforms the linear system to 
+\begin_inset Formula 
+\[
+Ux=y
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $U$
+\end_inset
+
+ is upper triangular, and then solves 
+\begin_inset Formula $Ux=y$
+\end_inset
+
+ by back substitution
+\end_layout
+
+\begin_layout Itemize
+Gaussian elimination performs three types of operations
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Add a multiple one equation to another 
+\end_layout
+
+\begin_layout Enumerate
+Interchange two equations
+\end_layout
+
+\begin_layout Enumerate
+Multiply an equation by a nonzero constant
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Gaussian elimination can be represented as transformation of augmented matrix
+ 
+\begin_inset Formula 
+\[
+\left[A\mid b\right]\rightarrow\left[U\mid y\right]
+\]
+
+\end_inset
+
+through operations are on rows of matrix
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $A$
+\end_inset
+
+ is nonsingular if and only if 
+\begin_inset Formula $U$
+\end_inset
+
+ is nonsingular
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example of Gaussian Elimination
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Consider the linear system
+\begin_inset Formula 
+\begin{align*}
+3x_{1}+5x_{2} & =9\\
+6x_{1}+7x_{2} & =4
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Multiply first row by 
+\begin_inset Formula $2=6/2$
+\end_inset
+
+ and subtract it from second row, we obtain
+\begin_inset Formula 
+\begin{align*}
+3x_{1}+5x_{2} & =9\\
+-3x_{2} & =-4
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Then solve upper triangular system using back substitution
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+LU Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+, suppose we can find 
+\begin_inset Formula $A=LU$
+\end_inset
+
+, where 
+\begin_inset Formula $L$
+\end_inset
+
+ is lower-triangular and 
+\begin_inset Formula $U$
+\end_inset
+
+ is upper-triangular.
+ Then solve the system in three steps:
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Find 
+\begin_inset Formula $A=LU$
+\end_inset
+
+ (LU factorization)
+\end_layout
+
+\begin_layout Enumerate
+Solve 
+\begin_inset Formula $Ly=b$
+\end_inset
+
+ (forward substitution)
+\end_layout
+
+\begin_layout Enumerate
+Solve 
+\begin_inset Formula $Ux=y$
+\end_inset
+
+ (back substitution)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+In previous example, 
+\begin_inset Formula 
+\[
+\underset{A}{\begin{bmatrix}3 & 5\\
+6 & 7
+\end{bmatrix}}=\underset{L}{\begin{bmatrix}1 & 0\\
+2 & 1
+\end{bmatrix}}\underset{U}{\begin{bmatrix}3 & 5\\
+0 & -3
+\end{bmatrix}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+LU factorization and Gaussian elimination are often used interchangeably
+\end_layout
+
+\begin_layout Itemize
+Note: 
+\begin_inset Formula $A=LU$
+\end_inset
+
+ may not always exist even if 
+\begin_inset Formula $A$
+\end_inset
+
+ is non-singular
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Why? Division by zero may occur
+\end_layout
+
+\begin_layout Itemize
+Remedy: Pivoting may be needed
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+We start with simplest case without pivoting
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Gaussian Elimination and LU Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Gaussian elimination without row interchanges can be viewed as 
+\begin_inset Quotes eld
+\end_inset
+
+triangular triangularization
+\begin_inset Quotes erd
+\end_inset
+
+ of 
+\emph on
+nonsingular
+\emph default
+ 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\underbrace{\vec{L}_{n-1}\cdots\vec{L}_{2}\vec{L}_{1}}_{\vec{L}^{-1}}\vec{A}=\vec{U}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Then 
+\begin_inset Formula $A=LU$
+\end_inset
+
+.
+ It is also called LU factorization (without pivoting)
+\end_layout
+
+\begin_layout Itemize
+For augmented matrix, 
+\begin_inset Formula $\vec{L}^{-1}\left[A\mid b\right]=\left[A\mid y\right]$
+\end_inset
+
+, so 
+\begin_inset Formula $y=\vec{L}^{-1}b$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Example of 
+\emph on
+LU
+\emph default
+ factorization of 
+\begin_inset Formula $4\times4$
+\end_inset
+
+ matrix 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\underrightarrow{\vec{L}_{1}}\underbrace{\left[\begin{array}{cccc}
+\times & \times & \times & \times\\
+0 & \mathbf{x} & \mathbf{x} & \mathbf{x}\\
+0 & \mathbf{x} & \mathbf{x} & \mathbf{x}\\
+0 & \mathbf{x} & \mathbf{x} & \mathbf{x}
+\end{array}\right]}_{\vec{L}_{1}\vec{A}}\underrightarrow{\vec{L}_{2}}\underbrace{\left[\begin{array}{cccc}
+\times & \times & \times & \times\\
+ & \times & \times & \times\\
+ & 0 & \mathbf{x} & \mathbf{x}\\
+ & 0 & \mathbf{x} & \mathbf{x}
+\end{array}\right]}_{\vec{L}_{2}\vec{L}_{1}\vec{A}}\underrightarrow{\vec{L}_{3}}\underbrace{\left[\begin{array}{cccc}
+\times & \times & \times & \times\\
+ & \times & \times & \times\\
+ &  & \times & \times\\
+ &  & 0 & \mathbf{x}
+\end{array}\right]}_{\vec{L}_{3}\vec{L}_{2}\vec{L}_{1}\vec{A}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example of LU Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Consider 
+\begin_inset Formula 
+\[
+A=\begin{bmatrix}2 & 1 & 1 & 0\\
+4 & 3 & 3 & 1\\
+8 & 7 & 9 & 5\\
+6 & 7 & 9 & 8
+\end{bmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Then 
+\begin_inset Formula $L_{1}=\begin{bmatrix}\begin{array}{rrrr}
+1\\
+-2 & 1\\
+-4 &  & 1\\
+-3 &  &  & 1
+\end{array}\end{bmatrix}$
+\end_inset
+
+ and 
+\begin_inset Formula $L_{1}A=\begin{bmatrix}2 & 1 & 1 & 0\\
+ & 1 & 1 & 1\\
+ & 3 & 5 & 5\\
+ & 4 & 6 & 8
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example of LU Factorization Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $L_{1}A=\begin{bmatrix}2 & 1 & 1 & 0\\
+ & 1 & 1 & 1\\
+ & 3 & 5 & 5\\
+ & 4 & 6 & 8
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $L_{2}=\begin{bmatrix}\begin{array}{rrrr}
+1 & 0 & 0 & 0\\
+ & 1 & 0 & 0\\
+ & -3 & 1 & 0\\
+ & -4 & 0 & 1
+\end{array}\end{bmatrix}$
+\end_inset
+
+ and 
+\begin_inset Formula $L_{2}L_{1}A=\begin{bmatrix}2 & 1 & 1 & 0\\
+ & 1 & 1 & 1\\
+ &  & 2 & 2\\
+ &  & 2 & 4
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $L_{3}=\begin{bmatrix}\begin{array}{rrrr}
+1 & 0 & 0 & 0\\
+ & 1 & 0 & 0\\
+ &  & 1 & 0\\
+ &  & -1 & 1
+\end{array}\end{bmatrix}$
+\end_inset
+
+ and 
+\begin_inset Formula $L_{3}L_{2}L_{1}A=\begin{bmatrix}2 & 1 & 1 & 0\\
+ & 1 & 1 & 1\\
+ &  & 2 & 2\\
+ &  & 0 & 2
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example of LU Factorization Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $L_{1}=\begin{bmatrix}\begin{array}{rrrr}
+1\\
+-2 & 1\\
+-4 &  & 1\\
+-3 &  &  & 1
+\end{array}\end{bmatrix}$
+\end_inset
+
+, 
+\begin_inset Formula $L_{2}=\begin{bmatrix}\begin{array}{rrrr}
+1 & 0 & 0 & 0\\
+ & 1 & 0 & 0\\
+ & -3 & 1 & 0\\
+ & -4 & 0 & 1
+\end{array}\end{bmatrix}$
+\end_inset
+
+, 
+\begin_inset Formula $L_{3}=\begin{bmatrix}\begin{array}{rrrr}
+1 & 0 & 0 & 0\\
+ & 1 & 0 & 0\\
+ &  & 1 & 0\\
+ &  & -1 & 1
+\end{array}\end{bmatrix}$
+\end_inset
+
+ and 
+\begin_inset Formula $L_{3}L_{2}L_{1}A=\begin{bmatrix}2 & 1 & 1 & 0\\
+ & 1 & 1 & 1\\
+ &  & 2 & 2\\
+ &  & 0 & 2
+\end{bmatrix}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Then, 
+\begin_inset Formula 
+\[
+\underset{A}{\begin{bmatrix}2 & 1 & 1 & 0\\
+4 & 3 & 3 & 1\\
+8 & 7 & 9 & 5\\
+6 & 7 & 9 & 8
+\end{bmatrix}}=\underset{L=L_{1}^{-1}L_{2}^{-1}L_{3}^{-1}}{\begin{bmatrix}\begin{array}{rrrr}
+1\\
+2 & 1\\
+4 & 3 & 1\\
+3 & 4 & 1 & 1
+\end{array}\end{bmatrix}}\underset{U}{\begin{bmatrix}2 & 1 & 1 & 0\\
+ & 1 & 1 & 1\\
+ &  & 2 & 2\\
+ &  & 0 & 2
+\end{bmatrix}}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+What is Matrix 
+\begin_inset Formula $\vec{L}_{1}$
+\end_inset
+
+?
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+In Gaussian elimination, at first step 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is transformed to 
+\begin_inset Formula $A^{(1)}$
+\end_inset
+
+ by
+\begin_inset Formula 
+\begin{align*}
+\ell_{i1} & =a_{i1}/a_{11},\qquad i=2,\dots,n\\
+a_{ij}^{(1)} & =a_{ij}-\ell_{i1}a_{1j},\qquad i=2,\dots,n,\quad j=2,\dots,n
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In matrix form, we have 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $A^{(1)}=L_{1}A$
+\end_inset
+
+, where
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ 
+\begin_inset Formula 
+\[
+\vec{L}_{1}=\left[\begin{array}{ccccc}
+1\\
+-\ell_{2,1} & 1\\
+-\ell_{3,1} &  & 1\\
+\vdots &  &  & \ddots\\
+-\ell_{n,1} &  &  &  & 1
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+What is Matrices 
+\begin_inset Formula $\vec{L}_{k}$
+\end_inset
+
+?
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+At step 
+\begin_inset Formula $k$
+\end_inset
+
+, eliminate entries below 
+\begin_inset Formula $a_{kk}^{(k-1)}$
+\end_inset
+
+: 
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $a_{:,k}^{(k-1)}$
+\end_inset
+
+ be 
+\begin_inset Formula $k$
+\end_inset
+
+th column of 
+\begin_inset Formula $\vec{L}_{k-1}\cdots\vec{L}_{1}\vec{A}$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\[
+a_{:,k}^{(k-1)}=[a_{1k}^{(k-1)},a_{2k}^{(k-1)},\cdots,a_{kk}^{(k-1)},a_{k,k+1}^{(k-1)},\cdots a_{n,k}^{(k-1)}]^{T}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{L}_{k}a_{:,k}^{(k-1)}=[a_{1k}^{(k-1)},a_{2k}^{(k-1)},\cdots,a_{kk}^{(k-1)},0,\cdots0]^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The 
+\emph on
+multipliers
+\emph default
+ 
+\begin_inset Formula $\ell_{jk}=a_{jk}^{(k-1)}/a_{kk}^{(k-1)}$
+\end_inset
+
+ appear in 
+\begin_inset Formula $\vec{L}_{k}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\vec{L}_{k}=\left[\begin{array}{cccccc}
+1\\
+ & \ddots\\
+ &  & 1\\
+ &  & -\ell_{k+1,k} & 1\\
+ &  & \vdots &  & \ddots\\
+ &  & -\ell_{n,k} &  &  & 1
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Forming The 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ Matrix
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Let 
+\begin_inset Formula $\vec{\ell}_{k}=[\underbrace{0,\cdots,0}_{k},\ell_{k+1,k},\cdots,\ell_{n,k}]^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{e}_{k}=[\underbrace{0,\cdots,0}_{k-1},1,\cdots,0]^{T}$
+\end_inset
+
+, then 
+\begin_inset Formula $\vec{L}_{k}=\vec{I}-\vec{\ell}_{k}\vec{e}_{k}^{T}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Luckily, 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ matrix contains the
+\emph on
+ 
+\emph default
+multipliers 
+\begin_inset Formula $\ell_{jk}=x_{jk}/x_{kk}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{L}=\vec{L}_{1}^{-1}\vec{L}_{2}^{-1}\cdots\vec{L}_{n-1}^{-1}=\left[\begin{array}{ccccc}
+1\\
+\ell_{21} & 1\\
+\ell_{31} & \ell_{32} & 1\\
+\vdots & \vdots & \ddots & \ddots\\
+\ell_{n1} & \ell_{n2} & \ldots & \ell_{n,n-1} & 1
+\end{array}\right]
+\]
+
+\end_inset
+
+and is said to be a 
+\emph on
+unit lower triangular matrix
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Proof of Structure of 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ Matrix
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+First, 
+\begin_inset Formula $\vec{L}_{k}^{-1}=\vec{I}+\vec{\ell}_{k}\vec{e}_{k}^{T}$
+\end_inset
+
+, because 
+\begin_inset Formula $\vec{e}_{k}^{T}\vec{\ell}_{k}=0$
+\end_inset
+
+ and 
+\begin_inset Formula 
+\[
+(\vec{I}-\vec{\ell}_{k}\vec{e}_{k}^{T})(\vec{I}+\vec{\ell}_{k}\vec{e}_{k}^{T})=\vec{I}-\vec{\ell}_{k}\vec{e}_{k}^{T}\vec{\ell}_{k}\vec{e}_{k}^{T}=\vec{I}
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Second, 
+\begin_inset Formula $\vec{L}_{1}^{-1}\vec{L}_{2}^{-1}\cdots\vec{L}_{k+1}^{-1}=\vec{I}+\sum_{j=1}^{k+1}\vec{\ell}_{j}\vec{e}_{j}^{T}$
+\end_inset
+
+, since (prove by induction) 
+\begin_inset Formula 
+\[
+(\vec{I}+\sum_{j=1}^{k}\vec{\ell}_{j}\vec{e}_{j}^{T})(\vec{I}+\vec{\ell}_{k+1}\vec{e}_{k+1}^{T})=\vec{I}+\sum_{j=1}^{k+1}\vec{\ell}_{j}\vec{e}_{j}^{T}+\sum_{j=1}^{k}\vec{\ell}_{j}(\vec{e}_{j}^{T}\vec{\ell}_{k+1})\vec{e}_{k+1}^{T}
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $\vec{e}_{j}^{T}\vec{\ell}_{k+1}=0$
+\end_inset
+
+ for 
+\begin_inset Formula $j<k+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In other words, 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+union
+\begin_inset Quotes erd
+\end_inset
+
+ of nonzero entries in 
+\begin_inset Formula $\vec{L}_{1}^{-1},\vec{L}_{2}^{-1},\cdots,\vec{L}_{n-1}^{-1}$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+LU Factorization without Pivoting
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Factorize 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ into 
+\begin_inset Formula $\vec{A}=\vec{L}\vec{U}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "70text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Gaussian elimination without pivoting
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{U}\leftarrow\vec{A},\vec{L}\leftarrow\vec{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1:n-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=k+1:n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+ 
+\begin_inset Formula $\ell_{jk}\leftarrow u_{jk}/u_{kk}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{2cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+ 
+\begin_inset Formula $u_{j,k:n}\leftarrow u_{j,k:n}-\ell_{jk}u_{k,k:n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Flop count 
+\begin_inset Formula $\sim\sum_{k=1}^{n}2(n-k)(n-k)\sim2\sum_{k=1}^{n}k^{2}\sim2n^{3}/3$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In practice, 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ overwrites lower-triangular part of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+ overwrites upper-triangular part of 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Question: What happens if 
+\begin_inset Formula $u_{kk}$
+\end_inset
+
+ is 
+\begin_inset Formula $0$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Itemize
+Answer: The algorithm will break due to division by zero!
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Theorem of LU Factorization
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+Let 
+\begin_inset Formula $A$
+\end_inset
+
+ be an 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ matrix whose leading principal submatrices are all nonsingular.
+ Then 
+\begin_inset Formula $A$
+\end_inset
+
+ can be factorized in exactly one way into a product 
+\begin_inset Formula $A=LU$
+\end_inset
+
+, such that 
+\begin_inset Formula $L$
+\end_inset
+
+ is unit lower triangular and 
+\begin_inset Formula $U$
+\end_inset
+
+ is upper triangular.
+\end_layout
+
+\begin_layout Itemize
+However, the requirement of nonsingular leading principal submatrices is
+ too strong!
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Analogous to 
+\begin_inset Formula $LDL^{T}$
+\end_inset
+
+ with respect to Cholesky factorization, 
+\begin_inset Formula $ $
+\end_inset
+
+a variant is LU is 
+\begin_inset Formula $LDV$
+\end_inset
+
+, where 
+\begin_inset Formula $D$
+\end_inset
+
+ is diagonal and 
+\begin_inset Formula $V$
+\end_inset
+
+ is unit upper triangular
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+More importantly, what happens if 
+\begin_inset Formula $u_{kk}$
+\end_inset
+
+ is 
+\series bold
+\emph on
+nearly
+\series default
+\emph default
+ 
+\begin_inset Formula $0$
+\end_inset
+
+ (or a submatrix is 
+\series bold
+\emph on
+nearly
+\series default
+\emph default
+ singular)?
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Gaussian Elimination with Pivoting (NLA§21)
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Gaussian Elimination with Partial Pivoting
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+At step 
+\begin_inset Formula $k$
+\end_inset
+
+, we divide by 
+\begin_inset Formula $u_{kk}$
+\end_inset
+
+ (
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+i.e., 
+\begin_inset Formula $a_{kk}^{(k-1)}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+), which would break if 
+\begin_inset Formula $u_{kk}$
+\end_inset
+
+ is 0 (or close to 
+\begin_inset Formula $0$
+\end_inset
+
+), which can happen even if 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+ is nonsingular
+\end_layout
+
+\begin_layout Itemize
+Other nonzero entry in 
+\begin_inset Formula $k$
+\end_inset
+
+th column below diagonal can be 
+\emph on
+pivot
+\emph default
+
+\begin_inset Formula 
+\[
+\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+ & \times & \times & \times & \times\\
+ & \times & \times & \times & \times\\
+ & a_{ik}^{(k-1)} & \mathbf{x} & \mathbf{x} & \mathbf{x}\\
+ & \times & \times & \times & \times
+\end{array}\right]\rightarrow\left[\begin{array}{ccccc}
+\times & \times & \times & \times & \times\\
+ & 0 & \mathbf{x} & \mathbf{x} & \mathbf{x}\\
+ & 0 & \mathbf{x} & \mathbf{x} & \mathbf{x}\\
+ & a_{ik}^{(k-1)} & \times & \times & \times\\
+ & 0 & \mathbf{x} & \mathbf{x} & \mathbf{x}
+\end{array}\right]
+\]
+
+\end_inset
+
+and we permute (interchange) row 
+\begin_inset Formula $i$
+\end_inset
+
+ with row 
+\begin_inset Formula $k$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Partial Pivoting
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+We choose nonzero entry with largest magnitude as pivot
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $k$
+\end_inset
+
+th step of Gaussian elimination of partial pivoting 
+\begin_inset Formula 
+\[
+\underset{\mbox{Pivot selection}}{\left[\begin{array}{cccc}
+\times & \times & \times & \times\\
+ & \times & \times & \times\\
+ & x_{ik} & \mathbf{x} & \mathbf{x}\\
+ & \times & \times & \times
+\end{array}\right]}\underrightarrow{\vec{P}_{k}}\underset{\mbox{Row interchange}}{\left[\begin{array}{cccc}
+\times & \times & \times & \times\\
+ & x_{kk} & \mathbf{x} & \mathbf{x}\\
+ & \mathbf{x} & \mathbf{x} & \mathbf{x}\\
+ & \times & \times & \times
+\end{array}\right]}\underrightarrow{\vec{L}_{k}}\underset{\mbox{Elimination}}{\left[\begin{array}{cccc}
+\times & \times & \times & \times\\
+ & x_{kk} & \times & \times\\
+ & 0 & \mathbf{x} & \mathbf{x}\\
+ & 0 & \mathbf{x} & \mathbf{x}
+\end{array}\right]}
+\]
+
+\end_inset
+
+and we interchange row 
+\begin_inset Formula $i$
+\end_inset
+
+ with row 
+\begin_inset Formula $k$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $P_{k}$
+\end_inset
+
+ is a permutation matrix, obtained by interchanging two rows of 
+\begin_inset Formula $I$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Product of permutation matrices is also a permutation matrix
+\end_layout
+
+\begin_layout Itemize
+For any permutation matrix 
+\begin_inset Formula $P$
+\end_inset
+
+, all its entries are zeros and ones, and 
+\begin_inset Formula $PP^{T}=P^{T}P=I$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example of LU with Partial Pivoting
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Consider 
+\begin_inset Formula $A=\begin{bmatrix}2 & 1 & 1 & 0\\
+4 & 3 & 3 & 1\\
+8 & 7 & 9 & 5\\
+6 & 7 & 9 & 8
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\underset{P_{1}}{\begin{bmatrix} &  & 1\\
+ & 1\\
+1\\
+ &  &  & 1
+\end{bmatrix}}\begin{bmatrix}2 & 1 & 1 & 0\\
+4 & 3 & 3 & 1\\
+8 & 7 & 9 & 5\\
+6 & 7 & 9 & 8
+\end{bmatrix}=\begin{bmatrix}8 & 7 & 9 & 5\\
+4 & 3 & 3 & 1\\
+2 & 1 & 1 & 0\\
+6 & 7 & 9 & 8
+\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $L_{1}=\begin{bmatrix}\begin{array}{rrrr}
+1\\
+-\frac{1}{2} & 1\\
+-\frac{1}{4} &  & 1\\
+-\frac{3}{4} &  &  & 1
+\end{array}\end{bmatrix}$
+\end_inset
+
+ and 
+\begin_inset Formula $L_{1}P_{1}A=\begin{bmatrix}\begin{array}{rrrr}
+8 & 7 & 9 & 5\\
+ & -\frac{1}{2} & -\frac{3}{2} & -\frac{3}{2}\\
+ & -\frac{3}{4} & -\frac{5}{4} & -\frac{5}{4}\\
+ & \frac{7}{4} & \frac{9}{4} & \frac{17}{4}
+\end{array}\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example of LU with Partial Pivoting Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\underset{P_{2}}{\begin{bmatrix}1\\
+ &  &  & 1\\
+ &  & 1\\
+ & 1
+\end{bmatrix}}\underset{L_{1}P_{1}A}{\begin{bmatrix}\begin{array}{rrrr}
+8 & 7 & 9 & 5\\
+ & -\frac{1}{2} & -\frac{3}{2} & -\frac{3}{2}\\
+ & -\frac{3}{4} & -\frac{5}{4} & -\frac{5}{4}\\
+ & \frac{7}{4} & \frac{9}{4} & \frac{17}{4}
+\end{array}\end{bmatrix}}$
+\end_inset
+
+
+\begin_inset Formula $=\underset{P_{2}L_{1}P_{1}A}{\begin{bmatrix}\begin{array}{rrrr}
+8 & 7 & 9 & 5\\
+ & \frac{7}{4} & \frac{9}{4} & \frac{17}{4}\\
+ & -\frac{3}{4} & -\frac{5}{4} & -\frac{5}{4}\\
+ & -\frac{1}{2} & -\frac{3}{2} & -\frac{3}{2}
+\end{array}\end{bmatrix}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $L_{2}=\begin{bmatrix}\begin{array}{rrrr}
+1 & 0 & 0 & 0\\
+ & 1 & 0 & 0\\
+ & \frac{3}{7} & 1 & 0\\
+ & \frac{2}{7} & 0 & 1
+\end{array}\end{bmatrix}$
+\end_inset
+
+ and 
+\begin_inset Formula $L_{2}P_{2}L_{1}P_{1}A=\begin{bmatrix}\begin{array}{rrrr}
+8 & 7 & 9 & 5\\
+ & \frac{7}{4} & \frac{9}{4} & \frac{17}{4}\\
+ &  & -\frac{2}{7} & \frac{4}{7}\\
+ &  & -\frac{6}{7} & -\frac{2}{7}
+\end{array}\end{bmatrix}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example of LU with Partial Pivoting Cont'd
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $\underset{P_{3}}{\begin{bmatrix}1\\
+ & 1\\
+ &  &  & 1\\
+ &  & 1
+\end{bmatrix}}\underset{L_{2}P_{2}L_{1}P_{1}A}{\begin{bmatrix}\begin{array}{rrrr}
+8 & 7 & 9 & 5\\
+ & \frac{7}{4} & \frac{9}{4} & \frac{17}{4}\\
+ &  & -\frac{2}{7} & \frac{4}{7}\\
+ &  & -\frac{6}{7} & -\frac{2}{7}
+\end{array}\end{bmatrix}}$
+\end_inset
+
+
+\begin_inset Formula $=\underset{P_{3}L_{2}P_{2}L_{1}P_{1}A}{\begin{bmatrix}\begin{array}{rrrr}
+8 & 7 & 9 & 5\\
+ & \frac{7}{4} & \frac{9}{4} & \frac{17}{4}\\
+ &  & -\frac{6}{7} & -\frac{2}{7}\\
+ &  & -\frac{2}{7} & \frac{4}{7}
+\end{array}\end{bmatrix}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $L_{3}=\begin{bmatrix}\begin{array}{rrrr}
+1 & 0 & 0 & 0\\
+ & 1 & 0 & 0\\
+ &  & 1 & 0\\
+ &  & -\frac{1}{3} & 1
+\end{array}\end{bmatrix}$
+\end_inset
+
+ and 
+\begin_inset Formula $L_{3}P_{3}L_{2}P_{2}L_{1}P_{1}A=\underset{L_{2}P_{2}L_{1}P_{1}A}{\begin{bmatrix}\begin{array}{rrrr}
+8 & 7 & 9 & 5\\
+ & \frac{7}{4} & \frac{9}{4} & \frac{17}{4}\\
+ &  & -\frac{6}{7} & -\frac{2}{7}\\
+ &  &  & \frac{2}{3}
+\end{array}\end{bmatrix}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Then, 
+\begin_inset Formula 
+\[
+\underset{P}{\begin{bmatrix} &  & 1\\
+ &  &  & 1\\
+ & 1\\
+1
+\end{bmatrix}}\underset{A}{\begin{bmatrix}2 & 1 & 1 & 0\\
+4 & 3 & 3 & 1\\
+8 & 7 & 9 & 5\\
+6 & 7 & 9 & 8
+\end{bmatrix}}=\underset{L}{\begin{bmatrix}\begin{array}{rrrr}
+1 & 0 & 0 & 0\\
+\frac{3}{4} & 1 & 0 & 0\\
+\frac{1}{2} & -\frac{2}{7} & 1 & 0\\
+\frac{1}{4} & -\frac{3}{7} & \frac{1}{3} & 1
+\end{array}\end{bmatrix}}\underset{U}{\begin{bmatrix}\begin{array}{rrrr}
+8 & 7 & 9 & 5\\
+ & \frac{7}{4} & \frac{9}{4} & \frac{17}{4}\\
+ &  & -\frac{6}{7} & -\frac{2}{7}\\
+ &  &  & \frac{2}{3}
+\end{array}\end{bmatrix}}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Matrix Notation of Partial Pivoting
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+In terms of matrices, it becomes 
+\begin_inset Formula $\underbrace{\vec{L}_{n-1}\vec{P}_{n-1}\cdots\vec{L}_{2}\vec{P}_{2}\vec{L}_{1}\vec{P}_{1}}_{\vec{L}^{-1}\vec{P}}\vec{A}=\vec{U}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $PA=LU$
+\end_inset
+
+ or 
+\begin_inset Formula $A=P^{T}LU$
+\end_inset
+
+.
+ This is LU factorization with partial pivoting
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{P}=\vec{P}_{n-1}\cdots\vec{P}_{2}\vec{P}_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{L}=\left(\vec{L}'_{n-1}\cdots\vec{L}'_{2}\vec{L}'_{1}\right)^{-1}$
+\end_inset
+
+, where 
+\begin_inset Formula $\vec{L}_{k}'=\vec{P}_{n-1}\cdots\vec{P}_{k+1}\vec{L}_{k}\vec{P}_{k+1}^{-1}\cdots\vec{P}_{n-1}^{-1}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+It is easy to verify that 
+\begin_inset Formula $\vec{L}_{n-1}\vec{P}_{n-1}\cdots\vec{L}_{2}\vec{P}_{2}\vec{L}_{1}\vec{P}_{1}=\left(\vec{L}'_{n-1}\cdots\vec{L}'_{2}\vec{L}'_{1}\right)\left(\vec{P}_{n-1}\cdots\vec{P}_{2}\vec{P}_{1}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\vec{L}_{k}'=\vec{I}-\vec{P}_{n-1}\cdots\vec{P}_{k+1}\vec{\ell}_{k}\vec{e}_{k}^{T}$
+\end_inset
+
+ , and 
+\begin_inset Formula $\left(\vec{L}_{k}'\right)^{-1}\equiv\vec{I}+\vec{P}_{n-1}\cdots\vec{P}_{k+1}\vec{\ell}_{k}\vec{e}_{k}^{T}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+In other words, 
+\begin_inset Formula $L_{k}'$
+\end_inset
+
+ is obtained by continued permutation of 
+\begin_inset Formula $\vec{\ell}_{k}\vec{e}_{k}^{T}$
+\end_inset
+
+ along with 
+\begin_inset Formula $A^{(k+)}$
+\end_inset
+
+, and lower-triangular part of 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+union
+\begin_inset Quotes erd
+\end_inset
+
+ of permuted 
+\begin_inset Formula $\vec{\ell}_{k}\vec{e}_{k}^{T}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Algorithm of Gaussian Elimination with Partial Pivoting
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Factorize 
+\begin_inset Formula $\vec{A}\in\mathbb{R}^{n\times n}$
+\end_inset
+
+ into 
+\begin_inset Formula $\vec{A}=\vec{P}^{T}\vec{L}\vec{U}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "90text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Gaussian elimination with partial pivoting
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{U}\leftarrow\vec{A},\vec{L}\leftarrow\vec{I}$
+\end_inset
+
+, 
+\begin_inset Formula $\vec{P}\leftarrow\vec{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1:n-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $i\leftarrow\arg\max_{i\geq k}\vert u_{ik}|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{u}_{k,k:n}\leftrightarrow\vec{u}_{i,k:n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{\ell}_{k,1:k-1}\leftrightarrow\vec{\ell}_{i,1:k-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $p_{k,:}\leftrightarrow p_{i,:}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $j=k+1:n$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+ 
+\begin_inset Formula $\ell_{jk}\leftarrow u_{jk}/u_{kk}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1cm}
+\end_layout
+
+\end_inset
+
+
+\series bold
+ 
+\begin_inset Formula $u_{j,k:n}\leftarrow u_{j,k:n}-\ell_{jk}u_{k,k:n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Flop count 
+\begin_inset Formula $\sim\sum_{k=1}^{n}2(n-k)(n-k)\sim2\sum_{k=1}^{n}k^{2}\sim2n^{3}/3$
+\end_inset
+
+, same as without pivoting
+\end_layout
+
+\begin_layout Itemize
+Question: Can 
+\begin_inset Formula $u_{kk}$
+\end_inset
+
+ be 
+\begin_inset Formula $0$
+\end_inset
+
+?
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+An Alternative Implementation
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+In practice, 
+\begin_inset Formula $\vec{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{U}$
+\end_inset
+
+ overwrite 
+\begin_inset Formula $\vec{A}$
+\end_inset
+
+, and 
+\begin_inset Formula $\vec{P}$
+\end_inset
+
+ is represented by a vector
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80text%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Gaussian elimination with partial pivoting (alternative)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{p}\leftarrow[1,2,\cdots,n]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+ 
+\series bold
+for
+\series default
+ 
+\begin_inset Formula $k=1:n-1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $i\leftarrow\arg\max_{i\geq k}\vert a_{ik}|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\vec{a}_{k,1:n}\leftrightarrow\vec{a}_{i,1:n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $p_{k}\leftrightarrow p_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\vec{a}_{k+1:n,k}\leftarrow\vec{a}_{k+1:n,k}/a_{k,k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+STATE
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{0.5cm}
+\end_layout
+
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\vec{A}_{k+1:n,k+1:n}\leftarrow\vec{A}_{k+1:n,k+1:n}-\vec{a}_{k+1:n,k}*\vec{a}_{k,k+1:n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Using LU factorization with partial pivoting to solve 
+\begin_inset Formula $\vec{A}\vec{x}=\vec{b}:$
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $\vec{A}=\vec{P}^{T}\vec{L}\vec{U};$
+\end_inset
+
+ (LU factorization with partial pivoting)
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\vec{L}\vec{y}=\vec{P}\vec{b}$
+\end_inset
+
+; (Forward substitution, where 
+\begin_inset Formula $(Pb)_{i}=b(p_{i})$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\vec{U}\vec{x}=\vec{y}$
+\end_inset
+
+; (Back substitution)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If the augmented matrix is used, then first two steps are merged.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Complete Pivoting
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+More generally, pivot can be chosen from entries 
+\begin_inset Formula $(i,j)$
+\end_inset
+
+, 
+\begin_inset Formula $i\geq k$
+\end_inset
+
+, 
+\begin_inset Formula $j\geq k$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\left[\begin{array}{cccc}
+\times & \times & \times & \times\\
+ & \times & \times & \times\\
+ & \mathbf{x} & x_{ij} & \mathbf{x}\\
+ & \times & \times & \times
+\end{array}\right]\rightarrow\left[\begin{array}{cccc}
+\times & \times & \times & \times\\
+ & \mathbf{x} & 0 & \mathbf{x}\\
+ & \times & x_{ij} & \times\\
+ & \mathbf{x} & 0 & \mathbf{x}
+\end{array}\right]
+\]
+
+\end_inset
+
+and we then permute row 
+\begin_inset Formula $i$
+\end_inset
+
+ with row 
+\begin_inset Formula $k$
+\end_inset
+
+, column 
+\begin_inset Formula $j$
+\end_inset
+
+ with column 
+\begin_inset Formula $k$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+In matrix operations, complete can be expressed as 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula 
+\[
+\underbrace{\vec{L}_{n-1}\vec{P}_{n-1}\cdots\vec{L}_{2}\vec{P}_{2}\vec{L}_{1}\vec{P}_{1}}_{\vec{L}^{-1}\vec{P}}\vec{A}\underbrace{\vec{Q}_{1}\vec{Q}_{2}\cdots\vec{Q}_{n-1}}_{\vec{Q}}=\vec{U}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Therefore, 
+\begin_inset Formula $\vec{P}\vec{A}\vec{Q}=\vec{L}\vec{U}$
+\end_inset
+
+ where 
+\begin_inset Formula $\vec{P}=\vec{P}_{n-1}\cdots\vec{P}_{2}\vec{P}_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{L}=\left(\vec{L}'_{n-1}\cdots\vec{L}'_{2}\vec{L}'_{1}\right)^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Complete Pivoting
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+By choosing largest absolute value among these entries, complete pivoting
+ gives better stability theoretically (to be discussed later)
+\end_layout
+
+\begin_layout Itemize
+Complete pivoting is typically not used in practice, because it increases
+ cost in searching pivot and complexity of implementation
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+complete pivoting incurs 
+\begin_inset Formula $O(n^{3})$
+\end_inset
+
+ comparisons, whereas partial pivoting incurs 
+\begin_inset Formula $O(n^{2})$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Complete pivoting can be useful in solving underdetermined systems
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+System is underdetermined if 
+\begin_inset Formula $A$
+\end_inset
+
+ is singular, and it has an infinite number of solutions
+\end_layout
+
+\begin_layout Itemize
+One can compute 
+\begin_inset Formula 
+\[
+PAQ^{T}=L\left[U_{1}\vert U_{2}\right],
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $U_{1}$
+\end_inset
+
+ is nonsingular and upper-triangular, and 
+\begin_inset Formula $U_{2}$
+\end_inset
+
+ has zeros along diagonal
+\end_layout
+
+\begin_layout Itemize
+It allows finding a solution, but not necessarily an optimal solution
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Alternative Linear Solvers
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Gauss-Jordan
+\begin_inset space ~
+\end_inset
+
+elimination: At the 
+\begin_inset Formula $k$
+\end_inset
+
+th step, use pivot to eliminate nonzeros in column 
+\begin_inset Formula $k$
+\end_inset
+
+ both above and below diagonal.
+ It is more expensive than Gaussian elimination.
+ How much more?
+\end_layout
+
+\begin_layout Description
+Cramer's
+\begin_inset space ~
+\end_inset
+
+rule 
+\begin_inset Formula $x_{i}=\det(A^{(i)})/\det(A)$
+\end_inset
+
+, where 
+\begin_inset Formula $A^{(i)}$
+\end_inset
+
+ is obtained from 
+\begin_inset Formula $A$
+\end_inset
+
+ by replacing 
+\begin_inset Formula $i$
+\end_inset
+
+th column by 
+\begin_inset Formula $b$
+\end_inset
+
+.
+ This is overly expensive and unstable, so it is never used except for 
+\begin_inset Formula $n=2$
+\end_inset
+
+ or 
+\begin_inset Formula $3$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Strassen's
+\begin_inset space ~
+\end_inset
+
+method (and similar recursive algorithms) for matrix-matrix multiplication
+ can be modified to solve linear systems in 
+\begin_inset Formula $O(n^{s})$
+\end_inset
+
+ flops for 
+\begin_inset Formula $s<3$
+\end_inset
+
+, but are not advantageous in practice
+\end_layout
+
+\begin_layout Standard
+These are direct methods.
+ Other important classes of methods include
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+iterative methods
+\emph default
+ (later) and 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+multigrid methods
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
