@@ -625,11 +625,11 @@ Algebraic multiplicity
 
 \begin_layout Itemize
 Any matrix 
-\begin_inset Formula $\vec{A}$
+\begin_inset Formula $\vec{A}\in\mathbb{C}^{n\times n}$
 \end_inset
 
  has 
-\begin_inset Formula $m$
+\begin_inset Formula $n$
 \end_inset
 
  eigenvalues, counted with algebraic multiplicity
@@ -849,7 +849,7 @@ Extend
 \end_inset
 
  to unitary 
-\begin_inset Formula $\vec{V}\equiv[\hat{\vec{V}},\tilde{\vec{V}}]\in\mathbb{C}^{n\times k}$
+\begin_inset Formula $\vec{V}\equiv[\hat{\vec{V}},\tilde{\vec{V}}]\in\mathbb{C}^{n\times n}$
 \end_inset
 
  and form
@@ -1062,7 +1062,7 @@ An
 \end_inset
 
 ) A nondefective matrix has 
-\begin_inset Formula $m$
+\begin_inset Formula $n$
 \end_inset
 
  linearly independent eigenvectors.
