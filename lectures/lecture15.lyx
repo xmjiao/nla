@@ -310,7 +310,7 @@ Any eigenvalue solver must be iterative
 
 \begin_layout Itemize
 To see this, consider a general polynomial of degree 
-\begin_inset Formula $m$
+\begin_inset Formula $n$
 \end_inset
 
 
@@ -321,16 +321,16 @@ p(z)=z^{n}+a_{n-1}z^{n-1}+\cdots+a_{1}z+a_{0}
 
 \end_inset
 
-There is no closed-form expression for the roots of 
-\begin_inset Formula $p$
+There is no closed-form expression for roots for 
+\begin_inset Formula $n>4$
 \end_inset
 
-: (Abel, 1842)
+:
 \begin_inset Newline newline
 \end_inset
 
 In general, the roots of polynomial equations higher than fourth degree
- cannot be written in terms of a finite number of operations
+ cannot be written in terms of a finite number of operations (Abel, 1842)
 \end_layout
 
 \end_deeper
@@ -878,7 +878,7 @@ After
  steps, we obtain the Hessenberg form:
 \begin_inset Formula 
 \[
-\underbrace{\vec{Q}_{m-2}^{*}\cdots\vec{Q}_{2}^{*}\vec{Q}_{1}^{*}}_{\vec{Q}^{*}}\vec{A}\underbrace{\vec{Q}_{1}\vec{Q}_{2}\cdots\vec{Q}_{m-2}}_{\vec{Q}}=\vec{H}=\left[\begin{array}{ccccc}
+\underbrace{\vec{Q}_{n-2}^{*}\cdots\vec{Q}_{2}^{*}\vec{Q}_{1}^{*}}_{\vec{Q}^{*}}\vec{A}\underbrace{\vec{Q}_{1}\vec{Q}_{2}\cdots\vec{Q}_{n-2}}_{\vec{Q}}=\vec{H}=\left[\begin{array}{ccccc}
 \times & \times & \times & \times & \times\\
 \times & \times & \times & \times & \times\\
  & \times & \times & \times & \times\\
