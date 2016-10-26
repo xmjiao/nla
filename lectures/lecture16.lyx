@@ -2847,7 +2847,7 @@ Natural choice of
 
 \begin_inset Formula 
 \[
-\mu^{(k)}=r(\vec{q}_{m}^{(k)})=\left(\vec{q}_{m}^{(k)}\right)^{T}\vec{A}\vec{q}_{m}^{(k)}
+\mu^{(k)}=r(\vec{q}_{n}^{(k)})=\left(\vec{q}_{n}^{(k)}\right)^{T}\vec{A}\vec{q}_{n}^{(k)}
 \]
 
 \end_inset
@@ -2857,7 +2857,7 @@ Natural choice of
 
 \begin_layout Itemize
 As in Rayleigh quotient iteration, last column 
-\begin_inset Formula $\vec{q}_{m}^{(k)}$
+\begin_inset Formula $\vec{q}_{n}^{(k)}$
 \end_inset
 
  converges cubically
@@ -2865,7 +2865,7 @@ As in Rayleigh quotient iteration, last column
 
 \begin_layout Itemize
 This Rayleigh quotient appears as 
-\begin_inset Formula $(m,m)$
+\begin_inset Formula $(n,n)$
 \end_inset
 
  entry of 
@@ -2881,7 +2881,7 @@ This Rayleigh quotient appears as
 
 \begin_layout Itemize
 Rayleigh quotient shift corresponds to setting 
-\begin_inset Formula $\mu^{(k)}=A_{mm}^{(k)}$
+\begin_inset Formula $\mu^{(k)}=A_{nn}^{(k)}$
 \end_inset
 
 
@@ -2964,7 +2964,7 @@ Wilkinson breaks symmetry by considering lower-rightmost
 
 \begin_inset Formula $\vec{B}=\left[\begin{array}{cc}
 a_{n-1} & b_{n-1}\\
-b_{n-1} & a_{m}
+b_{n-1} & a_{n}
 \end{array}\right]$
 \end_inset
 
