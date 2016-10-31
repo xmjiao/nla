@@ -330,7 +330,7 @@ Need not tridiagonalize first, but loop over all pairs of rows and columns
 \end_layout
 
 \begin_layout Itemize
-Magnitude of nonzeros shrink steadily, converging quadratic 
+Magnitude of nonzeros shrink steadily, converging quadratically 
 \end_layout
 
 \begin_layout Itemize
@@ -733,7 +733,7 @@ Divide-and-Conquer Algorithm
 
 \begin_deeper
 \begin_layout Itemize
-Suppose diagonalization 
+Suppose diagonalizations 
 \begin_inset Formula $\hat{\vec{T}}_{1}=\vec{Q}_{1}\vec{D}_{1}\vec{Q}_{1}^{T}$
 \end_inset
 
@@ -821,7 +821,7 @@ Eigenvalues of
  are the roots of rational function
 \begin_inset Formula 
 \[
-f(\lambda)=1+\sum_{j=1}^{m}\frac{w_{j}^{2}}{d_{j}-\lambda}
+f(\lambda)=1+\sum_{j=1}^{n}\frac{w_{j}^{2}}{d_{j}-\lambda}
 \]
 
 \end_inset
@@ -875,15 +875,15 @@ secular equation
 \begin_inset Formula $f(\lambda)=0$
 \end_inset
 
- with nonlinear solver
+ with quadratic convergence
 \end_layout
 
 \begin_layout Itemize
-\begin_inset Formula $O(n)$
+\begin_inset Formula $O(n\log\vert\log(\epsilon_{\mbox{machine}})\vert)$
 \end_inset
 
- flops per root, 
-\begin_inset Formula $O(n^{2})$
+ flops per root; 
+\begin_inset Formula $O(n^{2}\log\vert\log(\epsilon_{\mbox{machine}})\vert)$
 \end_inset
 
  flops for all roots
@@ -893,9 +893,13 @@ secular equation
 Total cost for divide-and-conquer algorithm is 
 \begin_inset Formula 
 \[
-O\left(\sum_{k=1}^{\log n}2^{k-1}\left(\frac{n}{2^{k-1}}\right)^{2}\right)=O(n^{2})
+O\left(\sum_{k=1}^{\log n}2^{k-1}\left(\frac{n}{2^{k-1}}\right)^{2}\right)=O(n^{2}),
 \]
 
+\end_inset
+
+where constant depends on 
+\begin_inset Formula $\log\vert\log(\epsilon_{\mbox{machine}})\vert$
 \end_inset
 
 
