@@ -363,7 +363,7 @@ Typical algorithm for computing SVD are similar to computation of eigenvalues
 
 \begin_layout Itemize
 Consider 
-\begin_inset Formula $\vec{A}\in\mathbb{C}^{m\times m}$
+\begin_inset Formula $\vec{A}\in\mathbb{C}^{m\times n}$
 \end_inset
 
 , then Hermitian matrix 
