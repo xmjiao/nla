@@ -3176,7 +3176,7 @@ STATE
 \begin_inset Formula $\vec{A}^{(0)}\vec{Q}^{(0)}=\vec{A}$
 \end_inset
 
- {tridiagnolization of 
+ {tridiagonalization of 
 \begin_inset Formula $\vec{A}$
 \end_inset
 
