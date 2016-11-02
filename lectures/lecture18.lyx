@@ -1155,7 +1155,7 @@ Classical and modified Gram-Schmidt
 \end_layout
 
 \begin_layout Itemize
-QR factorization using Householder triangularization
+QR factorization using Householder triangularization and Givens rotation
 \end_layout
 
 \end_deeper
@@ -1177,6 +1177,14 @@ Alternative solutions: normal equation; SVD
 \end_layout
 
 \end_deeper
+\begin_layout Itemize
+Conditioning and stability of linear least squares problems
+\end_layout
+
+\begin_layout Itemize
+QR factorization with pivoting
+\end_layout
+
 \end_deeper
 \begin_layout Standard
 \begin_inset Separator parbreak
@@ -1302,11 +1310,8 @@ algebraic multiplicity
 \end_layout
 
 \begin_layout Itemize
-
-\emph on
-Similar
-\emph default
- matrices have the same eigenvalues, and algebraic and geometric multiplicities
+Similarity transformations preserve eigenvalues and their algebraic and
+ geometric multiplicities
 \end_layout
 
 \begin_layout Itemize
